@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testforms</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'jq', 'data-turbolinks-track': 'reload' %>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  </head>
+  <body>
+    <header class="container-fluid">
+      <div class="row">
+        <div class="col-sm" id="logo"><span>
+          <a class="logoimg" href="/"><%= image_tag "logo-testforms.png", alt: "Онлайн система Testforms" %></a></span>
+        </div>
+        <div class="col-sm">
+    	    <ul id="navbar">
+            <li><a href="#">Тарифы</a></li>
+            <li><a href="#">Возможности</a></li>
+            <li><a href="#">О компании</a></li>
+          </ul>
+    	  </div>
+        <div class="col-sm" id="registrationform">
+          <span class="aut">
+            <% if (user_signed_in?) or (username_signed_in?) %>
+              <span class="name"> <% if (user_signed_in?) and !(username_signed_in?) %><%= current_user.email %>
+              <span class="out"><%= link_to "Выход", destroy_user_session_path, method: :delete, class: "reg" %></span>
+            <% end %>
+            <% if (username_signed_in?) and !(user_signed_in?)%><%= current_username.email %>
+              <span class="out"><%= link_to "Выход", destroy_username_session_path, method: :delete, class: "reg" %></span>
+            <% end %>
+          </span>
+            <% else %>
+              <span class="name buttonname">Создать задание</span><span class="out buttomout">Выполнить задание</span>
+              <span class="name disnone"> <%= link_to "Вход", new_user_session_path, class: "reg" %></span>
+              <span class="out disnone"><%= link_to "Регистрация", new_user_registration_path, class: "reg" %></span>
+              <span class="name dsnone"> <%= link_to "Вход", new_username_session_path, class: "reg" %></span>
+              <span class="out dsnone"><%= link_to "Регистрация", new_username_registration_path, class: "reg" %></span>
+            <% end %>
+          </span>
+  	    </div>
+    </header>
+    <main id="main">
+      <div class="row">
+        <div class="container-fluid col-9" id="left-colon">
+      	  <%= yield %>
+    		</div>
+        <%= render "layouts/menu_r_creator" %>
+        <%= render "layouts/menu_r_visitor" %>
+	    </div>
+    </main>
+    <footer class="container-fluid">
+      <div class="row">
+      	<div class="col-sm-7" id="left-colon-footer">
+        	<p>Есть предложения по улучшению работы сайта? Пишите!</p>
+        	<a class="feedback-button"href="#">Обратная связь</a>
+    		</div>
+    		<div class="col-sm-5" id="right-colon-footer">
+      		<span class="otstup"><a class="menu-r-link"href="#">Помощь</a></span>
+      		<span class="otstup"><a class="menu-r-link"href="#">Договор</a></span>
+      		<span class="otstup"><a class="menu-r-link"href="#">Контакты</a></span>
+    		</div>
+  		</div>
+    </footer>
+  </body>
+</html>

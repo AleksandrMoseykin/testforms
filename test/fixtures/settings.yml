@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  agebefore: 1
+  ageafter: 1
+  counttrue: 1
+  accomplishment: MyText
+
+two:
+  agebefore: 1
+  ageafter: 1
+  counttrue: 1
+  accomplishment: MyText

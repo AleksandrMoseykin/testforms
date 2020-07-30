@@ -1,0 +1,30 @@
+<% topicid = @topic.id %>
+<% idreg = Topic.find_by(id: topicid).idreg %>
+<% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+  <% if idreg1 == idreg %>
+    <% if @topic.settings.find_by(topic_id: topicid) == nil %>
+      <h1>Настройки вывода статистики ответов</h1>
+      <%= form_with(model: [ @topic, @topic.settings.build ], local: true) do |form| %>
+      <p>
+        <%= form.label :"Возраст от" %><br>
+        <input id="setting_agebefore" max="100" min="7" name="setting[agebefore]" step="1" type="number" value="7" />
+      </p>
+      <p>
+        <%= form.label :"Возраст до" %><br>
+        <input id="setting_ageafter" max="100" min="7" name="setting[ageafter]" step="1" type="number" value="90" />
+      </p>
+      <p>
+        <%= form.label :"Выполнение" %><br>
+        <%= form.select(:accomplishment, [['Все', "Все"], ['Да', "Да"], ['Нет', "Нет"]]) %>
+      </p>
+      <p>
+        <%= form.submit "Сохранить" %>
+      </p>
+    <% end %>
+    <%= link_to 'Назад', topics_path %>
+  <% else %>
+    <% idsettings = @topic.settings.find_by(topic_id: @topic.id).id  %>
+    <p>Параметры настроек для тестового задания "<%= @topic.titletopic %>" добавлены.</p>
+    <a href="/topics/<%= @topic.id %>/settings/<%= idsettings %>/edit">Редактировать</a>
+  <% end %>
+<% end %>

@@ -1,0 +1,10 @@
+<h2>Добавить вопрос в задание "<%= @topic.titletopic %>"</h2>
+<%= form_with(model: [ @topic, @topic.questions.build ], local: true) do |form| %>
+  <p><%= form.label :"Вопрос" %><br><%= form.text_field :titlequestion %></p>
+  <p><%= form.label :"Правильный ответ" %><br><%= form.text_field :answertrue %></p>
+  <p><%= form.label :"Вариант ответа 1" %><br><%= form.text_field :answer2 %></p>
+  <p><%= form.label :"Вариант ответа 2" %><br><%= form.text_field :answer3 %></p>
+  <p><%= form.label :"Вариант ответа 3" %><br><%= form.text_field :answer4 %></p>
+  <p><%= form.submit "Добавить", name: "add"%></p>
+<% end %>
+<%= link_to 'Назад', topics_path %>

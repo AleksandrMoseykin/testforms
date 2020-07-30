@@ -1,0 +1,40 @@
+<div class="container">
+<h1>Редактировать личные данные</h1>
+<%= form_with model: @creator, url: creator_path, local: true do |form|  %>
+  <% if @creator.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <% er=@creator.errors.count %>
+        <% if er>0 %>
+        <span>Форма заполнена неправильно</span>
+        <% end %>
+      </h2>
+      <% if @creator.errors[:photocreator] %>
+        <p>Проверьте загружаемое изображение, размер файла не должен быть больше 1 Мб. Для загрузки используйте изображения в фомате .png, .jpg и .gif. </p>
+      <% end %>
+    </div>
+  <% end %>
+  <p><%= form.file_field :photocreator %></p>
+  <p><%= form.label :"Имя" %><br><%= form.text_field :namecreator %></p>
+  <p><%= form.label :"Фамилия" %><br><%= form.text_field :surnamecreator %></p>
+  <p><%= form.label :"Телефон" %><br><%= form.text_field :telephonecreator %></p>
+  <p><%= form.label :"Компания" %><br><%= form.text_field :companycreator %></p>
+  <p><%= form.label :"Промокод" %><br><%= form.text_field :promocodecreator %></p>
+  <p><%= form.submit "Сохранить" %></p>
+<% end %>
+<p><a href="/profile">Назад</a></p>
+</div>
+<% rr = Dir.children("public/uploads/tmp/")%>
+<% contrr = rr.count %>
+<% contrr = (contrr-1)%>
+<% for i in 0..contrr %>
+<% x = Dir.children("public/uploads/tmp/#{rr[i]}")%>
+<% x.each do |name| %>
+  <% File.delete("public/uploads/tmp/#{rr[i]}/#{name}") %>
+<% end %>
+<% end %>
+<% rr.each do |namef| %>
+  <% if Dir.empty?("public/uploads/tmp/#{namef}")%>
+    <% Dir.delete("public/uploads/tmp/#{namef}") %>
+  <% end %>
+<% end %>

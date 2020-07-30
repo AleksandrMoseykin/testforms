@@ -1,0 +1,10 @@
+<h1>Согласия (данные)</h1>
+<% @topic.consents.each do |consent| %>
+<p>Юзер id: <%= consent.userid %></p>
+<p>Стоп: <%= consent.stoptime %></p>
+<p>Правильных ответов: <%= consent.counttrue %></p>
+<p>Общее время: <%= consent.totaltime %></p>
+<p>Вы ответили на <%= consent.questionsall %> вопросов. <%= consent.created_at %></p>
+<% # Consent.destroy_by(userid: 1) %>
+<% # Consent.destroy_by(userid: 2) %>
+<% end %>

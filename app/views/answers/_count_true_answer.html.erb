@@ -1,0 +1,6 @@
+<% if (username_signed_in?) %>
+  <% idreg1 = current_username.id %>
+<% end %>
+<% topicid = @topic.id %>
+<% counttrue = Answer.where(userid:idreg1, topic_id: topicid, scoreanswer: '1').count %>
+<% Consent.where(userid: idreg1, topic_id: topicid).update(counttrue: counttrue) %>

@@ -1,0 +1,275 @@
+<% if (username_signed_in?) %>
+  <% idreg1 = current_username.id %>
+<% end %>
+<% topicid = @topic.id %>
+<% cnt = @topic.questions.count %>
+<% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall == cnt %>
+  <%= render "answers/mesto" %>
+  <%= render "answers/tabltotal" %>
+<% end %>
+<% if @topic.rand == "Выкл." %>
+  <% questionsall=Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+  <% countreserve = @topic.answers.where(userid: idreg1, answeruser: nil).count %>
+    <% if countreserve != nil %>
+      <% numberrand = 0 + questionsall + countreserve %>
+    <% else %>
+      <% numberrand = 0 + questionsall %>
+    <% end %>
+  <% if cnt == numberrand and Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil) != nil %>
+    <% numberrand = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).numberanswer %>
+    <% if numberrand !="" %>
+      <% numberid = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).id %>
+      <% Answer.destroy_by(id: numberid) %>
+    <% end %>
+  <% end %>
+  <% numberanswer = rand(0..6) %>
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall < cnt %>
+    <% @topic.questions.each_with_index do |question, index| %>
+    <% idquestion = Array[] %>
+    <% idquestion[index]=question.id %>
+    <% titlequestion = Array[] %>
+    <% titlequestion[index]=question.titlequestion %>
+    <% imgquestion = Array[] %>
+    <% imgquestion[index]=question.imgquestion %>
+    <% answertrue = Array[] %>
+    <% answertrue[index]=question.answertrue %>
+    <% answer2 = Array[] %>
+    <% answer2[index]=question.answer2 %>
+    <% answer3 = Array[] %>
+    <% answer3[index]=question.answer3 %>
+    <% answer4 = Array[] %>
+    <% answer4[index]=question.answer4 %>
+    <% topic_id = Array[] %>
+    <% topic_id[index]=question.topic_id %>
+    <div hidden class="hid"><%=idquestion[numberrand] %></div>
+    <div><%= titlequestion[numberrand] %></div>
+    <% if numberanswer == 0 %>
+      <div class="answ"><%= answertrue[numberrand] %></div>
+      <div class="answ"><%= answer2[numberrand] %></div>
+      <div class="answ"><%= answer3[numberrand] %></div>
+      <div class="answ"><%= answer4[numberrand] %></div>
+    <% end %>
+    <% if numberanswer == 1 %>
+      <div class="answ"><%= answer2[numberrand] %></div>
+      <div class="answ"><%= answer3[numberrand] %></div>
+      <div class="answ"><%= answer4[numberrand] %></div>
+      <div class="answ"><%= answertrue[numberrand] %></div>
+    <% end %>
+    <% if numberanswer == 2 %>
+      <div class="answ"><%= answer3[numberrand] %></div>
+      <div class="answ"><%= answer4[numberrand] %></div>
+      <div class="answ"><%= answertrue[numberrand] %></div>
+      <div class="answ"><%= answer2[numberrand] %></div>
+    <% end %>
+    <% if numberanswer == 3 %>
+      <div class="answ"><%= answer4[numberrand] %></div>
+      <div class="answ"><%= answertrue[numberrand] %></div>
+      <div class="answ"><%= answer2[numberrand] %></div>
+      <div class="answ"><%= answer3[numberrand] %></div>
+    <% end %>
+    <% if numberanswer == 4 %>
+      <div class="answ"><%= answer4[numberrand] %></div>
+      <div class="answ"><%= answer2[numberrand] %></div>
+      <div class="answ"><%= answer3[numberrand] %></div>
+      <div class="answ"><%= answertrue[numberrand] %></div>
+    <% end %>
+    <% if numberanswer == 5 %>
+      <div class="answ"><%= answer3[numberrand] %></div>
+      <div class="answ"><%= answer4[numberrand] %></div>
+      <div class="answ"><%= answer2[numberrand] %></div>
+      <div class="answ"><%= answertrue[numberrand] %></div>
+    <% end %>
+    <% if numberanswer == 6 %>
+      <div class="answ"><%= answertrue[numberrand] %></div>
+      <div class="answ"><%= answer3[numberrand] %></div>
+      <div class="answ"><%= answer2[numberrand] %></div>
+      <div class="answ"><%= answer4[numberrand] %></div>
+    <% end %>
+  <% end %>
+  <%= render "answers/forma" %>
+  <% numbercnt = cnt - questionsall %>
+  <% if numbercnt > 1 %>
+    <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+      <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= numberrand %>>
+      <% if (username_signed_in?) %><% idreg = current_username.id %>
+        <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+      <% end %>
+    <%= form.submit "Пропустить", name: "add"%>
+    <% end %>
+  <% end %>
+<% end %>
+<% end %>
+
+<% if @topic.rand == "Вкл." and cnt != Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+  <% questionsall = Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+  <% countreserve = @topic.answers.where(userid: idreg1, answeruser: nil).count %>
+  <% cntquest = cnt - questionsall %>
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).numberrand == nil %>
+    <% idar = Array[] %>
+    <% @topic.questions.each_with_index do |quest, index| %>
+      <% idar.push(quest.id)%>
+    <% end %>
+    <% idar %>
+    <% updatenumberrand = Consent.find_by(userid: idreg1, topic_id: topicid) %>
+    <% updatenumberrand.update(numberrand: idar) %>
+  <% end %>
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).numberrand != nil %>
+    <% arraycountdb = Consent.find_by(userid: idreg1, topic_id: topicid).numberrand %>
+    <% arraycount = arraycountdb.count - 1 %>
+    <% if arraycount > - 1 %>
+      <% randint = rand(0..arraycount) %>
+      <% idarray = arraycountdb[randint] %>
+    <% end %>
+  <% end %>
+  <% if cntquest == countreserve %>
+    <% numberrand = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).numberanswer %>
+    <% if numberrand !="" %>
+      <% numberid = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).id %>
+      <% Answer.destroy_by(id: numberid) %>
+    <% end %>
+<% numberanswer = rand(0..6) %>
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall < cnt %>
+    <% titlequestion = Question.find_by(id: numberrand).titlequestion %>
+    <% imgquestion = Question.find_by(id: numberrand).imgquestion %>
+    <% answertrue = Question.find_by(id: numberrand).answertrue %>
+    <% answer2 = Question.find_by(id: numberrand).answer2 %>
+    <% answer3 = Question.find_by(id: numberrand).answer3 %>
+    <% answer4 = Question.find_by(id: numberrand).answer4 %>
+    <% topic_id = Question.find_by(id: numberrand).topic_id %>
+    <div hidden class="hid"><%= numberrand %></div>
+    <div><%= titlequestion %></div>
+    <% if numberanswer == 0 %>
+      <div class="answ"><%= answertrue %></div>
+      <div class="answ"><%= answer2 %></div>
+      <div class="answ"><%= answer3 %></div>
+      <div class="answ"><%= answer4 %></div>
+    <% end %>
+  <% if numberanswer == 1 %>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answertrue %></div>
+  <% end %>
+  <% if numberanswer == 2 %>
+   <div class="answ"><%= answer3 %></div>
+   <div class="answ"><%= answer4 %></div>
+   <div class="answ"><%= answertrue %></div>
+   <div class="answ"><%= answer2 %></div>
+  <% end %>
+  <% if numberanswer == 3 %>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answertrue %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer3 %></div>
+  <% end %>
+  <% if numberanswer == 4 %>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answertrue %></div>
+   <% end %>
+  <% if numberanswer == 5 %>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answertrue %></div>
+  <% end %>
+  <% if numberanswer == 6 %>
+    <div class="answ"><%= answertrue %></div>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer4 %></div>
+  <% end %>
+<%= render "answers/forma" %>
+<% numbercnt = cnt - questionsall %>
+  <% if numbercnt > 1 %>
+    <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+      <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= numberrand %>>
+      <% if (username_signed_in?) %><% idreg = current_username.id %>
+        <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+      <% end %>
+    <%= form.submit "Пропустить", name: "add"%>
+   <% end %>
+  <% end %>
+<% end %>
+<% end %>
+<% if cntquest != countreserve %>
+  <% if Question.find_by(id: idarray) %>
+    <% titlequestion = Question.find_by(id: idarray).titlequestion %>
+    <% imgquestion = Question.find_by(id: idarray).imgquestion %>
+    <% answertrue = Question.find_by(id: idarray).answertrue %>
+    <% answer2 = Question.find_by(id: idarray).answer2 %>
+    <% answer3 = Question.find_by(id: idarray).answer3 %>
+    <% answer4 = Question.find_by(id: idarray).answer4 %>
+    <% topic_id = Question.find_by(id: idarray).topic_id %>
+  <% end %>
+  <% numberanswer = rand(0..6) %>
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall != cnt %>
+    <div hidden class="hid"><%= idarray %></div>
+    <div><%= titlequestion %></div>
+  <% if numberanswer == 0 %>
+    <div class="answ"><%= answertrue %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer4 %></div>
+  <% end %>
+  <% if numberanswer == 1 %>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answertrue %></div>
+  <% end %>
+  <% if numberanswer == 2 %>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answertrue %></div>
+    <div class="answ"><%= answer2 %></div>
+  <% end %>
+  <% if numberanswer == 3 %>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answertrue %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer3 %></div>
+  <% end %>
+  <% if numberanswer == 4 %>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answertrue %></div>
+  <% end %>
+  <% if numberanswer == 5 %>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer4 %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answertrue %></div>
+  <% end %>
+  <% if numberanswer == 6 %>
+    <div class="answ"><%= answertrue %></div>
+    <div class="answ"><%= answer3 %></div>
+    <div class="answ"><%= answer2 %></div>
+    <div class="answ"><%= answer4 %></div>
+  <% end %>
+  <%= render "answers/forma" %>
+  <% arraydel = Consent.find_by(userid: idreg1, topic_id: topicid) %>
+  <% arraydelete = arraydel.numberrand %>
+  <% if arraydelete != [] %>
+    <% arraydelete.delete_at(randint) %>
+  <% end %>
+  <% arraydelete %>
+  <% if arraydelete.count > -1 %>
+    <% updatearraydelete = Consent.find_by(userid: idreg1, topic_id: topicid) %>
+    <% updatearraydelete.update(numberrand: arraydelete) %>
+  <% end %>
+  <% numbercnt = cnt - questionsall %>
+  <% if numbercnt > 1 %>
+    <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+      <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= idarray %>>
+      <% if (username_signed_in?) %><% idreg = current_username.id %>
+      <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+    <% end %>
+  <%= form.submit "Пропустить", name: "add"%>
+  <% end %>
+  <% end %>
+<% end %>
+<% end %>
+<% end %>

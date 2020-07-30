@@ -1,0 +1,135 @@
+<h1>
+  Тестовое задание" <%= @topic.titletopic %>"
+</h1>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Вопросов в тесте:</h4></td>
+        <td><h4><a href="/topics/<%= @topic.id %>/edit"><%= @topic.countquestions %></a></h4></td>
+      </tr>
+      <tr>
+        <td colspan="2"><p>Указано количество вопросов в тестовом задании. Если вы добавили меньше вопросов, чем
+          указано, то ваше задание будет неактивно.</p></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Правильных ответов:</h4></td>
+        <td><h4><a href="/topics/<%= @topic.id %>/edit"><%= @topic.sucquest %></a></h4></td>
+      </tr>
+      <tr>
+        <td colspan="2"><p>Если по итогам прохождения теста, количество правильных ответов равно или больше, чем указано,
+          то задание считается пройденым.</p></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Успешное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td><p><a href="/topics/<%= @topic.id %>/edit"><%= @topic.successmessage %></a></p></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Неудовлетвори&shy;тель&shy;ное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td><p><a href="/topics/<%= @topic.id %>/edit"><%= @topic.failuremessage %></a></p></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Начало показов:</h4></td>
+      </tr>
+      <tr>
+        <td><p><a href="/topics/<%= @topic.id %>/edit"><%= @topic.intdate1.strftime("%d.%m.%Y %H:%M") %></a></p></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Окончание показов:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @topic.intdate2 %>
+              <a href="/topics/<%= @topic.id %>/edit"><%= @topic.intdate2.strftime("%d.%m.%Y %H:%M") %></a>
+            <% else %>
+              <a href="/topics/<%= @topic.id %>/edit">Не задано</a>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Время:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <% @topic.timetask %>
+            <% date=@topic.timetask %>
+            <a href="/topics/<%= @topic.id %>/edit"><%= date.strftime("%H:%M")%></a>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Показы:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><a href="/topics/<%= @topic.id %>/edit"><%= @topic.activ %></a></h5></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Случай&shy;ный поря&shy;док:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><a href="/topics/<%= @topic.id %>/edit"><%= @topic.rand %></a></h5></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Пароль:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <a href="/topics/<%= @topic.id %>/edit"><%= @topic.password %></a>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<%= link_to 'Редактировать', edit_topic_path(@topic) %> |
+<%= link_to 'Назад', topics_path %>

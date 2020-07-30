@@ -1,0 +1,59 @@
+<h1>Настройки вывода статистики ответов "<%= @topic.titletopic %>"</h1>
+<%= form_with model: @setting, url: topic_setting_path, local: true do |form| %>
+  <div class="row">
+    <div class="col-md-6">
+      <table class="borderdiv">
+        <tr>
+          <td><h4>Воз&shy;раст от:</h4></td>
+          <% if Setting.find_by(topic_id: @topic.id).agebefore %>
+            <td><h5><input id="setting_agebefore" max="100" min="7" name="setting[agebefore]" step="1" type="number" value="<%= Setting.find_by(topic_id: @topic.id).agebefore %>" /></h5></td>
+          <% else %>
+            <td><h5><input id="setting_agebefore" max="100" min="7" name="setting[agebefore]" step="1" type="number" value="7" /></h5></td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <table class="borderdiv">
+        <tr>
+          <td><h4>Воз&shy;раст до:</h4></td>
+          <% if Setting.find_by(topic_id: @topic.id).ageafter %>
+            <td><h5><input id="setting_ageafter" max="100" min="7" name="setting[ageafter]" step="1" type="number" value="<%= Setting.find_by(topic_id: @topic.id).ageafter %>" /></h5></td>
+          <% else %>
+            <td><h5><input id="setting_ageafter" max="100" min="7" name="setting[ageafter]" step="1" type="number" value="90" /></h5></td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <table class="borderdiv">
+        <tr>
+          <td><h4>Выпол&shy;не&shy;ние задания:</h4></td>
+          <td><h5><%= form.select(:accomplishment, [['Все', "Все"], ['Да', "Да"], ['Нет', "Нет"]]) %></h5></td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-4">
+      <table class="borderdiv">
+        <tr>
+          <td><h4>Страна:</h4></td>
+          <td><h5><%= form.select(:country, [['Все', "Все"], ['Россия', "Россия"], ['Беларусь', "Беларусь"], ['Украина', "Украина"], ['Армения', "Армения"], ['Грузия', "Грузия"], ['Азербайджан', "Азербайджан"], ['Узбекистан', "Узбекистан"], ['Киргизия', "Киргизия"], ['Израиль', "Израиль"], ['США', "США"]]) %></h5></td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-4">
+      <table class="borderdiv">
+        <tr>
+          <td><h4>Пол:</h4></td>
+          <td><h5><%= form.select(:sex, [['Все', "Все"], ['Муж.', "Муж."], ['Жен.', "Жен."]]) %></h5></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <p>
+    <%= form.submit "Сохранить" %>
+  </p>
+<% end %>
+<%= link_to 'Назад', topic_setting_path %>

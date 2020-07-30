@@ -1,0 +1,10 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+<% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+<h1>Контакты</h1>
+  <% if Contact.find_by(idcreator: idreg1) %>
+    <% @contacts.where(idcreator: idreg1).each do |contact| %>
+      <% id = contact.idvisitor %>
+      <%= Visitor.find_by(idregvis: id).surname %>
+    <% end %>
+  <% end %>
+<% end %>

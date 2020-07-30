@@ -1,0 +1,10 @@
+<% @topic.answers.each do |answer| %>
+  <% if answer.scoreanswer == nil and answer.numberanswer == nil%>
+    <% if Question.find_by(id: answer.questionid) !=nil %>
+      <% sravn = Question.find_by(id: answer.questionid).answertrue %>
+    <% end %>
+    <% if answer.answeruser == sravn %>
+      <% answer.update(scoreanswer: '1') %>
+    <% end %>
+  <% end %>
+<% end %>

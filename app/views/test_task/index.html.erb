@@ -1,0 +1,49 @@
+<% if (username_signed_in?) and !(user_signed_in?) %>
+  <div class="div-line"><h1>Тестовые задания</h1> </div>
+  <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
+    <% if Consent.find_by(userid: idreg1) %>
+      <table class ="task-tabl">
+        <tr class="gl-zag-tabl">
+          <th>Название</th>
+          <th>Вопросов</th>
+          <th>Правильных ответов</th>
+          <th>Выполнение</th>
+        </tr>
+        <% numguest = 0 %>
+        <% Consent.where(userid: idreg1).each do |con| %>
+          <% topicid = con.topic.id %>
+          <tr class="zag-tabl">
+            <td><h4><%= h(Topic.find_by(id: topicid).titletopic) %> <a href="/topics/<%= topicid %>/answers/new"><i class="fa fa-info-circle" aria-hidden="true"></a></h4></td>
+            <td><h4><%= Topic.find_by(id: topicid).countquestions %></h4></td>
+            <td><h4><%= con.counttrue %></h4></td>
+            <td>
+              <% if con.counttrue < Topic.find_by(id: topicid).sucquest %>
+                <i class="fa fa-minus-square-o fa-2x redicon" aria-hidden="true"></i>
+              <% else %>
+                <i class="fa fa-plus-square-o fa-2x greenicon" aria-hidden="true"></i>
+              <% end %>
+            </td>
+          </tr>
+          <% Answer.where(userid: idreg1, topic_id: topicid).each do |answer| %>
+          <% questionid = answer.questionid %>
+          <% scoreanswer = Answer.find_by(questionid: questionid).scoreanswer %>
+          <% countanswers = Answer.where(questionid: questionid).count %>
+          <% scorecountanswers = Answer.where(questionid: questionid, scoreanswer: 1).count %>
+          <% countprocent = scorecountanswers.to_f / countanswers.to_f * 100 %>
+          <tr class="questabl borderquestabl">
+            <th><h5><%= Question.find_by(id: questionid).titlequestion %></h5></th>
+            <th><h5>#<%= numguest += 1 %></h5></th>
+            <th>
+              <% if answer.scoreanswer != nil %>
+                <i class="fa fa-plus fa-2x greenicon" aria-hidden="true">
+              <% else %>
+                <i class="fa fa-minus fa-2x redicon" aria-hidden="true"></i>
+              <% end %>
+            </th>
+            <th><h5><%= countprocent.to_i %>%</h5> <p>ответели правильно</p></th>
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+  <% end %>
+<% end %>

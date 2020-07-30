@@ -1,0 +1,7 @@
+<h1>Правила</h1>
+<%= form_with(model: [@topic, @topic.consents.build],local: true) do |form| %>
+  <% if (username_signed_in?) %><% idreg = current_username.id %>
+    <input type="hidden" name="consent[userid]" id="consent_userid" value=<%= idreg %>>
+  <% end %>
+  <p><%= form.submit "Начать", name: "add" %></p>
+<% end %>

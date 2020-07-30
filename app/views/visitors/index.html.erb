@@ -1,0 +1,15 @@
+<% @visitors.each do |c| %>
+  <% if c.photo !="" %>
+    <img src="<%= c.photo.url(:thumb) %>">
+  <% end %>
+  <p><%= c.name %></p>
+  <p><%= c.surname %></p>
+  <p><%= c.telephone %></p>
+  <p><%= c.birthdate %></p>
+  <p><%= c.country %></p>
+  <p><%= c.city %></p>
+  <p><%= c.promocode %></p>
+  <p><%= c.idregvis %></p>
+  <hr>
+<% end %>
+<% #Creator.destroy_by(namecreator: "Александр") %>

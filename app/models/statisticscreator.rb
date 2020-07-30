@@ -1,0 +1,2 @@
+class Statisticscreator < ApplicationRecord
+end

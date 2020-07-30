@@ -1,0 +1,39 @@
+<h1>Настройки вывода статистики ответов "<%= @topic.titletopic %>"</h1>
+<div class="row">
+  <div class="col-md-4">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Воз&shy;раст от:</h4></td>
+        <% if @setting.find_by(topic_id: @topic.id) %>
+          <td><h4><%= @setting.find_by(topic_id: @topic.id).agebefore %></h4></td>
+        <% end %>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Воз&shy;раст до:</h4></td>
+        <% if @setting.find_by(topic_id: @topic.id) %>
+          <td><h4><%= @setting.find_by(topic_id: @topic.id).ageafter %></h4></td>
+        <% end %>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Выпол&shy;не&shy;ние задания:</h4></td>
+        <% if @setting.find_by(topic_id: @topic.id) %>
+          <td><h4><%= @setting.find_by(topic_id: @topic.id).accomplishment %></h4></td>
+        <% end %>
+      </tr>
+    </table>
+  </div>
+</div>
+<% if @setting.find_by(topic_id: @topic.id) %>
+  <% idsettings = @topic.settings.find_by(topic_id: @topic.id).id  %>
+  <a href="/topics/<%= @topic.id %>/settings/<%= idsettings %>/edit">Редактировать</a>
+<% end %> |
+<%= link_to 'Назад', topic_questions_path %>
+<% #Setting.destroy_by(topic_id: @topic.id)%>

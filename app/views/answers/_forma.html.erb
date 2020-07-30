@@ -1,0 +1,13 @@
+<%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+<p class="answerus">
+  <%= form.label :"Ответ" %><br>
+  <%= form.text_field :answeruser %>
+</p>
+<%= form.hidden_field :questionid %>
+<% if (username_signed_in?) %><% idreg = current_username.id %>
+  <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+<% end %>
+<p>
+  <%= form.submit "Добавить", name: "add"%>
+</p>
+<% end %>

@@ -1,0 +1,71 @@
+<div class="container">
+  <h1>Редактировать личные данные</h1>
+  <%= form_with model: @visitor, url: visitor_path, local: true do |form|  %>
+    <% if @visitor.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <% er=@visitor.errors.count %>
+          <% if er>0 %>
+            <span>Форма заполнена неправильно</span>
+          <% end %>
+        </h2>
+          <% if @visitor.errors[:photo] %>
+            <p>Проверьте загружаемое изображение, размер файла не должен быть больше 1 Мб. Для загрузки используйте изображения в фомате .png, .jpg и .gif. </p>
+          <% end %>
+      </div>
+    <% end %>
+    <p>
+      <%= form.file_field :photo %>
+    </p>
+    <p>
+      <%= form.label :"Имя" %><br>
+      <%= form.text_field :name %>
+    </p>
+    <p>
+      <%= form.label :"Фамилия" %><br>
+      <%= form.text_field :surname %>
+    </p>
+    <p>
+      <%= form.label :"Пол" %><br>
+      <%= form.select(:sex, [['Муж.', "Муж."], ['Жен.', "Жен."]]) %>
+    </p>
+    <p>
+      <%= form.label :"Телефон" %><br>
+      <%= form.text_field :telephone %>
+    </p>
+    <p>
+      <%= form.label :"Страна" %><br>
+      <%= form.text_field :country %>
+    </p>
+    <p>
+      <%= form.label :"Город" %><br>
+      <%= form.text_field :city %>
+    </p>
+    <p>
+      <%= form.label :"Дата рождения" %><br>
+      <%= form.date_field :birthdate %>
+    </p>
+    <p>
+      <%= form.label :"Промокод" %><br>
+      <%= form.text_field :promocode %>
+    </p>
+    <p>
+      <%= form.submit "Сохранить" %>
+    </p>
+  <% end %>
+  <p><a href="/profilevisitor/">Назад</a></p>
+</div>
+<% rr = Dir.children("public/uploads/tmp/")%>
+<% contrr = rr.count %>
+<% contrr = (contrr-1)%>
+<% for i in 0..contrr %>
+  <% x = Dir.children("public/uploads/tmp/#{rr[i]}")%>
+  <% x.each do |name| %>
+    <% File.delete("public/uploads/tmp/#{rr[i]}/#{name}") %>
+  <% end %>
+<% end %>
+<% rr.each do |namef| %>
+  <% if Dir.empty?("public/uploads/tmp/#{namef}")%>
+    <% Dir.delete("public/uploads/tmp/#{namef}") %>
+  <% end %>
+<% end %>

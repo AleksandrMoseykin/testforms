@@ -1,0 +1,18 @@
+<div class="container">
+  <% if (user_signed_in?) %><% userid = current_user.id %><% end %>
+    <% if Creator.find_by(idreg: userid) !="" %>
+      <h1>Профиль пользователя</h1>
+      <%= image_tag @creator.photocreator.url(:thumb), class: "photoprofile" if @creator.photocreator?%>
+      <h4><%= @creator.surnamecreator %> <%= @creator.namecreator %> (<%= @creator.telephonecreator %>)</h4>
+      <p><strong>Email: </strong><% if (user_signed_in?) %><%= current_user.email %><% end %></p>
+      <p><strong>Id пользователя: </strong><% if (user_signed_in?) %><%= current_user.id %><% end %></p>
+      <p><strong>Зарегистрирован:</strong><% if (user_signed_in?) %><% regdata = current_user.created_at %><%= regdata.time.strftime("%d-%m-%Y") %><% end %></p>
+      <% if @creator.companycreator !="" %>
+        <p><strong>Название организации:</strong><%= @creator.companycreator %></p>
+      <% end %>
+      <% if @creator.promocodecreator !="" %>
+        <p><strong>Промокод:</strong><%= @creator.promocodecreator %></p>
+      <% end %>
+    <% end %>
+  <p><a href="/creators/<%= Creator.find_by(idreg: userid).id %>/edit">Редактировать</a></p>
+</div>

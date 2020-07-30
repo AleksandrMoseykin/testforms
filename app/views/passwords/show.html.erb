@@ -1,0 +1,7 @@
+<h2>Пароли</h2>
+<% @topic.passwords.each do |password| %>
+  <p><%= password.pasanswer %></p>
+  <p><%= password.pascount %></p>
+  <p><%= password.pasvalue %></p>
+  <p><%= password.userid %></p>
+<% end %>

@@ -1,0 +1,8 @@
+<h1>Проверка пароля</h1>
+<% @topic.passwords.each do |password| %>
+  <p>Пароль пользователя: <%= password.pasanswer %></p>
+  <p>Попыток ввода пароля: <%= password.pascount %></p>
+  <p>Сравнение паролей: <%= password.pasvalue %></p>
+  <p>Юзер id: <%= password.userid %></p>
+  <% Password.destroy_by(userid: 1) %>
+<% end %>

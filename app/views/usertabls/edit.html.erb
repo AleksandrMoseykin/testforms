@@ -1,0 +1,128 @@
+<% usertabls = @usertabl.userid %>
+<% usertabltopicid = @usertabl.topic_id %>
+<% idreg = Topic.find_by(id: usertabltopicid).idreg %>
+<% if (user_signed_in?) %><% userid = current_user.id %><% end %>
+<% if idreg==userid %>
+  <% if Username.find_by(id: usertabls) %>
+    <% usernameid = Username.find_by(id: usertabls).id %>
+  <% end %>
+  <% #@usertabl.update(addcontact: nil) %>
+  <% if @usertabl.addcontact %>
+    <% unless Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
+      <% Contact.create(idvisitor: usernameid, idcreator: userid) %>
+    <% end %>
+  <% end %>
+  <% if Visitor.find_by(idregvis: usertabls) %>
+    <h1><%= Visitor.find_by(idregvis: usertabls).surname %> <%= Visitor.find_by(idregvis: usertabls).name %> - ответы на задание "<%= Topic.find_by(id: usertabltopicid).titletopic %>"</h1>
+    <table cellspacing="5" cellpadding="10" class="backgroundtabl">
+      <tr>
+        <td class="w260" valign="top">
+          <% if Visitor.find_by(idregvis: usertabls).photo.url(:thumb) %>
+            <%= image_tag Visitor.find_by(idregvis: usertabls).photo.url(:thumb), class: "photousertabls" %>
+          <% end %>
+          <%= form_with(model: @usertabl, url: topic_usertabl_path, local: true) do |form| %>
+            <input type="hidden" name="usertabl[addcontact]" id="usertabl_addcontact" value=<%= Username.find_by(id: usernameid).confirmation_token %>>
+            <% if @usertabl.addcontact or Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
+              <P class ="greenicon"><strong><i class="fa fa-check-circle" aria-hidden="true"></i> Пользователь добавлен в контакты</strong><p>
+            <% else %>
+              <p><%= form.submit "Добавить в контакты", name: "add" %></p>
+            <% end %>
+          <% end %>
+        </td>
+        <td>
+          <h6>
+            <strong>Id пользователя:</strong>
+            <% if Username.find_by(id: usertabls) %>
+              <%= usernameid %>
+            <% end %>
+          </h6><hr>
+          <h6>
+            <strong>Пол:</strong>
+            <% if Visitor.find_by(id: usertabls) %><%= Visitor.find_by(id: usertabls).sex %><% end %>
+          </h6><hr>
+          <h6>
+            <strong>Email:</strong>
+            <% if Username.find_by(id: usertabls) %><%= Username.find_by(id: usertabls).email %><% end %>
+          </h6><hr>
+          <h6>
+            <strong>Телефон:</strong>
+            <% if Visitor.find_by(idregvis: usertabls) %><%= Visitor.find_by(idregvis: usertabls).telephone %><% end %>
+          </h6><hr>
+            <% if Visitor.find_by(idregvis: usertabls).birthdate !="" %>
+              <% birthdate = Visitor.find_by(idregvis: usertabls).birthdate %>
+              <% birthdate.time.strftime("%d-%m-%Y") %>
+          <h6>
+            <strong>Возраст:</strong>
+            <% timed=Time.now.strftime("%d-%m-%Y") %>
+            <% age = Time.diff(Time.now, birthdate) %>
+            <%= age[:year] %> лет
+          </h6><hr>
+            <% end %>
+          <% if Visitor.find_by(idregvis: usertabls).country !="" %>
+            <h6>
+              <strong>Страна:</strong>
+              <%= Visitor.find_by(idregvis: usertabls).country %>
+            </h6><hr>
+          <% end %>
+          <% if Visitor.find_by(idregvis: usertabls).city !="" %>
+            <h6>
+              <strong>Город:</strong>
+              <%= Visitor.find_by(idregvis: usertabls).city %>
+            </h6>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+  <% else %>
+    <h1>Пользователь id: <%= usertabls %> - ответы на задание "<%= Topic.find_by(id: usertabltopicid).titletopic %>"</h1>
+    <h6>
+      <strong>Email:</strong>
+      <% if Username.find_by(id: usertabls) %><%= Username.find_by(id: usertabls).email %><% end %>
+    </h6>
+  <% end %>
+  <table class ="task-tabl">
+    <tr class="gl-zag-tabl">
+      <th>Название</th>
+      <th>Вопросов</th>
+      <th>Правильных ответов</th>
+      <th>Выполнение</th>
+    </tr>
+    <% numguest = 0 %>
+    <% Consent.where(userid: usertabls).each do |con| %>
+      <% topicid = con.topic.id %>
+      <tr class="zag-tabl">
+        <td><h4><%= h(Topic.find_by(id: topicid).titletopic) %></h4></td>
+        <td><h4><%= Topic.find_by(id: topicid).countquestions %></h4></td>
+        <td><h4><%= con.counttrue %></h4></td>
+        <td>
+          <% if con.counttrue < Topic.find_by(id: topicid).sucquest %>
+            <i class="fa fa-minus-square-o fa-2x redicon" aria-hidden="true"></i>
+          <% else %>
+            <i class="fa fa-plus-square-o fa-2x greenicon" aria-hidden="true"></i>
+          <% end %>
+        </td>
+      </tr>
+      <% Answer.where(userid: usertabls, topic_id: topicid).each do |answer| %>
+        <% questionid = answer.questionid %>
+        <% scoreanswer = Answer.find_by(questionid: questionid).scoreanswer %>
+        <% countanswers = Answer.where(questionid: questionid).count %>
+        <% scorecountanswers = Answer.where(questionid: questionid, scoreanswer: 1).count %>
+        <% countprocent = scorecountanswers.to_f / countanswers.to_f * 100 %>
+        <tr class="questabl borderquestabl">
+          <th><h5><%= Question.find_by(id: questionid).titlequestion %></h5></th>
+          <th><h5>#<%= numguest += 1 %></h5></th>
+          <th>
+            <% if answer.scoreanswer != nil %>
+              <i class="fa fa-plus fa-2x greenicon" aria-hidden="true">
+            <% else %>
+              <i class="fa fa-minus fa-2x redicon" aria-hidden="true"></i>
+            <% end %>
+          </th>
+          <th><h5><%= countprocent.to_i %>%</h5> <p>ответели правильно</p></th>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+<% end %>
+<br>
+<%= link_to 'Назад', topic_questions_path %>

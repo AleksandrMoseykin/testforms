@@ -1,0 +1,15 @@
+<% if (username_signed_in?) %><% idreg1 = current_username.id %>
+  <h2>Ответы</h2>
+  <% @topic.answers.where(userid:idreg1).each do |answer| %>
+    <p> Ответ: <%= answer.answeruser %> </p>
+    <p> Очки: <%= answer.scoreanswer %> </p>
+    <p> id вопроса: <%= answer.questionid %> </p>
+    <p> id задания: <%= answer.topic_id %> </p>
+    <p> id пользователя: <%= answer.userid %> </p>
+    <p> numberanswer: <%= answer.numberanswer %> </p>
+  <% end %>
+  <% topicid = @topic.id %>
+  <% # Answer.destroy_by(topic_id: '45') %>
+<% else %>
+  <%= render "answers/forma_reg" %>
+<% end %>

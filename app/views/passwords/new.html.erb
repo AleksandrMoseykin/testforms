@@ -1,0 +1,7 @@
+<%= form_with(model: [ @topic, @topic.passwords.build ], local: true) do |form| %>
+  <p><%= form.label :"Пароль" %><br><%= form.text_field :pasanswer %></p>
+  <% if (username_signed_in?) %><% idreg = current_username.id %>
+    <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+  <% end %>
+    <p><%= form.submit "Добавить", name: "add"%></p>
+<% end %>

@@ -1,0 +1,45 @@
+<% if (username_signed_in?) %><% userid = current_username.id %>
+  <% if Visitor.exists? %>
+    <% if Visitor.find_by(idregvis: userid) %>
+      <div class="container">
+        <h1>Профиль пользователя</h1>
+        <% if Visitor.find_by(idregvis: userid).photo.url(:thumb) !="" %>
+          <%= image_tag Visitor.find_by(idregvis: userid).photo.url(:thumb), class: "photoprofile" %>
+        <% end %>
+        <h4><%= Visitor.find_by(idregvis: userid).surname %> <%= Visitor.find_by(idregvis: userid).name %> (<%= Visitor.find_by(idregvis: userid).telephone %>)</h4>
+        <p></p>
+        <p><strong>Пол: </strong><%= Visitor.find_by(idregvis: userid).sex %></p>
+        <p><strong>Email: </strong><% if (username_signed_in?) %><%= current_username.email %><% end %></p>
+        <p><strong>Id пользователя: </strong><% if (username_signed_in?) %><%= current_username.id %><% end %></p>
+        <p><strong>Зарегистрирован: </strong><% if (username_signed_in?) %><% regdata = current_username.created_at %><%= regdata.time.strftime("%d-%m-%Y") %><% end %></p>
+        <% if Visitor.find_by(idregvis: userid).birthdate !="" %>
+          <% birthdate = Visitor.find_by(idregvis: userid).birthdate %>
+          <% birthdate.time.strftime("%d-%m-%Y") %>
+          <p><strong>Возраст:</strong><% timed=Time.now.strftime("%d-%m-%Y") %><% age = Time.diff(Time.now, birthdate) %><%= age[:year] %> лет</p>
+        <% end %>
+        <% if Visitor.find_by(idregvis: userid).country !="" %>
+          <p><strong>Страна:</strong><%= Visitor.find_by(idregvis: userid).country %></p>
+        <% end %>
+        <% if Visitor.find_by(idregvis: userid).city !="" %>
+          <p><strong>Город:</strong><%= Visitor.find_by(idregvis: userid).city %></p>
+        <% end %>
+        <% editid = Visitor.find_by(idregvis: userid).id %>
+        <p><%= link_to 'Редактировать', edit_visitor_path(id: editid) %></p>
+      </div>
+    <% else %>
+      <div class="container">
+        <h1>Профиль пользователя</h1>
+        <h3>Ваш профиль заполнен не полностью</h3>
+        <a><%= image_tag "avatarka-no.png", alt: "Фото аватарки отсутствует" %></a>
+        <p>Фото аватарки отсутствует</p>
+        <p><strong>Email:</strong><% if (username_signed_in?) %><%= current_username.email %><% end %></p>
+        <p><strong>Id пользователя:</strong><% if (username_signed_in?) %><%= current_username.id %><% end %></p>
+        <p><strong>Зарегистрирован:</strong>
+        <% if (username_signed_in?) %><% regdata = current_username.created_at %>
+          <%= regdata.time.strftime("%d-%m-%Y") %>
+        <% end %>
+        <p><a href="/visitors/new">Добавить данные</a></p>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

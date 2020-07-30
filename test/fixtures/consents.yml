@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  userid: 1
+  creatorid: 1
+  stoptime: 
+  counttrue: 1
+  totaltime: 1
+  questionsall: 1
+  topic: one
+
+two:
+  userid: 1
+  creatorid: 1
+  stoptime: 
+  counttrue: 1
+  totaltime: 1
+  questionsall: 1
+  topic: two

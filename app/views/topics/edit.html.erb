@@ -1,0 +1,194 @@
+<% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+  <% if Topic.find_by(idreg: idreg1) %>
+    <% curentdate = Time.new %>
+    <% newcurentdate = curentdate.strftime("%Y-%m-%dT%H:%M") %>
+    <h1>Редактировать "<%= @topic.titletopic %>"</h1>
+    <%= form_with(model: @topic, local: true) do |form| %>
+      <% if @topic.errors.any? %>
+        <div id="error_explanation">
+          <h2>
+            <% er=@topic.errors.count %>
+            <% if er>0 %>
+              <span>Форма заполнена неправильно</span>
+            <% end %>
+          </h2>
+        </div>
+      <% end %>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Вопросов в тесте:</h4></td>
+        <td>
+          <h4>
+            <% if @topic.countquestions %>
+              <input id="topic_countquestions" class="w100" max="100" min="1" name="topic[countquestions]" step="1" type="number" value=<%= @topic.countquestions %> />
+            <% else %>
+              <input id="topic_countquestions" class="w100" max="100" min="1" name="topic[countquestions]" step="1" type="number" value="10" />
+            <% end %>
+          </h4>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <p>Указано количество вопросов в тестовом задании. Если вы добавили меньше вопросов, чем
+          указано, то ваше задание будет неактивно.</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Правильных ответов:</h4></td>
+        <td>
+          <h4>
+            <% if @topic.sucquest %>
+              <input id="topic_sucquest" class="w100" max="100" min="1" name="topic[sucquest]" step="1" type="number" value=<%= @topic.sucquest %> />
+            <% else %>
+              <input id="topic_sucquest" class="w100" max="100" min="1" name="topic[sucquest]" step="1" type="number" value="5" />
+            <% end %>
+          </h4>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <p>Если по итогам прохождения теста, количество правильных ответов равно или больше, чем указано,
+          то задание считается пройденым.</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Успешное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @topic.successmessage %>
+              <textarea name="topic[successmessage]" id="topic_successmessage" class="w100"><%= @topic.successmessage %></textarea>
+            <% else %>
+              <textarea name="topic[successmessage]" id="topic_successmessage" class="w100">Вы успешно прошли тест</textarea>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Неудовлетвори&shy;тель&shy;ное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @topic.failuremessage %>
+              <textarea name="topic[failuremessage]" id="failuremessage_successmessage" class="w100"><%= @topic.failuremessage %></textarea>
+            <% else %>
+              <textarea name="topic[failuremessage]" id="failuremessage_successmessage" class="w100">Вы не прошли тест</textarea>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Начало показов:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @topic.intdate1 %>
+              <%= form.datetime_local_field :intdate1, class: "w100" %>
+            <% else %>
+              <input type="datetime-local" name="topic[intdate1]" id="topic_intdate1" value=<%= newcurentdate %>>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Окончание показов:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <%= form.datetime_local_field :intdate2, class: "w100" %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Время:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <%= form.time_field :timetask, class: "w100" %>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Показы:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><%= form.select(:activ, [['Вкл.', "Вкл."], ['Выкл.', "Выкл."]]) %></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Случай&shy;ный поря&shy;док:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><%= form.select(:rand, [['Выкл.', "Выкл."], ['Вкл.', "Вкл."]]) %></h5></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Пароль:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <% if @topic.password %>
+              <input name="topic[password]" id="topic_password" class = "w100" value=<%= @topic.password%>>
+            <% else %>
+              <%= form.password_field :password, class: "w100" %>
+            <% end %>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<p>
+  <%= form.submit "Сохранить" %>
+</p>
+<% end %>
+  <%= link_to 'Назад', topic_path(id: @topic) %>
+<% end %>

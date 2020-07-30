@@ -1,0 +1,55 @@
+<div class="container">
+  <% if (username_signed_in?) %><% userid = current_username.id %><% end %>
+  <% if Visitor.find_by(idregvis: userid) !="" %>
+    <h1>Профиль пользователя</h1>
+    <%= image_tag @visitor.photo.url(:thumb), class: "photoprofile" if @visitor.photo?%>
+    <h4><%= @visitor.surname %> <%= @visitor.name %> (<%= @visitor.telephone %>)</h4>
+    <p>
+      <strong>Email:</strong>
+      <% if (username_signed_in?) %><%= current_username.email %><% end %>
+    </p>
+    <p>
+      <strong>Id пользователя:</strong>
+      <% if (username_signed_in?) %><%= current_username.id %><% end %>
+    </p>
+    <p>
+      <strong>Зарегистрирован:</strong>
+      <% if (username_signed_in?) %><% regdata = current_username.created_at %>
+        <%= regdata.time.strftime("%d-%m-%Y") %>
+      <% end %>
+    </p>
+    <% if @visitor.birthdate !="" %>
+      <% birthdate = @visitor.birthdate %>
+      <% birthdate.time.strftime("%d-%m-%Y") %>
+    <p>
+      <strong>Возраст:</strong>
+      <% timed=Time.now.strftime("%d-%m-%Y") %>
+      <% age = Time.diff(Time.now, birthdate) %>
+      <%= age[:year] %> лет
+    </p>
+    <p>
+      <strong>Пол:</strong>
+      <%= @visitor.sex %>
+    </p>
+    <% end %>
+    <% if @visitor.country !="" %>
+      <p>
+        <strong>Страна:</strong>
+        <%= @visitor.country %>
+      </p>
+    <% end %>
+    <% if @visitor.country !="" %>
+      <p>
+        <strong>Город:</strong>
+        <%= @visitor.city %>
+      </p>
+    <% end %>
+    <% if @visitor.promocode !="" %>
+      <p>
+        <strong>Промокод:</strong>
+        <%= @visitor.promocode %>
+      </p>
+    <% end %>
+  <% end %>
+  <p><a href="/visitors/<%= Visitor.find_by(idregvis: userid).id %>/edit">Редактировать</a></p>
+</div>

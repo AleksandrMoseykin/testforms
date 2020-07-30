@@ -1,0 +1,53 @@
+<% if (username_signed_in?) %>
+  <% idreg1 = current_username.id %>
+<% end %>
+<% topicid = @topic.id %>
+<% maxcounttrue01 = Consent.where(topic_id: topicid).maximum("counttrue") %>
+<% mintime01 = Consent.where(topic_id: topicid, counttrue: maxcounttrue01).minimum("totaltime") %>
+<% iduser01 = Consent.find_by(topic_id: topicid, counttrue: maxcounttrue01, totaltime: mintime01).userid %>
+<% maxcounttrue021 = Consent.where.not(userid: iduser01) %>
+<% maxcounttrue02 = maxcounttrue021.where(topic_id: topicid).maximum("counttrue") %>
+<% mintime02 = maxcounttrue021.where(topic_id: topicid, counttrue: maxcounttrue02).minimum("totaltime") %>
+
+<% if mintime02 %>
+  <% iduser02 = Consent.find_by(topic_id: topicid, counttrue: maxcounttrue02, totaltime: mintime02).userid %>
+  <% idconsent = Consent.find_by(userid: iduser02).id %>
+<% end %>
+
+<% maxcounttrue031 = Consent.where.not(userid: iduser01, id: idconsent) %>
+<% maxcounttrue03 = maxcounttrue031.where(topic_id: topicid).maximum("counttrue") %>
+<% mintime03 = maxcounttrue031.where(topic_id: topicid, counttrue: maxcounttrue03).minimum("totaltime") %>
+
+<% if mintime03 %>
+  <% iduser03 = Consent.find_by(topic_id: topicid, counttrue: maxcounttrue03, totaltime: mintime03).userid %>
+<% end %>
+
+<% if Consent.where(topic_id: topicid).count > 1 %>
+  <p>
+    <% if iduser01 %>
+      <b>1. Место:</b>
+        <% if Visitor.find_by(idregvis: iduser01) %>
+          <%= Visitor.find_by(idregvis: iduser01).name %>
+          <%= Visitor.find_by(idregvis: iduser01).surname %>
+        <% else %>
+          id: <%= iduser01 %>
+        <% end %>
+    <% end %>
+    <% if iduser02 %>
+      | <b>2. Место:</b>
+      <% if Visitor.find_by(idregvis: iduser02) %>
+        <%= Visitor.find_by(idregvis: iduser02).name %> <%= Visitor.find_by(idregvis: iduser02).surname %>
+      <% else %>
+        id: <%= iduser02 %>
+      <% end %>
+    <% end %>
+    <% if iduser03 %>
+      | <b>3. Место:</b>
+      <% if Visitor.find_by(idregvis: iduser03) %>
+        <%= Visitor.find_by(idregvis: iduser03).name %> <%= Visitor.find_by(idregvis: iduser03).surname %>
+      <% else %>
+        id: <%= iduser03 %>
+      <% end %>
+    <% end %>
+  </p>
+<% end %>

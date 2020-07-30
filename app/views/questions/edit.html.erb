@@ -1,0 +1,11 @@
+<h2>Редактировать вопрос</h2>
+<%= Question.find_by(topic_id: @topic.id).imgquestion %>
+<%= form_with model: @question, url: topic_question_path, local: true do |form| %>
+  <p><%= form.label :"Вопрос" %><br><%= form.text_field :titlequestion %></p>
+  <p><%= form.label :"Правильный ответ" %><br><%= form.text_field :answertrue %></p>
+  <p><%= form.label :"Вариант ответа 1" %><br><%= form.text_field :answer2 %></p>
+  <p><%= form.label :"Вариант ответа 2" %><br><%= form.text_field :answer3 %></p>
+  <p><%= form.label :"Вариант ответа 3" %><br><%= form.text_field :answer4 %></p>
+  <p><%= form.submit "Сохранить" %></p>
+<% end %>
+<%= link_to 'Назад', topics_path %>

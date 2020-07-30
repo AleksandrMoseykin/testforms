@@ -1,0 +1,9 @@
+<h2>Вопросы</h2>
+<% @topic.questions.each do |question| %>
+  <p><%= question.titlequestion %></p>
+  <p><%= question.answertrue %></p>
+  <p><%= question.answer2 %></p>
+  <p><%= question.answer3 %></p>
+  <p><%= question.answer4 %></p>
+  <%= link_to "Назад",  @topic %>
+<% end %>

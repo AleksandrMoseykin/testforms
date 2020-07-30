@@ -1,0 +1,21 @@
+
+
+
+
+
+
+
+    <% if countreserve != nil %>
+      <% numberrand = 0 + questionsall + countreserve %>
+    <% else %>
+      <% numberrand = 0 + questionsall %>
+    <% end %>
+
+    <% if cnt == numberrand and Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil) != nil %>
+
+        <% numberrand = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).numberanswer %>
+        <% if numberrand !="" %>
+        <% numberid = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).id %>
+        <% Answer.destroy_by(id: numberid) %>
+        <% end %>
+    <% end %>

@@ -1,0 +1,13 @@
+<% @creators.each do |c| %>
+  <% if c.photocreator !="" %>
+    <img src="<%= c.photocreator %>">
+  <% end %>
+  <p><%= c.namecreator %></p>
+  <p><%= c.surnamecreator %></p>
+  <p><%= c.telephonecreator %></p>
+  <p><%= c.companycreator %></p>
+  <p><%= c.promocodecreator %></p>
+  <p><%= c.idreg %></p>
+  <hr>
+<% end %>
+<% #Creator.destroy_by(namecreator: "Александр") %>

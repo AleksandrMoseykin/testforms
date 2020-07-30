@@ -1,0 +1,66 @@
+<h1>Добавить тестовое задание</h1>
+<% curentdate = Time.new %>
+<% newcurentdate = curentdate.strftime("%Y-%m-%dT%H:%M") %>
+<%= form_with scope: :topic, url: topics_path, local: true do |form| %>
+  <% if @topic.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <% er=@topic.errors.count %>
+        <% if er>0 %>
+          <span>Форма заполнена неправильно</span>
+        <% end %>
+      </h2>
+    </div>
+  <% end %>
+  <p>
+    <%= form.label :"Название" %><br>
+    <%= form.text_field :titletopic %>
+  </p>
+  <p>
+    <%= form.label :"Количество вопросов" %><br>
+    <input id="topic_countquestions" max="100" min="1" name="topic[countquestions]" step="1" type="number" value="10" />
+  </p>
+  <p>
+    <%= form.label :"Количество правильных ответов" %><br>
+    <input id="topic_sucquest" max="100" min="1" name="topic[sucquest]" step="1" type="number" value="5" />
+  </p>
+  <p>
+    <%= form.label :"Время" %><br>
+    <input type="time" name="topic[timetask]" id="topic_timetask" value="00:10">
+  </p>
+  <p>
+    <%= form.label :"Начало показов" %><br>
+    <input type="datetime-local" name="topic[intdate1]" id="topic_intdate1" value=<%= newcurentdate %>>
+  </p>
+  <p>
+    <%= form.label :"Окончание показов" %><br>
+    <%= form.datetime_local_field :intdate2 %>
+  </p>
+  <p>
+    <%= form.label :"Пароль" %><br>
+    <%= form.password_field :password %>
+  </p>
+  <% if (user_signed_in?) %><% idreg = current_user.id %>
+  <input type="hidden" name="topic[idreg]" id="topic_ip" value="<%= idreg %>">
+  <% end %>
+  <p>
+    <%= form.label :"Успешное сообщение" %><br>
+    <textarea name="topic[successmessage]" id="topic_successmessage">Вы успешно прошли тест</textarea>
+  </p>
+  <p>
+    <%= form.label :"Сообщение о неудаче" %><br>
+    <textarea name="topic[failuremessage]" id="failuremessage_successmessage">Вы не прошли тест</textarea>
+  </p>
+  <p>
+    <%= form.label :"Показы" %><br>
+    <%= form.select(:activ, [['Вкл.', "Вкл."], ['Выкл.', "Выкл."]]) %>
+  </p>
+  <p>
+    <%= form.label :"Случайный порядок показов" %><br>
+    <%= form.select(:rand, [['Выкл.', "Выкл."], ['Вкл.', "Вкл."]]) %>
+  </p>
+  <p>
+    <%= form.submit "Сохранить" %>
+  </p>
+<% end %>
+<%= link_to 'Назад', topics_path %>

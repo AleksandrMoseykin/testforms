@@ -1,0 +1,72 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+  <h1>Статистика</h1>
+  <% if Statisticscreator.find_by(idreg: idreg1) %>
+    <% if Statisticscreator.find_by(idreg: idreg1).test %>
+      <% stattest = Statisticscreator.find_by(idreg: idreg1).test %>
+      <% stattest2 = stattest.size %>
+    <% else %>
+      <% stattest2 = 0 %>
+    <% end %>
+  <% else %>
+    <% stattest2 = 0 %>
+  <% end %>
+  <% if Topic.find_by(idreg: idreg1) %>
+    <% if Topic.find_by(idreg: idreg1).activ == "Вкл." %>
+      <% statactiv = Topic.where(idreg: idreg1, activ: "Вкл.").count %>
+    <% else %>
+      <% statactiv = 0 %>
+    <% end %>
+  <% else %>
+    <% statactiv = 0 %>
+  <% end %>
+  <% if Topic.find_by(idreg: idreg1) %>
+    <% if Topic.find_by(idreg: idreg1).activ == "Выкл." %>
+      <% statstop = Topic.where(idreg: idreg1, activ: "Выкл.").count %>
+    <% else %>
+      <% statstop = 0 %>
+    <% end %>
+  <% else %>
+    <% statstop = 0 %>
+  <% end %>
+  <div class="row">
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4>Создано за все время</h4><p>Тестовые задания: <%= stattest2 %></p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4>Активные</h4><p>Тестовые задания: <%= statactiv %></p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4>Архив</h4><p>Тестовые задания: </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4>Остановленные</h4><p>Тестовые задания: <%= statstop %></p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<% end %>
