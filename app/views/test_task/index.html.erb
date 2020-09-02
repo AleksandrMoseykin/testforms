@@ -31,7 +31,7 @@
           <% scorecountanswers = Answer.where(questionid: questionid, scoreanswer: 1).count %>
           <% countprocent = scorecountanswers.to_f / countanswers.to_f * 100 %>
           <tr class="questabl borderquestabl">
-            <th><h5><%= Question.find_by(id: questionid).titlequestion %></h5></th>
+            <th><h5><% if Question.find_by(id: questionid) %><%= Question.find_by(id: questionid).titlequestion %><% end %></h5></th>
             <th><h5>#<%= numguest += 1 %></h5></th>
             <th>
               <% if answer.scoreanswer != nil %>

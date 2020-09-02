@@ -39,8 +39,20 @@
       <% usercreatid = @topic.idreg %>
       <% creatordb = Creator.find_by(idreg: usercreatid) %>
       <% #creatordb.namecreator %>
-      <h6>id: <%= @topic.id %> | Создатель: <%= creatordb.namecreator %> <%= creatordb.surnamecreator %> | <%= datecreadtopic.strftime("%d.%m.%Y") %></h6>
-      <p></p>
+      <p>
+        <h6>id: <%= @topic.id %> | Создатель: <%= creatordb.namecreator %> <%= creatordb.surnamecreator %> | <%= datecreadtopic.strftime("%d.%m.%Y") %></h6>
+      </p>
+      <% datestop = Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
+      <% currentdate = Time.new %>
+      <% finishtime = (datestop - currentdate) %>
+      <div class = "topinfoblock">
+        <strong>
+          <span id="my_timers"><%= Time.at(finishtime).utc.strftime("%H:%M:%S") %></span> |
+          <%= javascript_pack_tag 'timer', 'data-turbolinks-track': 'reload' %>
+          <span><%= Answer.where(topic_id: topicid1, userid: idreg1).count %></span>:<span><%= Question.where(topic_id: topicid1).count %></span>
+        </strong>
+      </div>
+
       <% cnt = @topic.questions.count %>
       <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
         <% if Consent.find_by(userid: idreg1) != nil %>
@@ -77,7 +89,7 @@
           <% if Answer.find_by(userid:idreg1, topic_id: topicid) %>
             <% createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
           <% end %>
-          <%= link_to "Подробнее",  "/test_task/" %>
+          <%= link_to "Подробнее!!!",  "/test_task/" %>
         <% else %>
             <%= render "answers/time_out" %>
         <% end %>
@@ -140,7 +152,7 @@
                 <% if Answer.find_by(userid:idreg1, topic_id: topicid) %>
                   <% createdanswer = Answer.where(userid:idreg1, topic_id: topicid).last.created_at %>
                 <% end %>
-                <%= link_to "Подробнее",  "/test_task/" %>
+                <%= link_to "Подробнее!!!",  "/test_task/" %>
               <% else %>
                 <%= render "answers/time_out" %>
               <% end %>
@@ -181,10 +193,18 @@
 <script type="text/javascript">
   $( document ).on('turbolinks:load', function() {
     $(".answ").on("click", function(){
-      var element = $(this).text();
+      var element = $(this).find(".answerspan").text();
+      $(".spanansw").css("background-color", "#ced2d8");
+      $(this).find(".spanansw").css("background-color", "#1ea076");
       $("#answer_answeruser").val(element);
       var hid = $(".hid").text();
       $("#answer_questionid").val(hid);
-});
+      $(".but-hid").removeClass();
+    });
+  });
+</script>
+<script>
+  $(document).on('turbolinks:load', function() {
+    $("a").attr("data-turbolinks", "false");
   });
 </script>

@@ -4,21 +4,21 @@ class TopicsController < ApplicationController
   end
 
   def show
-      @topic = Topic.find(params[:id])
-    end
+    @topic = Topic.find(params[:id])
+  end
 
   def new
     @topic = Topic.new
   end
 
   def edit
-  @topic = Topic.find(params[:id])
-end
+    @topic = Topic.find(params[:id])
+  end
 
   def create
-      @topic = Topic.new(topic_params)
+    @topic = Topic.new(topic_params)
 
-      if @topic.save
+    if @topic.save
       redirect_to @topic
     else
       render 'new'
@@ -26,8 +26,7 @@ end
   end
 
   def update
-  @topic = Topic.find(params[:id])
-
+    @topic = Topic.find(params[:id])
   if @topic.update(topic_params)
     redirect_to @topic
   else

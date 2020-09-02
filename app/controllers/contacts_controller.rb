@@ -5,30 +5,30 @@ class ContactsController < ApplicationController
 
   def show
       @contact = Contact.find(params[:id])
-    end
+  end
 
   def new
     @contact = Contact.new
   end
 
   def edit
-  @contact = Contact.find(params[:id])
-end
+    @contact = Contact.find(params[:id])
+  end
 
   def create
-      @contact = Contact.new(topic_params)
+    @contact = Contact.new(contact_params)
 
-      if @contact.save
-      redirect_to @contact
-    else
-      render 'new'
-    end
+    if @contact.save
+    redirect_to @contact
+  else
+    render 'new'
+  end
   end
 
   def update
-  @contact = Contact.find(params[:id])
+    @contact = Contact.find(params[:id])
 
-  if @contact.update(topic_params)
+  if @contact.update(contact_params)
     redirect_to @contact
   else
     render 'edit'
@@ -39,7 +39,7 @@ def destroy
   @contact = Contact.find(params[:id])
   @contact.destroy
 
-  redirect_to '/topics/'
+  redirect_to '/contacts/'
 end
 
   private

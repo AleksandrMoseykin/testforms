@@ -1,10 +1,36 @@
 <% if (user_signed_in?) and !(username_signed_in?) %>
 <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
-<h1>Контакты</h1>
+<% i = 0 %>
+<div class="div-line"><h1>Контакты</h1> <a href="#"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></a></div>
   <% if Contact.find_by(idcreator: idreg1) %>
+<br>
     <% @contacts.where(idcreator: idreg1).each do |contact| %>
-      <% id = contact.idvisitor %>
-      <%= Visitor.find_by(idregvis: id).surname %>
+      <table class="task-tabl">
+        <tr class="gl-zag-tabl">
+          <th>#</th>
+          <th>Имя</th>
+          <th>Фамилия</th>
+          <th>Пол</th>
+          <th>Телефон</th>
+          <th>Email</th>
+          <th>Город</th>
+          <th>Удалить</th>
+        </tr>
+        <tr class="zag-tabl">
+          <td><% id = contact.idvisitor %><%= i += 1 %></td>
+          <td><%= Visitor.find_by(idregvis: id).name %></td>
+          <td><%= Visitor.find_by(idregvis: id).surname %></td>
+          <td><%= Visitor.find_by(idregvis: id).sex %></td>
+          <td><%= Visitor.find_by(idregvis: id).telephone %></td>
+          <td><% idvisitor = Visitor.find_by(idregvis: id).idregvis %><%= Username.find_by(id: idvisitor).email %></td>
+          <td class="hidid"><%= Username.find_by(id: idvisitor).id %></td>
+          <td><%= Visitor.find_by(idregvis: id).city %></td>
+          <td><h4><a data-confirm="Удалить?" rel="nofollow" data-method="delete" href="/contacts/<%= Contact.find_by(idvisitor: idvisitor).id %>/"><i class="fa fa-trash-o" aria-hidden="true"></i></a></h4></td>
+        </tr>
+      </table>
+    <% end %>
+    <% else if %>
+      <p>В этой категории нет контактов.</p>
     <% end %>
   <% end %>
 <% end %>

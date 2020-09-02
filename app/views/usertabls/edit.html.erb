@@ -11,6 +11,7 @@
     <% unless Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
       <% Contact.create(idvisitor: usernameid, idcreator: userid) %>
     <% end %>
+    <% Usertabl.destroy_by(userid: usertabls) %>
   <% end %>
   <% if Visitor.find_by(idregvis: usertabls) %>
     <h1><%= Visitor.find_by(idregvis: usertabls).surname %> <%= Visitor.find_by(idregvis: usertabls).name %> - ответы на задание "<%= Topic.find_by(id: usertabltopicid).titletopic %>"</h1>
@@ -22,7 +23,7 @@
           <% end %>
           <%= form_with(model: @usertabl, url: topic_usertabl_path, local: true) do |form| %>
             <input type="hidden" name="usertabl[addcontact]" id="usertabl_addcontact" value=<%= Username.find_by(id: usernameid).confirmation_token %>>
-            <% if @usertabl.addcontact or Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
+            <% if Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
               <P class ="greenicon"><strong><i class="fa fa-check-circle" aria-hidden="true"></i> Пользователь добавлен в контакты</strong><p>
             <% else %>
               <p><%= form.submit "Добавить в контакты", name: "add" %></p>
@@ -88,39 +89,39 @@
       <th>Выполнение</th>
     </tr>
     <% numguest = 0 %>
-    <% Consent.where(userid: usertabls).each do |con| %>
+    <% Consent.where(userid: usertabls, topic_id: usertabltopicid).each do |con| %>
       <% topicid = con.topic.id %>
-      <tr class="zag-tabl">
-        <td><h4><%= h(Topic.find_by(id: topicid).titletopic) %></h4></td>
-        <td><h4><%= Topic.find_by(id: topicid).countquestions %></h4></td>
-        <td><h4><%= con.counttrue %></h4></td>
-        <td>
-          <% if con.counttrue < Topic.find_by(id: topicid).sucquest %>
-            <i class="fa fa-minus-square-o fa-2x redicon" aria-hidden="true"></i>
-          <% else %>
-            <i class="fa fa-plus-square-o fa-2x greenicon" aria-hidden="true"></i>
-          <% end %>
-        </td>
-      </tr>
-      <% Answer.where(userid: usertabls, topic_id: topicid).each do |answer| %>
-        <% questionid = answer.questionid %>
-        <% scoreanswer = Answer.find_by(questionid: questionid).scoreanswer %>
-        <% countanswers = Answer.where(questionid: questionid).count %>
-        <% scorecountanswers = Answer.where(questionid: questionid, scoreanswer: 1).count %>
-        <% countprocent = scorecountanswers.to_f / countanswers.to_f * 100 %>
-        <tr class="questabl borderquestabl">
-          <th><h5><%= Question.find_by(id: questionid).titlequestion %></h5></th>
-          <th><h5>#<%= numguest += 1 %></h5></th>
-          <th>
-            <% if answer.scoreanswer != nil %>
-              <i class="fa fa-plus fa-2x greenicon" aria-hidden="true">
+        <tr class="zag-tabl">
+          <td><h4><%= h(Topic.find_by(id: topicid).titletopic) %></h4></td>
+          <td><h4><%= Topic.find_by(id: topicid).countquestions %></h4></td>
+          <td><h4><%= con.counttrue %></h4></td>
+          <td>
+            <% if con.counttrue < Topic.find_by(id: topicid).sucquest %>
+              <i class="fa fa-minus-square-o fa-2x redicon" aria-hidden="true"></i>
             <% else %>
-              <i class="fa fa-minus fa-2x redicon" aria-hidden="true"></i>
+              <i class="fa fa-plus-square-o fa-2x greenicon" aria-hidden="true"></i>
             <% end %>
-          </th>
-          <th><h5><%= countprocent.to_i %>%</h5> <p>ответели правильно</p></th>
+          </td>
         </tr>
-      <% end %>
+        <% Answer.where(userid: usertabls, topic_id: topicid).each do |answer| %>
+          <% questionid = answer.questionid %>
+          <% scoreanswer = Answer.find_by(questionid: questionid).scoreanswer %>
+          <% countanswers = Answer.where(questionid: questionid).count %>
+          <% scorecountanswers = Answer.where(questionid: questionid, scoreanswer: 1).count %>
+          <% countprocent = scorecountanswers.to_f / countanswers.to_f * 100 %>
+          <tr class="questabl borderquestabl">
+            <th><h5><% if Question.find_by(id: questionid) %><%= Question.find_by(id: questionid).titlequestion %><% end %></h5></th>
+            <th><h5>#<%= numguest += 1 %></h5></th>
+            <th>
+              <% if answer.scoreanswer != nil %>
+                <i class="fa fa-plus fa-2x greenicon" aria-hidden="true">
+              <% else %>
+                <i class="fa fa-minus fa-2x redicon" aria-hidden="true"></i>
+              <% end %>
+            </th>
+            <th><h5><%= countprocent.to_i %>%</h5> <p>ответели правильно</p></th>
+          </tr>
+        <% end %>
     <% end %>
   </table>
 <% end %>

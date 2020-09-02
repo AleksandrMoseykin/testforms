@@ -65,6 +65,18 @@
 .w260 {width: 160px;}
 .right-element {text-align: right;}
 .photousertabls {padding-top: 2px; padding-bottom: 10px; padding-right: 20px;}
+.answ {margin-bottom: 12px; }
+.spanansw {background-color: #ced2d8; width: 100%; padding: 2px 10px; border-radius: 5px; border-width: 1px; border-color: #ced2d8; border-style: solid;}
+.spanansw:hover {border-width: 1px; border-color: #1ea076; border-style: solid;}
+.hid {display: none;}
+.but-hid {display: none;}
+.link-for-copy {background-color: #e9fbc7; padding-left: 3px; padding-right: 3px;}
+.hidid {display: none;}
+.addid {margin-top: 8px;}
+.addidhid {display: none;}
+.topinfoblock {text-align: right;}
+#addbut {width: 40%; margin-left: 30%}
+#click-to-copy {margin-left: 3px;}
 
  #right-colon {
    padding-top: 10px;

@@ -41,49 +41,80 @@
     <% answer4[index]=question.answer4 %>
     <% topic_id = Array[] %>
     <% topic_id[index]=question.topic_id %>
+
     <div hidden class="hid"><%=idquestion[numberrand] %></div>
-    <div><%= titlequestion[numberrand] %></div>
-    <% if numberanswer == 0 %>
-      <div class="answ"><%= answertrue[numberrand] %></div>
-      <div class="answ"><%= answer2[numberrand] %></div>
-      <div class="answ"><%= answer3[numberrand] %></div>
-      <div class="answ"><%= answer4[numberrand] %></div>
+    <% if titlequestion[numberrand] %>
+      <div><h5><%= titlequestion[numberrand] %></h5></div>
     <% end %>
-    <% if numberanswer == 1 %>
-      <div class="answ"><%= answer2[numberrand] %></div>
-      <div class="answ"><%= answer3[numberrand] %></div>
-      <div class="answ"><%= answer4[numberrand] %></div>
-      <div class="answ"><%= answertrue[numberrand] %></div>
+    <% if numberanswer == 0 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
     <% end %>
-    <% if numberanswer == 2 %>
-      <div class="answ"><%= answer3[numberrand] %></div>
-      <div class="answ"><%= answer4[numberrand] %></div>
-      <div class="answ"><%= answertrue[numberrand] %></div>
-      <div class="answ"><%= answer2[numberrand] %></div>
+    <% if numberanswer == 1 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
     <% end %>
-    <% if numberanswer == 3 %>
-      <div class="answ"><%= answer4[numberrand] %></div>
-      <div class="answ"><%= answertrue[numberrand] %></div>
-      <div class="answ"><%= answer2[numberrand] %></div>
-      <div class="answ"><%= answer3[numberrand] %></div>
+    <% if numberanswer == 2 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+      </div>
     <% end %>
-    <% if numberanswer == 4 %>
-      <div class="answ"><%= answer4[numberrand] %></div>
-      <div class="answ"><%= answer2[numberrand] %></div>
-      <div class="answ"><%= answer3[numberrand] %></div>
-      <div class="answ"><%= answertrue[numberrand] %></div>
+    <% if numberanswer == 3 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+      </div>
     <% end %>
-    <% if numberanswer == 5 %>
-      <div class="answ"><%= answer3[numberrand] %></div>
-      <div class="answ"><%= answer4[numberrand] %></div>
-      <div class="answ"><%= answer2[numberrand] %></div>
-      <div class="answ"><%= answertrue[numberrand] %></div>
+    <% if numberanswer == 4 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
     <% end %>
-    <% if numberanswer == 6 %>
-      <div class="answ"><%= answertrue[numberrand] %></div>
-      <div class="answ"><%= answer3[numberrand] %></div>
-      <div class="answ"><%= answer2[numberrand] %></div>
-      <div class="answ"><%= answer4[numberrand] %></div>
+    <% if numberanswer == 5 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+    <% if numberanswer == 6 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
     <% end %>
   <% end %>
   <%= render "answers/forma" %>
@@ -137,48 +168,78 @@
     <% answer4 = Question.find_by(id: numberrand).answer4 %>
     <% topic_id = Question.find_by(id: numberrand).topic_id %>
     <div hidden class="hid"><%= numberrand %></div>
-    <div><%= titlequestion %></div>
-    <% if numberanswer == 0 %>
-      <div class="answ"><%= answertrue %></div>
-      <div class="answ"><%= answer2 %></div>
-      <div class="answ"><%= answer3 %></div>
-      <div class="answ"><%= answer4 %></div>
+    <% if titlequestion %>
+      <div><h5><%= titlequestion %></h5></div>
     <% end %>
-  <% if numberanswer == 1 %>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answertrue %></div>
+    <% if numberanswer == 0 and answertrue %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      </div>
+    <% end %>
+  <% if numberanswer == 1 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 2 %>
-   <div class="answ"><%= answer3 %></div>
-   <div class="answ"><%= answer4 %></div>
-   <div class="answ"><%= answertrue %></div>
-   <div class="answ"><%= answer2 %></div>
+  <% if numberanswer == 2 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 3 %>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answertrue %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer3 %></div>
+  <% if numberanswer == 3 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 4 %>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answertrue %></div>
+  <% if numberanswer == 4 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
    <% end %>
-  <% if numberanswer == 5 %>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answertrue %></div>
+  <% if numberanswer == 5 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 6 %>
-    <div class="answ"><%= answertrue %></div>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer4 %></div>
+  <% if numberanswer == 6 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
   <% end %>
 <%= render "answers/forma" %>
 <% numbercnt = cnt - questionsall %>
@@ -207,47 +268,75 @@
   <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall != cnt %>
     <div hidden class="hid"><%= idarray %></div>
     <div><%= titlequestion %></div>
-  <% if numberanswer == 0 %>
-    <div class="answ"><%= answertrue %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer4 %></div>
+  <% if numberanswer == 0 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 1 %>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answertrue %></div>
+  <% if numberanswer == 1 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 2 %>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answertrue %></div>
-    <div class="answ"><%= answer2 %></div>
+  <% if numberanswer == 2 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 3 %>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answertrue %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer3 %></div>
+  <% if numberanswer == 3 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 4 %>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answertrue %></div>
+  <% if numberanswer == 4 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 5 %>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer4 %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answertrue %></div>
+  <% if numberanswer == 5 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
   <% end %>
-  <% if numberanswer == 6 %>
-    <div class="answ"><%= answertrue %></div>
-    <div class="answ"><%= answer3 %></div>
-    <div class="answ"><%= answer2 %></div>
-    <div class="answ"><%= answer4 %></div>
+  <% if numberanswer == 6 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
   <% end %>
   <%= render "answers/forma" %>
   <% arraydel = Consent.find_by(userid: idreg1, topic_id: topicid) %>

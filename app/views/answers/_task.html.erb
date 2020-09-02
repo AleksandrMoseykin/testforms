@@ -1,21 +1,22 @@
-
-
-
-
-
-
-
-    <% if countreserve != nil %>
-      <% numberrand = 0 + questionsall + countreserve %>
-    <% else %>
-      <% numberrand = 0 + questionsall %>
+<% numbercnt = cnt - questionsall %>
+<% if numbercnt > 1 %>
+  <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+    <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= numberrand %>>
+    <% if (username_signed_in?) %><% idreg = current_username.id %>
+      <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
     <% end %>
+  <%= form.submit "Пропустить", name: "add"%>
+  <% end %>
+<% end %>
 
-    <% if cnt == numberrand and Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil) != nil %>
 
-        <% numberrand = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).numberanswer %>
-        <% if numberrand !="" %>
-        <% numberid = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).id %>
-        <% Answer.destroy_by(id: numberid) %>
-        <% end %>
-    <% end %>
+<% numbercnt = cnt - questionsall %>
+  <% if numbercnt > 1 %>
+    <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+      <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= numberrand %>>
+      <% if (username_signed_in?) %><% idreg = current_username.id %>
+        <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+      <% end %>
+    <%= form.submit "Пропустить", name: "add"%>
+   <% end %>
+  <% end %>

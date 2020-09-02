@@ -64,3 +64,47 @@
   </p>
 <% end %>
 <%= link_to 'Назад', topics_path %>
+<script type="text/javascript">
+  $( document ).on('turbolinks:load', function() {
+    $("#topic_countquestions").on("change", function(){
+      let element = $("#topic_countquestions").val();
+      element = element * 1;
+      let hid = $("#topic_sucquest").val();
+      hid = hid * 1;
+      if (element < hid) {
+      $("#topic_sucquest").val(element);
+      }
+    });
+    $("#topic_sucquest").on("change", function(){
+      let el = $("#topic_sucquest").val();
+      el = el * 1;
+      let el2 = $("#topic_countquestions").val();
+      el2 = el2 * 1;
+      if (el > el2) {
+      $("#topic_countquestions").val(el);
+      }
+    });
+    $("#topic_intdate1").on("change", function(){
+      let dataelement = $("#topic_intdate1").val();
+      intdate1 = new Date(dataelement);
+      let dataelement2 = $("#topic_intdate2").val();
+      if (dataelement2) {
+        intdate2 = new Date(dataelement2);
+        if (intdate1 > intdate2) {
+          $("#topic_intdate2").val(dataelement);
+        }
+      }
+    });
+    $("#topic_intdate2").on("change", function(){
+      let datael = $("#topic_intdate2").val();
+      int1 = new Date(datael);
+      let datael2 = $("#topic_intdate1").val();
+      if (datael) {
+        int2 = new Date(datael2);
+        if (int1 < int2) {
+          $("#topic_intdate1").val(datael);
+        }
+      }
+    });
+  });
+</script>

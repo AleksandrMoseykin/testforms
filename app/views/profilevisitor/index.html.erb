@@ -15,13 +15,13 @@
         <% if Visitor.find_by(idregvis: userid).birthdate !="" %>
           <% birthdate = Visitor.find_by(idregvis: userid).birthdate %>
           <% birthdate.time.strftime("%d-%m-%Y") %>
-          <p><strong>Возраст:</strong><% timed=Time.now.strftime("%d-%m-%Y") %><% age = Time.diff(Time.now, birthdate) %><%= age[:year] %> лет</p>
+          <p><strong>Возраст: </strong><% timed=Time.now.strftime("%d-%m-%Y") %><% age = Time.diff(Time.now, birthdate) %><%= age[:year] %> лет</p>
         <% end %>
         <% if Visitor.find_by(idregvis: userid).country !="" %>
-          <p><strong>Страна:</strong><%= Visitor.find_by(idregvis: userid).country %></p>
+          <p><strong>Страна: </strong><%= Visitor.find_by(idregvis: userid).country %></p>
         <% end %>
         <% if Visitor.find_by(idregvis: userid).city !="" %>
-          <p><strong>Город:</strong><%= Visitor.find_by(idregvis: userid).city %></p>
+          <p><strong>Город: </strong><%= Visitor.find_by(idregvis: userid).city %></p>
         <% end %>
         <% editid = Visitor.find_by(idregvis: userid).id %>
         <p><%= link_to 'Редактировать', edit_visitor_path(id: editid) %></p>

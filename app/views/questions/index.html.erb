@@ -1,5 +1,10 @@
 <% if (user_signed_in?) and !(username_signed_in?) %>
   <div class="div-line"><h1>Тестовое задание "<%= @topic.titletopic %>"</h1></div>
+  <div>
+    <strong>Ссылка для прохождения задания:</strong><br>
+    <span class="link-for-copy">http://localhost:3000/topics/<%= @topic.id %>/consents/</span>
+    <button id="click-to-copy">Скопировать</button>
+  </div>
   <% if Setting.find_by(topic_id: @topic.id) == nil %>
     <% Setting.create(ageafter: "90", accomplishment: "Все", sex: "Все", country: "Все", topic_id: @topic.id, agebefore: "7") %>
   <% end %>
@@ -130,3 +135,16 @@
     <%= link_to "Назад", topics_path %>
   <% end %>
 <% end %>
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+   $('#click-to-copy').click(function() {
+    var copyText = $('.link-for-copy').text();
+    var copytext2 = document.createElement('input');
+    copytext2.value = copyText;
+    document.body.appendChild(copytext2);
+    copytext2.select();
+    document.execCommand("copy");
+    document.body.removeChild(copytext2);
+   });
+  });
+</script>
