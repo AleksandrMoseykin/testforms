@@ -1,0 +1,84 @@
+<% if (username_signed_in?) %><% idreg1 = current_username.id %>
+<% topicid1 = @topic.id %>
+  <!-- Показываем правила перед прохождением теста   -->
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid1) == nil %>
+    <%= render "consents/pravila" %>
+  <% else %>
+
+  <!-- ПОКАЗЫВАЕМ ТЕСТОВОЕ ЗАДАНИЕ   -->
+  <% if (username_signed_in?) %>
+    <h1>Тестовое задание "<%= @topic.titletopic %>"</h1>
+
+    <!-- выводим id задания, создателя, и дату создания тестового задания   -->
+    <% datecreadtopic = @topic.created_at %>
+    <% usercreatid = @topic.idreg %>
+    <% creatordb = Creator.find_by(idreg: usercreatid) %>
+    <h6>id: <%= @topic.id %> | Создатель: <%= creatordb.namecreator %> <%= creatordb.surnamecreator %> | <%= datecreadtopic.strftime("%d.%m.%Y") %></h6>
+    <br>
+
+    <% cnt = @topic.questions.count %>
+
+    <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
+
+      <!-- Если время окончания показов еще не задано, то задаем время окончания показов в базе данных  -->
+      <% if Consent.find_by(userid: idreg1, topic_id: topicid1) != nil %>
+        <% if Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime == nil %>
+          <% timetask = Topic.find_by(id: topicid1).timetask %>
+          <% if timetask != nil %>
+            <% ttaskhour = timetask.hour * 3600 %>
+            <% ttaskmin = timetask.min * 60 %>
+            <% ttaskall = ttaskmin + ttaskhour %>
+            <% tcreat = Consent.find_by(userid: idreg1, topic_id: topicid1).created_at %>
+            <% stoptime = tcreat + ttaskall %>
+            <% Consent.find_by(userid: idreg1, topic_id: topicid1).update(stoptime: stoptime) %>
+          <% end %>
+        <% end %>
+
+        <!-- Задаем переменную окончания показов  -->
+        <% if Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime != nil %>
+          <% stoptime = Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
+        <% end %>
+      <% end %>
+
+      <!-- Если текущее время меньше даты окончания показов тестового задания, то выводим этот блок -->
+      <% stoptime.to_f %>
+      <% datetime = Time.now.to_f %>
+      <% if stoptime.to_f > datetime.to_f %>
+        <% cnty = cnt-1 %>
+        <% topicid = @topic.id %>
+
+        <!-- Количество вопросов -->
+        <%= render "answers/questionsall_consent" %>
+
+        <!-- Отмечаем правильные ответы -->
+        <%= render "answers/proverka_scoreanswer" %>
+
+        <!-- Подсчет правильных ответов -->
+        <%= render "answers/count_true_answer" %>
+
+        <!-- ВЫВОДИМ ВОПРОСЫ И ВАРИНТЫ ОТВЕТОВ -->
+        <% if Consent.first != nil %>
+          <%= render "answers/rand_answers" %>
+        <% end %>
+
+        <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
+
+        <!-- ??? -->
+        <% # if Consent.find_by(userid: idreg1, topic_id: topicid) != nil %>
+          <% # stoptimeconsent = Consent.find_by(userid: idreg1, topic_id: topicid).stoptime %>
+        <% # end %>
+
+        <!-- Узнаем дату последнего ответа -->
+        <% if Answer.find_by(userid: idreg1, topic_id: topicid) %>
+          <% createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
+        <% end %>
+      <% else %>
+          <!-- Выводим если время вышло -->
+            <%= render "answers/time_out" %>
+      <% end %>
+    <% else %>
+      <!-- Выводим форму для входа -->
+      <%= render "answers/forma_reg" %>
+    <% end %>
+  <% end %>
+<% end %>

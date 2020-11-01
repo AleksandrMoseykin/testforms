@@ -28,7 +28,7 @@
             <% stat = Statisticscreator.find_by(idreg: idreg1) %>
             <% stat.update(test: statistictest2) %>
           <% end %>
-          <% n=0 %>
+          <% n = 0 %>
           <% topic.questions.each do |t| %>
             <tr class="questabl">
               <th><h5><%= t.titlequestion %></h5></th>

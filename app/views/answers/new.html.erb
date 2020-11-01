@@ -1,17 +1,27 @@
+<!-- Проверяем авторизацию пользователя -->
 <% if (username_signed_in?) %><% idreg1 = current_username.id %>
-  <% br = [1,2,3,4,5] %>
-  <% br.delete_at(0)%>
-  <% br[0]%>
+
+<!-- Основной блок -->
+
+  <!-- Узнаем id темы тестового задания -->
   <% topicid1 = @topic.id %>
+
+    <!-- Узнаем дату окончания показа тестового задания -->
     <% if @topic.intdate2 %>
       <% findate = @topic.intdate2 %>
     <% else %>
       <% findate = Time.new + 90000 %>
     <% end %>
+
+  <!-- Если текущая дата больше даты старта показов и меньше даты окончания, то показываем этот блок   -->
   <% if @topic.intdate1 < Time.new and findate > Time.new or Consent.find_by(userid: idreg1, topic_id: topicid1) != nil %>
+
+    <!-- Проверяем активность тестового задания   -->
     <% if @topic.activ == "Выкл." and Consent.find_by(userid: idreg1, topic_id: topicid1) == nil %>
       <p>Тестовое задание "<%= @topic.titletopic %>" не запущено или остановлено.</p>
     <% else %>
+
+    <!-- Если количество вопросов созданых меньше, чем указано в настройках, то показываем сообщение "Создано недостаточное количество вопросов"  -->
     <% if @topic.countquestions > @topic.questions.count %>
       <% addcount = @topic.countquestions - @topic.questions.count %>
       <% if addcount == 1 or addcount == 21 or addcount == 31 or addcount == 41 or addcount == 51 or addcount == 61 or addcount == 71 or addcount == 81 or addcount == 91%>
@@ -29,152 +39,46 @@
       <% end %>
       <p>Создано недостаточное количество вопросов в тесте "<%= @topic.titletopic %>". Для запуска тестового задания нужно добавить еще <%= addcount %> <%= qs %>.</p>
   <% else %>
-  <% if @topic.password ==""%>
-    <% if Consent.find_by(userid: idreg1, topic_id: topicid1) == nil %>
-      <%= render "consents/pravila" %>
-    <% else %>
-    <% if (username_signed_in?) %>
-      <h1>Тестовое задание "<%= @topic.titletopic %>"</h1>
-      <% datecreadtopic = @topic.created_at %>
-      <% usercreatid = @topic.idreg %>
-      <% creatordb = Creator.find_by(idreg: usercreatid) %>
-      <% #creatordb.namecreator %>
-      <p>
-        <h6>id: <%= @topic.id %> | Создатель: <%= creatordb.namecreator %> <%= creatordb.surnamecreator %> | <%= datecreadtopic.strftime("%d.%m.%Y") %></h6>
-      </p>
-      <% datestop = Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
-      <% currentdate = Time.new %>
-      <% finishtime = (datestop - currentdate) %>
-      <div class = "topinfoblock">
-        <strong>
-          <span id="my_timers"><%= Time.at(finishtime).utc.strftime("%H:%M:%S") %></span> |
-          <%= javascript_pack_tag 'timer', 'data-turbolinks-track': 'reload' %>
-          <span><%= Answer.where(topic_id: topicid1, userid: idreg1).count %></span>:<span><%= Question.where(topic_id: topicid1).count %></span>
-        </strong>
-      </div>
 
-      <% cnt = @topic.questions.count %>
-      <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
-        <% if Consent.find_by(userid: idreg1) != nil %>
-          <% if Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime == nil %>
-            <% timetask = Topic.find_by(id: topicid1).timetask %>
-            <% if timetask != nil %>
-              <% ttaskhour = timetask.hour * 3600 %>
-              <% ttaskmin = timetask.min * 60 %>
-              <% ttaskall = ttaskmin + ttaskhour %>
-              <% tcreat = Consent.find_by(userid: idreg1, topic_id: topicid1).created_at %>
-              <% stoptime = tcreat + ttaskall %>
-              <% Consent.find_by(userid: idreg1, topic_id: topicid1).update(stoptime: stoptime) %>
-            <% end %>
-          <% end %>
-          <% if Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime != nil %>
-            <% stoptime = Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
-          <% end %>
-        <% end %>
-        <% stoptime.to_f %>
-        <% datetime = Time.now.to_f %>
-        <% if stoptime.to_f > datetime.to_f %>
-          <% cnty = cnt-1 %>
-          <% topicid = @topic.id %>
-          <%= render "answers/questionsall_consent" %>
-          <%= render "answers/proverka_scoreanswer" %>
-          <%= render "answers/count_true_answer" %>
-          <% if Consent.first != nil %>
-            <%= render "answers/rand_answers" %>
-          <% end %>
-          <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
-          <% if Consent.find_by(userid: idreg1, topic_id: topicid) != nil %>
-            <% stoptimeconsent = Consent.find_by(userid: idreg1, topic_id: topicid).stoptime %>
-          <% end %>
-          <% if Answer.find_by(userid:idreg1, topic_id: topicid) %>
-            <% createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
-          <% end %>
-          <%= link_to "Подробнее!!!",  "/test_task/" %>
-        <% else %>
-            <%= render "answers/time_out" %>
-        <% end %>
-      <% else %>
-        <%= render "answers/forma_reg" %>
-      <% end %>
-    <% end %>
+  <!-- Если пароль отсутствует   -->
+  <% if @topic.password ==""%>
+    <%= render "answers/for_test" %>
   <% end %>
+
+  <!-- Если пароль существует -->
   <% if @topic.password !="" %>
+
+  <!-- выводим форму ввода пароля -->
     <% if @topic.passwords.find_by(userid: idreg1) == nil %>
       <%= render "answers/password_form" %>
     <% end %>
+
+    <!-- Сравниваем пароли -->
     <% if @topic.passwords.find_by(userid: idreg1) != nil %>
-      <% if @topic.password == @topic.passwords.where(userid: idreg1).last.pasanswer %>
-        <% if Consent.find_by(userid: idreg1, topic_id: topicid1) == nil %>
-          <%= render "consents/pravila" %>
+      <% if @topic.password == @topic.passwords.where(userid: idreg1, topic_id: topicid1).last.pasanswer %>
+        <%= render "answers/for_test" %>
         <% else %>
-          <% if (username_signed_in?) %>
-            <h1>Ответы</h1>
-            <% cnt = @topic.questions.count %>
-            <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
-            <% if Consent.find_by(userid: idreg1) != nil %>
-              <% if Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime == nil %>
-              <% timetask = Topic.find_by(id: topicid1).timetask %>
-                <% if timetask != nil %>
-                  <% ttaskhour = timetask.hour * 3600 %>
-                  <% ttaskmin = timetask.min * 60 %>
-                  <% ttaskall = ttaskmin + ttaskhour %>
-                  <% tcreat = Consent.find_by(userid: idreg1, topic_id: topicid1).created_at %>
-                  <% stoptime = tcreat + ttaskall %>
-                  <% Consent.find_by(userid: idreg1, topic_id: topicid1).update(stoptime: stoptime) %>
-                <% end %>
-              <% end %>
-              <% if Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime != nil %>
-                <% stoptime = Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
-              <% end %>
-            <% end %>
-            <% stoptime.to_f %>
-            <% datetime = Time.now.to_f %>
-            <% if stoptime.to_f > datetime.to_f %>
-              <% cnty = cnt-1 %>
-              <% topicid = @topic.id %>
-              <%= render "answers/questionsall_consent" %>
-              <% if Consent.first != nil %>
-                <% if Consent.find_by(userid: idreg1).questionsall == cnt %>
-                  <p>Вы уже проходили этот тест</p>
-                <% end %>
-                <% questionsall=Consent.find_by(userid: idreg1).questionsall %>
-                <% numberrand = 0 + questionsall %>
-                <% numberanswer = rand(0..6) %>
-                <% if Consent.find_by(userid: idreg1).questionsall < cnt %>
-                  <%= render "answers/proverka_scoreanswer" %>
-                  <%= render "answers/count_true_answer" %>
-                  <%= render "answers/rand_answers" %>
-                <% end %>
-                <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
-                <% if Consent.find_by(userid: idreg1, topic_id: topicid) != nil %>
-                  <% stoptimeconsent = Consent.find_by(userid: idreg1, topic_id: topicid).stoptime %>
-                <% end %>
-                <% if Answer.find_by(userid:idreg1, topic_id: topicid) %>
-                  <% createdanswer = Answer.where(userid:idreg1, topic_id: topicid).last.created_at %>
-                <% end %>
-                <%= link_to "Подробнее!!!",  "/test_task/" %>
+
+          <!-- Проверяем количество раз введения пароля -->
+          <% if @topic.password != @topic.passwords.where(userid: idreg1).last.pasanswer %>
+            <% if @topic.passwords.where(userid: idreg1).count > 2 %>
+              <% timecreated = @topic.passwords.where(userid: idreg1).last.created_at %>
+              <% timefinal = timecreated + 1800 %>
+              <% time2 = Time.now %>
+              <% if timefinal.to_f > time2.to_f %>
+                <p>Вы 3 раза (или более раз) не правильно ввели пароль.</p>
+                <p>Повторная попытка будет доступна в <%= timefinal.hour %>-<%= timefinal.min %> (Мск)</p>
               <% else %>
-                <%= render "answers/time_out" %>
+
+                <!-- Выводим форму пароля -->
+                <%= render "answers/password_form" %>
               <% end %>
             <% else %>
-              <%= render "answers/forma_reg" %>
-            <% end %>
-          <% end %>
-        <% end %>
-        <% if @topic.password != @topic.passwords.where(userid: idreg1).last.pasanswer %>
-          <% if @topic.passwords.where(userid: idreg1).count > 2 %>
-            <% timecreated = @topic.passwords.where(userid: idreg1).last.created_at %>
-            <% timefinal = timecreated + 1800 %>
-            <% time2 = Time.now %>
-            <% if timefinal.to_f > time2.to_f %>
-              <p>Вы 3 раза (или более раз) не правильно ввели пароль.</p>
-              <p>Повторная попытка будет доступна в <%= timefinal.hour %>-<%= timefinal.min %> (Мск)</p>
-            <% else %>
+
+              <!-- Выводим форму пароля при ошибке -->
+              <p>Ошибка: пароль введен не верный! </p>
               <%= render "answers/password_form" %>
             <% end %>
-          <% else %>
-            <p>Ошибка: пароль введен не верный! </p>
-            <%= render "answers/password_form" %>
           <% end %>
         <% end %>
       <% end %>
@@ -183,13 +87,16 @@
 <% end %>
 <% end %>
 <% else %>
+
+  <!-- Проверка доступности тестового задания по времени -->
   <% if @topic.intdate1 > Time.new %>
     <p>Тестовое задание будет доступно <%= @topic.intdate1.strftime("%d.%m.%Y %H:%M") %> (Мск)</p>
   <% else %>
     <p>Тестовое задание было остановлено <%= @topic.intdate2.strftime("%d.%m.%Y %H:%M") %> (Мск)</p>
   <% end %>
 <% end %>
-<% end %>
+
+<!-- Скрипты -->
 <script type="text/javascript">
   $( document ).on('turbolinks:load', function() {
     $(".answ").on("click", function(){
@@ -198,8 +105,9 @@
       $(this).find(".spanansw").css("background-color", "#1ea076");
       $("#answer_answeruser").val(element);
       var hid = $(".hid").text();
-      $("#answer_questionid").val(hid);
-      $(".but-hid").removeClass();
+      $(".answer_questionid").val(hid);
+      $(".but-hid").removeClass().addClass("btn btn-primary");
+      $(".nextbutton").remove();
     });
   });
 </script>

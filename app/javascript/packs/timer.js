@@ -27,9 +27,11 @@ var timefinal = h1 + m1 + s1;
     else s--;
     if (s < 10) s = "0" + s;
     document.getElementById("my_timers").innerHTML = h+":"+m+":"+s;
+
   }
   let timerInterval = setInterval(startTimer, 1000);
 
   setTimeout(function(){
     clearInterval(timerInterval);
+    history.go(0);
 },timefinal);

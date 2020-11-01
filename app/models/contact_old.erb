@@ -1,0 +1,22 @@
+class Contact < ApplicationRecord
+  validates :idvisitor, presence: true, numericality: true, uniqueness: {scope: :idcreator}
+  validates :idcreator, presence: true, numericality: true
+  validates :codecreator, presence: true
+
+  before_validation :user_validtion
+  before_validation :user_id_validtion
+
+  private
+    def user_validtion
+        if self.codecreator != User.find_by(id: self.idcreator).encrypted_password
+          valid = User.find_by(encrypted_password: self.codecreator).id
+          valid.save!
+        end
+    end
+    def user_id_validtion
+        if User.find_by(id: self.idvisitor).encrypted_password == ""
+          valid = User.find_by(encrypted_password: self.codecreator).id
+          valid.save!
+        end
+    end
+end

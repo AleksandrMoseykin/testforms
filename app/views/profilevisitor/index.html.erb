@@ -6,22 +6,30 @@
         <% if Visitor.find_by(idregvis: userid).photo.url(:thumb) !="" %>
           <%= image_tag Visitor.find_by(idregvis: userid).photo.url(:thumb), class: "photoprofile" %>
         <% end %>
+        <hr>
         <h4><%= Visitor.find_by(idregvis: userid).surname %> <%= Visitor.find_by(idregvis: userid).name %> (<%= Visitor.find_by(idregvis: userid).telephone %>)</h4>
-        <p></p>
+        <hr>
         <p><strong>Пол: </strong><%= Visitor.find_by(idregvis: userid).sex %></p>
+        <hr>
         <p><strong>Email: </strong><% if (username_signed_in?) %><%= current_username.email %><% end %></p>
+        <hr>
         <p><strong>Id пользователя: </strong><% if (username_signed_in?) %><%= current_username.id %><% end %></p>
+        <hr>
         <p><strong>Зарегистрирован: </strong><% if (username_signed_in?) %><% regdata = current_username.created_at %><%= regdata.time.strftime("%d-%m-%Y") %><% end %></p>
+        <hr>
         <% if Visitor.find_by(idregvis: userid).birthdate !="" %>
           <% birthdate = Visitor.find_by(idregvis: userid).birthdate %>
           <% birthdate.time.strftime("%d-%m-%Y") %>
           <p><strong>Возраст: </strong><% timed=Time.now.strftime("%d-%m-%Y") %><% age = Time.diff(Time.now, birthdate) %><%= age[:year] %> лет</p>
+          <hr>
         <% end %>
         <% if Visitor.find_by(idregvis: userid).country !="" %>
           <p><strong>Страна: </strong><%= Visitor.find_by(idregvis: userid).country %></p>
+          <hr>
         <% end %>
         <% if Visitor.find_by(idregvis: userid).city !="" %>
           <p><strong>Город: </strong><%= Visitor.find_by(idregvis: userid).city %></p>
+          <hr>
         <% end %>
         <% editid = Visitor.find_by(idregvis: userid).id %>
         <p><%= link_to 'Редактировать', edit_visitor_path(id: editid) %></p>
@@ -30,14 +38,18 @@
       <div class="container">
         <h1>Профиль пользователя</h1>
         <h3>Ваш профиль заполнен не полностью</h3>
-        <a><%= image_tag "avatarka-no.png", alt: "Фото аватарки отсутствует" %></a>
+        <a><%= image_tag "avatarka-no.png", alt: "Фото аватарки отсутствует", class: "noavatarka" %></a>
         <p>Фото аватарки отсутствует</p>
-        <p><strong>Email:</strong><% if (username_signed_in?) %><%= current_username.email %><% end %></p>
-        <p><strong>Id пользователя:</strong><% if (username_signed_in?) %><%= current_username.id %><% end %></p>
-        <p><strong>Зарегистрирован:</strong>
+        <hr>
+        <p><strong>Email: </strong><% if (username_signed_in?) %><%= current_username.email %><% end %></p>
+        <hr>
+        <p><strong>Id пользователя: </strong><% if (username_signed_in?) %><%= current_username.id %><% end %></p>
+        <hr>
+        <p><strong>Зарегистрирован: </strong>
         <% if (username_signed_in?) %><% regdata = current_username.created_at %>
           <%= regdata.time.strftime("%d-%m-%Y") %>
         <% end %>
+        <hr>
         <p><a href="/visitors/new">Добавить данные</a></p>
       </div>
     <% end %>

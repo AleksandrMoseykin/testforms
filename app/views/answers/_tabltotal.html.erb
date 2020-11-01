@@ -1,9 +1,17 @@
+<!-- Узнаем id пользователя -->
 <% if (username_signed_in?) %>
   <% idreg1 = current_username.id %>
 <% end %>
+
+<!-- Узнаем id тестового задания -->
 <% topicid = @topic.id %>
+
+<!-- Узнаем дату начала теста -->
 <% datatest = @topic.consents.find_by(userid: idreg1).created_at %>
+
+<!-- Узнаем количество правильных ответов -->
 <% counttrue = Consent.find_by(userid: idreg1, topic_id: topicid).counttrue %>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-6 tbl-answer">
@@ -21,6 +29,8 @@
       <h4><%= @topic.countquestions%></h4>
     </div>
   </div>
+
+  <!-- Если правильных ответов нет, то переменной присваеваем значение 0 -->
   <% if counttrue == nil%>
     <% counttrue = 0 %>
   <% end %>
@@ -32,51 +42,37 @@
       <h4><%= counttrue %></h4>
     </div>
   </div>
+  <!-- Находим последний ответ -->
   <% lastanswer = Answer.where(userid: idreg1, topic_id: topicid).last %>
+  <!-- Дата начала -->
   <% firstanswer = Consent.find_by(userid: idreg1, topic_id: topicid).created_at %>
+  <!-- Общее время в секундах -->
   <% totaltimesec = lastanswer.created_at.to_i - firstanswer.to_i %>
   <% totaltime = Consent.find_by(userid: idreg1, topic_id: topicid) %>
+
+  <!-- Если количество вопросов равняется количеству в задании -->
   <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall == @topic.countquestions %>
+    <!-- Дата начала -->
     <% createdconsent = Consent.find_by(userid: idreg1, topic_id: topicid).created_at %>
+    <!-- Дата окончания -->
     <% createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
+    <!-- Время затраченное на ответы -->
     <% tansweruser = createdanswer - createdconsent %>
+    <!-- Обновляем общее время -->
     <% totaltime.update(totaltime: tansweruser) %>
-  <% else %>
-    <% totaltime.update(totaltime: ttaskall) %>
   <% end %>
-  <% ttimeconsent = Consent.find_by(userid: idreg1, topic_id: topicid).totaltime %>
-  <% if ttimeconsent %>
-    <% if ttimeconsent > 3599 %>
-      <% tth = ttimeconsent / 3600 %>
-      <% ttm = (ttimeconsent - tth * 3600) / 60 %>
-      <% tts = ttimeconsent - (tth * 3600 + ttm * 60) %>
-    <% end %>
-    <% if ttimeconsent < 3600 and ttimeconsent > 59 %>
-        <% tth = 0 %>
-        <% ttm = ttimeconsent / 60 %>
-        <% tts = ttimeconsent - (ttm * 60) %>
-    <% end %>
-    <% if ttimeconsent < 60 and ttimeconsent > 0 %>
-      <% tth = 0 %>
-      <% ttm = 0 %>
-      <% tts = ttimeconsent %>
-    <% end %>
-  <% end %>
+
+  <% tth = Time.at(tansweruser).utc.strftime("%H") %>
+  <% ttm = Time.at(tansweruser).utc.strftime("%M") %>
+  <% tts = Time.at(tansweruser).utc.strftime("%S") %>
+
   <div class="row">
     <div class="col-6 tbl-answer">
       <h4>Время прохождения теста:</h4>
   </div>
     <div class="col-6 tbl-answer">
       <h4>
-        <% if ttimeconsent %>
-          <% if tth > 0 %>
-            <%= tth %> ч.
-          <% end %>
-          <% if ttm > 0 %>
-            <%= ttm %> мин
-          <% end %>
-          <%= tts %> сек.
-        <% end %>
+        <%= tth %> ч. <%= ttm %> мин. <%= tts %> сек.
       </h4>
     </div>
   </div>
@@ -88,25 +84,17 @@
       <h4><%= Consent.where(topic_id: topicid).count %> </h4>
     </div>
   </div>
+
   <% counttrueconsent = Consent.where(topic_id: topicid) %>
+  <!-- Узнаем максимальное количество правильных ответов -->
   <% counttruemax = counttrueconsent.maximum("counttrue") %>
+  <!-- Узнаем минимальное время  -->
   <% totalt = Consent.where(topic_id: topicid, counttrue: counttruemax) %>
   <% totaltmin = totalt.minimum("totaltime") %>
-  <% if totaltmin > 3599 %>
-    <% th = ttimeconsent / 3600 %>
-    <% tm = (ttimeconsent - tth * 3600) / 60 %>
-    <% ts = ttimeconsent - (tth * 3600 + ttm * 60) %>
-  <% end %>
-  <% if totaltmin < 3600 and totaltmin > 59 %>
-    <% th = 0 %>
-    <% tm = ttimeconsent / 60 %>
-    <% ts = ttimeconsent - (tm * 60) %>
-  <% end %>
-  <% if totaltmin < 60 and totaltmin > 0 %>
-    <% th = 0 %>
-    <% tm = 0 %>
-    <% ts = ttimeconsent %>
-  <% end %>
+  <% th = Time.at(totaltmin).utc.strftime("%H") %>
+  <% tm = Time.at(totaltmin).utc.strftime("%M") %>
+  <% ts = Time.at(totaltmin).utc.strftime("%S") %>
+
   <div class="row">
     <div class="col-6 tbl-answer">
       <h4>Лучший результат:</h4>
@@ -115,9 +103,11 @@
       <h4>
         <% if counttruemax > 0 %>
           <% if counttruemax == 1 or counttruemax == 21 or counttruemax == 31 or counttruemax == 41 or counttruemax == 51 or counttruemax == 61 or counttruemax == 71 or counttruemax == 81 or counttruemax == 91 %>
-            <%= counttruemax %> правильный ответ (<% if th > 0 %> <%= th %> ч. <% end %><% if tm > 0 %><%= tm %> мин. <% end %><%= ts %> сек.)
+            <%= counttruemax %> правильный ответ <br> (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
+          <% elsif counttruemax == 2 or counttruemax == 3 or counttruemax == 4 or%>
+            <%= counttruemax %> правильных ответа <br> (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
           <% else %>
-            <%= counttruemax %> правильных ответов (<% if th > 0 %> <%= th %> ч. <% end %><% if tm > 0 %><%= tm %> мин. <% end %><%= ts %> сек.)
+            <%= counttruemax %> правильных ответов <br> (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
           <% end %>
         <% end %>
       </h4>
@@ -128,16 +118,23 @@
   <% if counttrue < topcon.counttrue %>
   <% position += 1 %>
 <% end %>
-<% if counttrue == topcon.counttrue and totaltime.totaltime > topcon.totaltime %>
-    <% position += 1 %>
+<% if topcon.counttrue %>
+  <% if counttrue == topcon.counttrue and totaltime.totaltime > topcon.totaltime %>
+      <% position += 1 %>
+  <% end %>
 <% end %>
+
 <% end %>
 <div class="row">
   <div class="col-6 tbl-answer">
     <h4>Ваше место:</h4>
   </div>
     <div class="col-6 tbl-answer">
+      <% if  Consent.find_by(topic_id: topicid, userid: idreg1).counttrue > 0 %>
   <h4># <%= position %></h4>
+    <% else %>
+    <h4> - </h4>
+    <% end %>
   </div>
 </div>
   <div class="row">

@@ -1,140 +1,159 @@
 <% if (user_signed_in?) and !(username_signed_in?) %>
-  <div class="div-line"><h1>Тестовое задание "<%= @topic.titletopic %>"</h1></div>
-  <div>
-    <strong>Ссылка для прохождения задания:</strong><br>
-    <span class="link-for-copy">http://localhost:3000/topics/<%= @topic.id %>/consents/</span>
-    <button id="click-to-copy">Скопировать</button>
-  </div>
-  <% if Setting.find_by(topic_id: @topic.id) == nil %>
-    <% Setting.create(ageafter: "90", accomplishment: "Все", sex: "Все", country: "Все", topic_id: @topic.id, agebefore: "7") %>
-  <% end %>
-  <% sid = Setting.find_by(topic_id: @topic.id).id %>
-  <% topicid = @topic.id %>
-  <div class="row">
-    <div class="col-sm-11"><h3>Статистика ответов на вопросы (всего: <%= Consent.where(topic_id: topicid).count %>)</h3></div>
-    <div class="col-sm-1 right-element"><h3><a href="/topics/<%= @topic.id %>/settings/<%= sid %>"><i class="fa fa-cog" aria-hidden="true"></i></a></h3></div>
-  </div>
-  <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
-    <% if Topic.find_by(idreg: idreg1) %>
-      <% if Consent.find_by(topic_id: topicid) %>
-        <table class ="task-tabl">
-        <tr class="gl-zag-tabl">
-          <th>Пользователи</th>
-          <th>№</th>
-          <th>Правильных ответов</th>
-          <th>Время</th>
-          <th>Выполнение</th>
-        </tr>
-        <% xcount = 0 %>
-        <% Consent.where(topic_id: topicid).each do |consent| %>
-          <% userid = consent.userid %>
-          <% unless Usertabl.find_by(userid: userid, topic_id: topicid)%>
-            <% Usertabl.create(userid: userid, topic_id: topicid) %>
-          <% end %>
-          <% if Setting.find_by(topic_id: topicid) %>
-            <% settingagebefore = Setting.find_by(topic_id: topicid).agebefore %>
-          <% settingageafter = Setting.find_by(topic_id: topicid).ageafter %>
-          <% else %>
-            <% settingagebefore = 0 %>
-            <% settingageafter = 100 %>
-          <% end %>
-          <% if consent.counttrue >= Topic.find_by(id: topicid).sucquest %>
-            <% accomplishment = "Да" %>
-          <% else %>
-            <% accomplishment = "Нет" %>
-          <% end %>
-          <% if Visitor.find_by(idregvis: userid) %>
-            <% birthdate22 = Visitor.find_by(idregvis: userid).birthdate %>
-            <% birthdate23 = birthdate22.time.strftime("%d-%m-%Y") %>
-            <% if birthdate23 %>
-              <% timed1 = Time.now.strftime("%d-%m-%Y") %>
-              <% age1 = Time.diff(Time.now, birthdate23) %>
-              <% age2 = age1[:year] %>
-            <% end %>
-            <% else %>
-            <% age2 = Setting.find_by(topic_id: topicid).ageafter %>
-          <% end %>
-          <% if Visitor.find_by(idregvis: userid) %>
-            <% visitorsex = Visitor.find_by(idregvis: userid).sex %>
-            <% visitorcountry = Visitor.find_by(idregvis: userid).country %>
-          <% end %>
-          <% if accomplishment == Setting.find_by(topic_id: topicid).accomplishment or Setting.find_by(topic_id: topicid).accomplishment =="Все" %>
-            <% if age2.to_i >= settingagebefore.to_i and age2.to_i <= settingageafter.to_i %>
-              <% if visitorsex == Setting.find_by(topic_id: topicid).sex or Setting.find_by(topic_id: topicid).sex =="Все" %>
-                <% if visitorcountry == Setting.find_by(topic_id: topicid).country or Setting.find_by(topic_id: topicid).country =="Все" %>
-                  <tr class="zag-tabl">
-                    <td>
-                      <h5>
-                        <% if Visitor.find_by(idregvis: userid) %>
-                        <% birthdate = Visitor.find_by(idregvis: userid).birthdate %>
-                        <% birthdate.time.strftime("%d-%m-%Y") %>
-                        <strong><%= Visitor.find_by(idregvis: userid).name %> <%= Visitor.find_by(idregvis: userid).surname %></strong><br>
-                      </h5>
-                      <h6>
-                        <strong>Возраст:</strong>
-                        <% timed=Time.now.strftime("%d-%m-%Y") %>
-                        <% age = Time.diff(Time.now, birthdate) %>
-                        <%= age[:year] %> лет<br>
-                        <strong>Телефон:</strong> <%= Visitor.find_by(idregvis: userid).telephone %><br>
-                        <strong>Email: </strong> <%= Username.find_by(id: userid).email %><br>
-                      </h6>
-                      <% else %>
-                        <h5><strong>Пользователь id: <%= userid %></strong></h5>
-                        <h6><strong>Email: </strong> <%= Username.find_by(id: userid).email %></h6>
-                      <% end %>
-                      <% usertablid = Usertabl.find_by(userid: userid, topic_id: topicid).id %>
-                      <h6><a href="/topics/<%= @topic.id %>/usertabls/<%= usertablid %>/edit">Подробнее</a></h6>
-                    </td>
-                    <td><h4><%= xcount += 1 %></h4></td>
-                    <td><h4><%= consent.counttrue %></h4></td>
-                    <% ttimeconsent = consent.totaltime %>
-                      <% if ttimeconsent %>
-                        <% if ttimeconsent > 3599 %>
-                          <% tth = ttimeconsent / 3600 %>
-                          <% ttm = (ttimeconsent - tth * 3600) / 60 %>
-                          <% tts = ttimeconsent - (tth * 3600 + ttm * 60) %>
-                        <% end %>
-                        <% if ttimeconsent < 3600 and ttimeconsent > 59 %>
-                          <% tth = 0 %>
-                          <% ttm = ttimeconsent / 60 %>
-                          <% tts = ttimeconsent - (ttm * 60) %>
-                        <% end %>
-                        <% if ttimeconsent < 60 and ttimeconsent > 0 %>
-                          <% tth = 0 %>
-                          <% ttm = 0 %>
-                          <% tts = ttimeconsent %>
-                        <% end %>
-                      <% end %>
-                    <td>
-                      <% if ttimeconsent %>
-                      <h4><% if tth > 0 %>
-                      <%= tth %> ч.
-                      <% end %>
+  <% if @topic.idreg == current_user.id %>
+    <div class="div-line"><h1>Тестовое задание "<%= @topic.titletopic %>"</h1></div>
+    <div>
+      <% qucount = @question.where(topic_id: @topic.id).count %>
+      <% tocount = @topic.countquestions %>
+      <strong>Ссылка для прохождения задания:</strong><br>
+      <% if tocount > qucount %>
+      <span class="link-for-copy-red">http://localhost:3000/topics/<%= @topic.id %>/consents/new</span>
+      <button disabled id="click-to-copy" class = "btn btn-primary">Скопировать</button>
+      <p>В тестовом задании недостаточное количество вопросов.</p>
+      <% else %>
+      <span class="link-for-copy">http://localhost:3000/topics/<%= @topic.id %>/consents/new</span>
+      <button id="click-to-copy" class = "btn btn-primary">Скопировать</button>
+      <% end %>
+    </div>
+    <br>
+    <% if Setting.find_by(topic_id: @topic.id) == nil %>
+      <% Setting.create(ageafter: "90", accomplishment: "Все", sex: "Все", country: "Все", topic_id: @topic.id, agebefore: "7") %>
+    <% end %>
+    <% sid = Setting.find_by(topic_id: @topic.id).id %>
+    <% topicid = @topic.id %>
 
-                      <% if ttm > 0 %>
-                      <%= ttm %> мин
-                      <% end %>
-                      <%= tts %> сек.</h4></td>
-                      <% end %>
-                    <td>
-                      <% if consent.counttrue >= Topic.find_by(id: topicid).sucquest %>
-                      <i class="fa fa-plus-square-o fa-2x greenicon" aria-hidden="true"></i>
-                      <% else %>
-                      <i class="fa fa-minus-square-o fa-2x redicon" aria-hidden="true"></i>
-                      <% end %>
-                    </td>
-                  </tr>
+    <% if Consent.where(topic_id: topicid).count > 0 %>
+      <div class="row">
+        <div class="col-sm-11"><h3>Статистика ответов на вопросы </h3></div>
+        <div class="col-sm-1 right-element"><h3><a href="/topics/<%= @topic.id %>/settings/<%= sid %>"><i class="fa fa-cog" aria-hidden="true"></i></a></h3></div>
+      </div>
+    <% end %>
+    <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+      <% if Topic.find_by(idreg: idreg1) %>
+        <% if Consent.find_by(topic_id: topicid) %>
+          <table class ="task-tabl">
+          <tr class="gl-zag-tabl">
+            <th>Пользователи</th>
+            <th>№</th>
+            <th>Правильных ответов</th>
+            <th>Время</th>
+            <th>Выполнение</th>
+          </tr>
+          <% xcount = 0 %>
+          <% Consent.where(topic_id: topicid).each do |consent| %>
+            <% userid = consent.userid %>
+            <% unless Usertabl.find_by(userid: userid, topic_id: topicid) %>
+              <% Usertabl.create(userid: userid, topic_id: topicid) %>
+            <% end %>
+            <% if Setting.find_by(topic_id: topicid) %>
+              <% settingagebefore = Setting.find_by(topic_id: topicid).agebefore %>
+            <% settingageafter = Setting.find_by(topic_id: topicid).ageafter %>
+            <% else %>
+              <% settingagebefore = 0 %>
+              <% settingageafter = 100 %>
+            <% end %>
+            <% if consent.counttrue >= Topic.find_by(id: topicid).sucquest %>
+              <% accomplishment = "Да" %>
+            <% else %>
+              <% accomplishment = "Нет" %>
+            <% end %>
+            <% if Visitor.find_by(idregvis: userid) %>
+              <% birthdate22 = Visitor.find_by(idregvis: userid).birthdate %>
+              <% birthdate23 = birthdate22.time.strftime("%d-%m-%Y") %>
+              <% if birthdate23 %>
+                <% timed1 = Time.now.strftime("%d-%m-%Y") %>
+                <% age1 = Time.diff(Time.now, birthdate23) %>
+                <% age2 = age1[:year] %>
+              <% end %>
+              <% else %>
+              <% age2 = Setting.find_by(topic_id: topicid).ageafter %>
+            <% end %>
+            <% if Visitor.find_by(idregvis: userid) %>
+              <% visitorsex = Visitor.find_by(idregvis: userid).sex %>
+              <% visitorcountry = Visitor.find_by(idregvis: userid).country %>
+            <% end %>
+            <% if accomplishment == Setting.find_by(topic_id: topicid).accomplishment or Setting.find_by(topic_id: topicid).accomplishment =="Все" %>
+              <% if age2.to_i >= settingagebefore.to_i and age2.to_i <= settingageafter.to_i %>
+                <% if visitorsex == Setting.find_by(topic_id: topicid).sex or Setting.find_by(topic_id: topicid).sex =="Все" %>
+                  <% if visitorcountry == Setting.find_by(topic_id: topicid).country or Setting.find_by(topic_id: topicid).country =="Все" %>
+                    <tr class="zag-tabl">
+                      <td>
+                        <h5>
+                          <% if Visitor.find_by(idregvis: userid) %>
+                          <% birthdate = Visitor.find_by(idregvis: userid).birthdate %>
+                          <% birthdate.time.strftime("%d-%m-%Y") %>
+                          <strong><%= Visitor.find_by(idregvis: userid).name %> <%= Visitor.find_by(idregvis: userid).surname %></strong><br>
+                        </h5>
+                        <h6>
+                          <strong>Возраст:</strong>
+                          <% timed=Time.now.strftime("%d-%m-%Y") %>
+                          <% age = Time.diff(Time.now, birthdate) %>
+                          <%= age[:year] %> лет<br>
+                          <strong>Телефон:</strong> <%= Visitor.find_by(idregvis: userid).telephone %><br>
+                          <strong>Email: </strong> <%= Username.find_by(id: userid).email %><br>
+                        </h6>
+                        <% else %>
+                          <h5><strong>Пользователь id: <%= userid %></strong></h5>
+                          <h6><strong>Email: </strong> <%= Username.find_by(id: userid).email %></h6>
+                        <% end %>
+                        <% usertablid = Usertabl.find_by(userid: userid, topic_id: topicid).id %>
+                        <h6><a href="/topics/<%= @topic.id %>/usertabls/<%= usertablid %>/edit">Подробнее</a></h6>
+                      </td>
+                      <td><h4><%= xcount += 1 %></h4></td>
+                      <td><h4><%= consent.counttrue %></h4></td>
+                      <% ttimeconsent = consent.totaltime %>
+                        <% if ttimeconsent %>
+                          <% if ttimeconsent > 3599 %>
+                            <% tth = ttimeconsent / 3600 %>
+                            <% ttm = (ttimeconsent - tth * 3600) / 60 %>
+                            <% tts = ttimeconsent - (tth * 3600 + ttm * 60) %>
+                          <% end %>
+                          <% if ttimeconsent < 3600 and ttimeconsent > 59 %>
+                            <% tth = 0 %>
+                            <% ttm = ttimeconsent / 60 %>
+                            <% tts = ttimeconsent - (ttm * 60) %>
+                          <% end %>
+                          <% if ttimeconsent < 60 and ttimeconsent > 0 %>
+                            <% tth = 0 %>
+                            <% ttm = 0 %>
+                            <% tts = ttimeconsent %>
+                          <% end %>
+                        <% end %>
+                      <td>
+                        <% if ttimeconsent %>
+                        <h4><% if tth > 0 %>
+                        <%= tth %> ч.
+                        <% end %>
+
+                        <% if ttm > 0 %>
+                        <%= ttm %> мин
+                        <% end %>
+                        <%= tts %> сек.</h4></td>
+                        <% end %>
+                      <td>
+                        <% if consent.counttrue >= Topic.find_by(id: topicid).sucquest %>
+                        <i class="fa fa-plus-square-o fa-2x greenicon" aria-hidden="true"></i>
+                        <% else %>
+                        <i class="fa fa-minus-square-o fa-2x redicon" aria-hidden="true"></i>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
           <% end %>
-        <% end %>
-      </table>
+        </table>
+      <% end %>
+      <% if xcount and xcount < 1 %>
+        <br>
+        <p><strong>Ничего не найдено.</strong> Проверьте настройки фильтра.</p>
+      <% end %>
+      <br>
+      <%= link_to "Назад", topics_path %>
     <% end %>
-    <p></p>
-    <%= link_to "Назад", topics_path %>
   <% end %>
 <% end %>
+
 <script type="text/javascript">
   jQuery(document).ready(function($){
    $('#click-to-copy').click(function() {

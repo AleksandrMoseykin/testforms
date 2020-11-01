@@ -1,11 +1,33 @@
-<h2>Редактировать вопрос</h2>
-<%= Question.find_by(topic_id: @topic.id).imgquestion %>
-<%= form_with model: @question, url: topic_question_path, local: true do |form| %>
-  <p><%= form.label :"Вопрос" %><br><%= form.text_field :titlequestion %></p>
-  <p><%= form.label :"Правильный ответ" %><br><%= form.text_field :answertrue %></p>
-  <p><%= form.label :"Вариант ответа 1" %><br><%= form.text_field :answer2 %></p>
-  <p><%= form.label :"Вариант ответа 2" %><br><%= form.text_field :answer3 %></p>
-  <p><%= form.label :"Вариант ответа 3" %><br><%= form.text_field :answer4 %></p>
-  <p><%= form.submit "Сохранить" %></p>
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <h2>Редактировать вопрос</h2>
+  <%= Question.find_by(topic_id: @topic.id).imgquestion %>
+  <%= form_with model: @question, url: topic_question_path, local: true do |form| %>
+
+  <%= image_tag @question.imgquestion.url(:big), class: "photoprofile" if @question.imgquestion? %>
+  <p class="inputphotocreator"><%= form.file_field :imgquestion %></p>
+
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <%= form.label :"Вопрос" %><br><%= form.text_field :titlequestion, class: "w100" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <%= form.label :"Правильный ответ" %><br><%= form.text_field :answertrue, class: "w100" %>
+      </div>
+      <div class="form-group col-sm-6">
+        <%= form.label :"Вариант ответа 1" %><br><%= form.text_field :answer2, class: "w100" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <%= form.label :"Вариант ответа 2" %><br><%= form.text_field :answer3, class: "w100" %>
+      </div>
+      <div class="form-group col-sm-6">
+        <%= form.label :"Вариант ответа 3" %><br><%= form.text_field :answer4, class: "w100" %>
+      </div>
+    </div>
+    <p><%= form.submit "Сохранить", class: "topic_button btn btn-primary" %></p>
+  <% end %>
+  <%= link_to 'Назад', topics_path %>
 <% end %>
-<%= link_to 'Назад', topics_path %>

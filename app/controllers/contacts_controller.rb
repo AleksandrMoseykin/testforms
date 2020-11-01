@@ -1,14 +1,11 @@
 class ContactsController < ApplicationController
   def index
     @contacts  = Contact.all
+    @contact = Contact.new
   end
 
   def show
-      @contact = Contact.find(params[:id])
-  end
-
-  def new
-    @contact = Contact.new
+    @contact = Contact.find(params[:id])
   end
 
   def edit
@@ -19,9 +16,9 @@ class ContactsController < ApplicationController
     @contact = Contact.new(contact_params)
 
     if @contact.save
-    redirect_to @contact
+    redirect_to '/contacts/'
   else
-    render 'new'
+    redirect_to '/contacts/'
   end
   end
 
@@ -44,6 +41,6 @@ end
 
   private
   def contact_params
-      params.require(:contact).permit(:idvisitor, :idcreator, :visconfirmation_token, :creatorconfirmation_token)
+      params.require(:contact).permit(:idvisitor, :idcreator, :codecreator)
   end
 end

@@ -1,0 +1,26 @@
+<% if (username_signed_in?) %>
+  <% idregvis = current_username.id %>
+  <h1>Статистика</h1>
+  <div class="row">
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4 class = "statisticscolor">Контакты</h4>
+            <p>Вас добавили в контакты: <% if Contact.where(idvisitor: idregvis) %><%= Contact.where(idvisitor: idregvis).count %><% else %><%= count = 0 %><% end %> </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4 class = "statisticscolor">Просмотры</h4>
+            <p>Просмотры профиля за неделю: </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<% end %>

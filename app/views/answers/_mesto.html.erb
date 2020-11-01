@@ -1,19 +1,29 @@
+<!-- Узнаем id пользователя -->
 <% if (username_signed_in?) %>
   <% idreg1 = current_username.id %>
 <% end %>
+
+<!-- Узнаем id задания -->
 <% topicid = @topic.id %>
+
+<!-- Узнаем максимальное количество правильных ответов от пользователя -->
 <% maxcounttrue01 = Consent.where(topic_id: topicid).maximum("counttrue") %>
+<!-- Узнаем минимальное количество времени из максимальных ответов -->
 <% mintime01 = Consent.where(topic_id: topicid, counttrue: maxcounttrue01).minimum("totaltime") %>
+<!-- Узнаем пользователя, который показал лучший результат -->
 <% iduser01 = Consent.find_by(topic_id: topicid, counttrue: maxcounttrue01, totaltime: mintime01).userid %>
+
+<!-- Узнаем пользователя, который показал 2-й результат -->
 <% maxcounttrue021 = Consent.where.not(userid: iduser01) %>
 <% maxcounttrue02 = maxcounttrue021.where(topic_id: topicid).maximum("counttrue") %>
 <% mintime02 = maxcounttrue021.where(topic_id: topicid, counttrue: maxcounttrue02).minimum("totaltime") %>
 
 <% if mintime02 %>
-  <% iduser02 = Consent.find_by(topic_id: topicid, counttrue: maxcounttrue02, totaltime: mintime02).userid %>
+  <% iduser02 = maxcounttrue021.find_by(topic_id: topicid, counttrue: maxcounttrue02, totaltime: mintime02).userid %>
   <% idconsent = Consent.find_by(userid: iduser02).id %>
 <% end %>
 
+<!-- Узнаем пользователя, который показал 3-й результат -->
 <% maxcounttrue031 = Consent.where.not(userid: iduser01, id: idconsent) %>
 <% maxcounttrue03 = maxcounttrue031.where(topic_id: topicid).maximum("counttrue") %>
 <% mintime03 = maxcounttrue031.where(topic_id: topicid, counttrue: maxcounttrue03).minimum("totaltime") %>
@@ -22,10 +32,11 @@
   <% iduser03 = Consent.find_by(topic_id: topicid, counttrue: maxcounttrue03, totaltime: mintime03).userid %>
 <% end %>
 
+<!-- Выводим результат если тест прошли более одного человека -->
 <% if Consent.where(topic_id: topicid).count > 1 %>
   <p>
-    <% if iduser01 %>
-      <b>1. Место:</b>
+    <% if iduser01 and maxcounttrue01 > 0 %>
+      <strong>1. Место:</strong>
         <% if Visitor.find_by(idregvis: iduser01) %>
           <%= Visitor.find_by(idregvis: iduser01).name %>
           <%= Visitor.find_by(idregvis: iduser01).surname %>
@@ -33,20 +44,22 @@
           id: <%= iduser01 %>
         <% end %>
     <% end %>
-    <% if iduser02 %>
-      | <b>2. Место:</b>
+    <% if iduser02 and maxcounttrue02 > 0 and iduser02 != iduser01 %>
+      | <strong>2. Место:</strong>
       <% if Visitor.find_by(idregvis: iduser02) %>
         <%= Visitor.find_by(idregvis: iduser02).name %> <%= Visitor.find_by(idregvis: iduser02).surname %>
       <% else %>
         id: <%= iduser02 %>
       <% end %>
     <% end %>
-    <% if iduser03 %>
-      | <b>3. Место:</b>
-      <% if Visitor.find_by(idregvis: iduser03) %>
-        <%= Visitor.find_by(idregvis: iduser03).name %> <%= Visitor.find_by(idregvis: iduser03).surname %>
-      <% else %>
-        id: <%= iduser03 %>
+    <% if Consent.where(topic_id: topicid).count > 2 %>
+      <% if iduser03 and maxcounttrue03 > 0 and iduser03 != iduser02 and iduser03 != iduser01 %>
+        | <strong>3. Место:</strong>
+        <% if Visitor.find_by(idregvis: iduser03) %>
+          <%= Visitor.find_by(idregvis: iduser03).name %> <%= Visitor.find_by(idregvis: iduser03).surname %>
+        <% else %>
+          id: <%= iduser03 %>
+        <% end %>
       <% end %>
     <% end %>
   </p>

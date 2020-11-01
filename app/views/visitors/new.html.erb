@@ -3,48 +3,77 @@
     <h2><%= Visitor.find_by(idreg: useridname).name %>, вы уже добавили данные</h2>
     <p>Для просмотра информации нажмите вкладку "Профиль".</p>
   <% else %>
-  <h1>Добавить личные данные</h1>
-  <%= form_with scope: :visitor, html: { multipart:  true }, url: visitors_path, local: true do |form| %>
-    <p>
-      <%= form.label :"Аватарка" %><br>
-      <%= form.file_field :photo %>
-    </p>
-      <p>
-        <%= form.label :"Имя" %><br>
-        <%= form.text_field :name %>
-      </p>
-      <p>
-        <%= form.label :"Фамилия" %><br>
-        <%= form.text_field :surname %>
-      </p>
-      <p>
-        <%= form.label :"Пол" %><br>
-        <%= form.select(:sex, [['Муж.', "Муж."], ['Жен.', "Жен."]]) %>
-      </p>
-      <p>
-        <%= form.label :"Телефон" %><br>
-        <%= form.text_field :telephone %>
-      </p>
-      <p>
-        <%= form.label :"Страна" %><br>
-        <%= form.text_field :country %>
-      </p>
-      <p>
-        <%= form.label :"Город" %><br>
-        <%= form.text_field :city %>
-      </p>
-      <p>
-        <%= form.label :"Дата рождения" %><br>
-        <%= form.date_field :birthdate %>
-      </p>
-      <p>
-        <%= form.label :"Промокод" %><br>
-        <%= form.text_field :promocode %>
-      </p>
-      <input type="hidden" name="visitor[idregvis]" id="visitor_idregvis" value="<% if (username_signed_in?) %><%= current_username.id %><% end %>">
-      <p>
-        <%= form.submit "Сохранить" %>
-      </p>
-    <% end %>
+    <h1>Добавить личные данные</h1>
+    <div class="formswrapper">
+      <%= form_with scope: :visitor, html: { multipart:  true }, url: visitors_path, local: true do |form| %>
+      <% if @visitor.errors.any? %>
+        <div id="error_explanation">
+          <h2>
+            <% er=@visitor.errors.count %>
+            <% if er>0 %>
+              <span class="formerrors">Форма заполнена неправильно</span>
+            <% end %>
+          </h2>
+        </div>
+      <% end %>
+        <div class="row">
+          <div class="form-group col-sm-4">
+            <%= form.label :"Аватарка" %><br>
+            <%= form.file_field :photo %>
+          </div>
+          <div class="form-group col-sm-4">
+            <%= form.label :"Имя*" %><br>
+            <%= form.text_field :name, class: "w100" %>
+          </div>
+          <div class="form-group col-sm-4">
+            <%= form.label :"Фамилия*" %><br>
+
+            <%= form.text_field :surname, class: "w100" %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="form-group col-sm-4">
+            <%= form.label :"Дата рождения*" %><br>
+            <%= form.date_field :birthdate, class: "w100" %>
+          </div>
+          <div class="form-group col-sm-4">
+            <%= form.label :"Пол*" %><br>
+            <%= form.select(:sex, [['Муж.', "Муж."], ['Жен.', "Жен."]]) %>
+          </div>
+          <div class="form-group col-sm-4">
+            <%= form.label :"Телефон*" %><br>
+            <%= form.text_field :telephone, class: "w100" %>
+            <small class="form-text text-muted">Пример: +7 900-000-00-00</small>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="form-group col-sm-4">
+            <%= form.label :"Страна*" %><br>
+            <%= form.text_field :country, class: "w100" %>
+          </div>
+          <div class="form-group col-sm-4">
+            <%= form.label :"Город*" %><br>
+            <%= form.text_field :city, class: "w100" %>
+          </div>
+          <div class="form-group col-sm-4">
+            <%= form.label :"Промокод" %><br>
+            <%= form.text_field :promocode, class: "w100" %>
+          </div>
+        </div>
+        <hr>
+        <input type="hidden" name="visitor[idregvis]" id="visitor_idregvis" value="<% if (username_signed_in?) %><%= current_username.id %><% end %>">
+        <%= form.hidden_field :idregvis, value: current_username.id %>
+        <%= form.hidden_field :codevisitor, value: current_username.encrypted_password %>
+        <p>
+          <%= form.submit "Сохранить", class: "topic_button btn btn-primary" %>
+        </p>
+      <% end %>
+    </div>
+    <div class="notation">
+      <p>Все поля с пометкой (*) должны быть заполнены.</p>
+      <p>Предоставляя свои персональные данные Пользователь даёт согласие на обработку, хранение и использование своих персональных данных. <%= link_to "Подробнее", personaldata_path %></p>
+    </div>
   <% end %>
 <% end %>

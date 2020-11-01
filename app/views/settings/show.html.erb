@@ -5,7 +5,11 @@
       <tr>
         <td><h4>Воз&shy;раст от:</h4></td>
         <% if Setting.find_by(topic_id: @topic.id) %>
-          <td><h4><%= Setting.find_by(topic_id: @topic.id).agebefore %></h4></td>
+          <td>
+            <h4>
+              <a href="/topics/<%= @topic.id %>/settings/<%= @topic.settings.find_by(topic_id: @topic.id).id %>/edit"><%= Setting.find_by(topic_id: @topic.id).agebefore %></a>
+            </h4>
+          </td>
         <% end %>
       </tr>
     </table>
@@ -15,7 +19,11 @@
       <tr>
         <td><h4>Воз&shy;раст до:</h4></td>
         <% if Setting.find_by(topic_id: @topic.id) %>
-          <td><h4><%= Setting.find_by(topic_id: @topic.id).ageafter %></h4></td>
+          <td>
+            <h4>
+              <a href="/topics/<%= @topic.id %>/settings/<%= @topic.settings.find_by(topic_id: @topic.id).id %>/edit"><%= Setting.find_by(topic_id: @topic.id).ageafter %></a>
+            </h4>
+          </td>
         <% end %>
       </tr>
     </table>
@@ -27,7 +35,11 @@
       <tr>
           <td><h4>Выпол&shy;не&shy;ние задания:</h4></td>
           <% if Setting.find_by(topic_id: @topic.id) %>
-            <td><h4><%= Setting.find_by(topic_id: @topic.id).accomplishment %></h4></td>
+            <td>
+              <h4>
+                <a href="/topics/<%= @topic.id %>/settings/<%= @topic.settings.find_by(topic_id: @topic.id).id %>/edit"><%= Setting.find_by(topic_id: @topic.id).accomplishment %></a>
+              </h4>
+            </td>
           <% end %>
       </tr>
     </table>
@@ -37,7 +49,11 @@
       <tr>
           <td><h4>Страна:</h4></td>
           <% if Setting.find_by(topic_id: @topic.id) %>
-            <td><h4><%= Setting.find_by(topic_id: @topic.id).country %></h4></td>
+            <td>
+              <h4>
+                <a href="/topics/<%= @topic.id %>/settings/<%= @topic.settings.find_by(topic_id: @topic.id).id %>/edit"><%= Setting.find_by(topic_id: @topic.id).country %></a>
+              </h4>
+            </td>
           <% end %>
       </tr>
   </table>
@@ -47,7 +63,11 @@
     <tr>
         <td><h4>Пол:</h4></td>
         <% if Setting.find_by(topic_id: @topic.id) %>
-        <td><h4><%= Setting.find_by(topic_id: @topic.id).sex %></h4></td>
+        <td>
+          <h4>
+            <a href="/topics/<%= @topic.id %>/settings/<%= @topic.settings.find_by(topic_id: @topic.id).id %>/edit"><%= Setting.find_by(topic_id: @topic.id).sex %></a>
+          </h4>
+        </td>
         <% end %>
     </tr>
   </table>

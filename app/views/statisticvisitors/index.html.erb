@@ -1,0 +1,37 @@
+<% if (username_signed_in?) %>
+  <% idregvis = current_username.id %>
+  <h1>Статистика</h1>
+  <div class="row">
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4 class = "statisticscolor">Контакты</h4>
+            <p>Вас добавили в контакты: <% if Contact.where(idvisitor: idregvis) %><%= Contact.where(idvisitor: idregvis).count %><% end %> </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-6">
+      <table class="borderdiv">
+        <tr>
+          <td>
+            <h4 class = "statisticscolor">Просмотры</h4>
+            <p>
+              Просмотры профиля за неделю: <%= Statisticvisitor.where(idregvis: idregvis).count %><br>
+              <% if Statisticvisitor.find_by(idregvis: idregvis) %>
+                <% created_statisticvisitor = Statisticvisitor.find_by(idregvis: idregvis).created_at %>
+                <% time_curent = Time.new %>
+                <% time_week = Time.new - 86400 %>
+                Просмотры за последний день: <%= Statisticvisitor.where(idregvis: idregvis, created_at: time_week..time_curent).count %>
+                <% if Statisticvisitor.first.created_at < time_week %>
+                  <% Statisticvisitor.first.destroy %>
+                <% end %>
+              <% end %>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<% end %>

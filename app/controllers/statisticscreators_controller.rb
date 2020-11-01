@@ -12,8 +12,8 @@ class StatisticscreatorsController < ApplicationController
   end
 
   def edit
-  @statisticscreator = Statisticscreator.find(params[:id])
-end
+    @statisticscreator = Statisticscreator.find(params[:id])
+  end
 
   def create
       @statisticscreator = Statisticscreator.new(statisticscreator_params)

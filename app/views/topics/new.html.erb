@@ -1,69 +1,129 @@
-<h1>Добавить тестовое задание</h1>
-<% curentdate = Time.new %>
-<% newcurentdate = curentdate.strftime("%Y-%m-%dT%H:%M") %>
-<%= form_with scope: :topic, url: topics_path, local: true do |form| %>
-  <% if @topic.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <% er=@topic.errors.count %>
-        <% if er>0 %>
-          <span>Форма заполнена неправильно</span>
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <h1>Добавить тестовое задание</h1>
+  <% curentdate = Time.new %>
+  <% newcurentdate = curentdate.strftime("%Y-%m-%dT%H:%M") %>
+  <%= form_with scope: :topic, url: topics_path, local: true do |form| %>
+    <% if @topic.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <% er=@topic.errors.count %>
+          <% if er>0 %>
+            <span class="formerrors">Форма заполнена неправильно</span>
+          <% end %>
+        </h2>
+      </div>
+    <% end %>
+    <div class="row form-group">
+      <div class="col-sm-12">
+        <%= form.label :"Название*" %><br>
+        <% if @topic.errors[:titletopic].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Название тестового задания должно быть уникальным</li>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 300 символов</li>
+          </ul>
         <% end %>
-      </h2>
+        <%= form.text_field :titletopic, class: "w100", placeholder: "Ввидите уникальное название тестового задания" %>
+        <small id="emailHelp" class="form-text text-muted">Обязательное поле для заполнения</small>
+      </div>
     </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-4">
+        <%= form.label :"Количество вопросов*" %><br>
+        <input id="topic_countquestions" max="100" min="1" name="topic[countquestions]" step="1" type="number" value="10" class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите количество вопросов в тесте</small>
+      </div>
+      <div class="col-sm-4">
+        <%= form.label :"Правильных ответов*" %><br>
+        <input id="topic_sucquest" max="100" min="1" name="topic[sucquest]" step="1" type="number" value="5" class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите количество правильных ответов для прохождения теста</small>
+      </div>
+      <div class="col-sm-4">
+        <%= form.label :"Время*" %><br>
+        <input type="time" name="topic[timetask]" id="topic_timetask" value="00:10" class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите время для прохождения тестового задания</small>
+      </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-6">
+        <%= form.label :"Начало показов*" %><br>
+        <input type="datetime-local" name="topic[intdate1]" id="topic_intdate1" value=<%= newcurentdate %> class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите дату запуска тестового задания</small>
+      </div>
+      <div class="col-sm-6">
+        <%= form.label :"Окончание показов" %><br>
+        <%= form.datetime_local_field :intdate2, class: "w100" %>
+        <small id="emailHelp" class="form-text text-muted">Дата окончания показов тестового задания</small>
+      </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-6">
+        <%= form.label :"Успешное сообщение" %><br>
+        <% if @topic.errors[:successmessage].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 300 символов</li>
+          </ul>
+        <% end %>
+        <%= form.text_area :successmessage, value: "Вы успешно прошли тест", class: "w100" %>
+        <small id="emailHelp" class="form-text text-muted">Введите сообщение, которое будет показываться при успешном прохождении теста</small>
+      </div>
+      <div class="col-sm-6">
+        <%= form.label :"Сообщение о неудаче" %><br>
+        <% if @topic.errors[:failuremessage].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 300 символов</li>
+          </ul>
+        <% end %>
+        <%= form.text_area :failuremessage, value: "Вы не прошли тест", class: "w100" %>
+        <small id="emailHelp" class="form-text text-muted">Введите сообщение, которое будет показываться при неудачном прохождении теста</small>
+      </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-4">
+        <%= form.label :"Пароль" %><br>
+        <% if @topic.errors[:password].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 20 символов</li>
+          </ul>
+        <% end %>
+        <%= form.password_field :password, class: "w100", placeholder: "Введите пароль (минимум: 3 символа)" %>
+        <small id="emailHelp" class="form-text text-muted">Поле можно оставить пустым</small>
+      </div>
+      <% if (user_signed_in?) %><% idreg = current_user.id %>
+        <%= form.hidden_field :idreg, value: idreg %>
+        <%= form.hidden_field :codecreator, value: current_user.encrypted_password %>
+      <% end %>
+      <div class="col-sm-4">
+        <%= form.label :"Показы*" %><br>
+        <%= form.select(:activ, [['Вкл.', "Вкл."], ['Выкл.', "Выкл."]]) %>
+        <small id="emailHelp" class="form-text text-muted">Настройте активность показов тестового задания</small>
+      </div>
+      <div class="col-sm-4">
+        <%= form.label :"Случайный порядок*" %><br>
+        <%= form.select(:rand, [['Выкл.', "Выкл."], ['Вкл.', "Вкл."]]) %>
+        <small id="emailHelp" class="form-text text-muted">Настройте порядок показов тестового задания</small>
+      </div>
+    </div>
+    <hr>
+      <p>
+        <%= form.submit "Сохранить", class: "topic_button btn btn-primary" %>
+      </p>
   <% end %>
-  <p>
-    <%= form.label :"Название" %><br>
-    <%= form.text_field :titletopic %>
-  </p>
-  <p>
-    <%= form.label :"Количество вопросов" %><br>
-    <input id="topic_countquestions" max="100" min="1" name="topic[countquestions]" step="1" type="number" value="10" />
-  </p>
-  <p>
-    <%= form.label :"Количество правильных ответов" %><br>
-    <input id="topic_sucquest" max="100" min="1" name="topic[sucquest]" step="1" type="number" value="5" />
-  </p>
-  <p>
-    <%= form.label :"Время" %><br>
-    <input type="time" name="topic[timetask]" id="topic_timetask" value="00:10">
-  </p>
-  <p>
-    <%= form.label :"Начало показов" %><br>
-    <input type="datetime-local" name="topic[intdate1]" id="topic_intdate1" value=<%= newcurentdate %>>
-  </p>
-  <p>
-    <%= form.label :"Окончание показов" %><br>
-    <%= form.datetime_local_field :intdate2 %>
-  </p>
-  <p>
-    <%= form.label :"Пароль" %><br>
-    <%= form.password_field :password %>
-  </p>
-  <% if (user_signed_in?) %><% idreg = current_user.id %>
-  <input type="hidden" name="topic[idreg]" id="topic_ip" value="<%= idreg %>">
-  <% end %>
-  <p>
-    <%= form.label :"Успешное сообщение" %><br>
-    <textarea name="topic[successmessage]" id="topic_successmessage">Вы успешно прошли тест</textarea>
-  </p>
-  <p>
-    <%= form.label :"Сообщение о неудаче" %><br>
-    <textarea name="topic[failuremessage]" id="failuremessage_successmessage">Вы не прошли тест</textarea>
-  </p>
-  <p>
-    <%= form.label :"Показы" %><br>
-    <%= form.select(:activ, [['Вкл.', "Вкл."], ['Выкл.', "Выкл."]]) %>
-  </p>
-  <p>
-    <%= form.label :"Случайный порядок показов" %><br>
-    <%= form.select(:rand, [['Выкл.', "Выкл."], ['Вкл.', "Вкл."]]) %>
-  </p>
-  <p>
-    <%= form.submit "Сохранить" %>
-  </p>
+  <%= link_to 'Тестовые задания', topics_path %>
 <% end %>
-<%= link_to 'Назад', topics_path %>
+
+
 <script type="text/javascript">
   $( document ).on('turbolinks:load', function() {
     $("#topic_countquestions").on("change", function(){

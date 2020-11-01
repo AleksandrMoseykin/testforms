@@ -10,6 +10,14 @@
     <hr class="razdelitel">
     <p><a class="menu-r-link"href="/test_task/">Тестовые задания</a></p>
     <hr class="razdelitel">
+    <p class="addlink">
+      <a class="menu-r-link"href="/links/">Ссылки</a>
+      <% messagelink = Linktask.find_by(userid: current_username.id, viewlinks: nil) %>
+      <% if messagelink %>
+      <sup><span class="linkscount"><%= Linktask.where(userid: current_username.id, viewlinks: nil).count %></span></sup>
+      <% end %>
+    </p>
+    <hr class="razdelitel">
     <p>Опросы</p>
     <hr class="razdelitel">
     <ul id="r-menu">
@@ -19,7 +27,7 @@
     <hr class="razdelitel">
     <li><a class="menu-r-link"href="/profilevisitor/">Профиль</a></li>
     <hr class="razdelitel">
-    <li><a class="menu-r-link"href="#">Статистика</a></li>
+    <li><a class="menu-r-link"href="/statisticvisitors/">Статистика</a></li>
     <hr class="razdelitel">
     <li><a class="menu-r-link"href="#">Настройки</a></li>
     <hr class="razdelitel">

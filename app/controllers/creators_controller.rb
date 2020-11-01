@@ -1,6 +1,7 @@
 class CreatorsController < ApplicationController
   def index
     @creators  = Creator.all
+    redirect_to '/creators/new'
   end
 
   def show
@@ -18,7 +19,7 @@ end
   def create
       @creator = Creator.new(creator_params)
 
-      if @creator.save
+    if @creator.save
       redirect_to @creator
     else
       render 'new'
@@ -45,6 +46,6 @@ end
   private
   def creator_params
       params.require(:creator).permit(:namecreator, :surnamecreator, :telephonecreator, :emailcreator,
-        :photocreator, :companycreator, :promocodecreator, :idreg)
+        :photocreator, :companycreator, :promocodecreator, :idreg, :codecreator)
   end
 end

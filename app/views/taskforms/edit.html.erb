@@ -1,0 +1,239 @@
+<% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+  <% if Topic.find_by(idreg: idreg1) %>
+    <% curentdate = Time.new %>
+    <% newcurentdate = curentdate.strftime("%Y-%m-%dT%H:%M") %>
+    <h1>Редактировать "<%= @taskform.titletask %>"</h1>
+    <%= form_with(model: @taskforms, local: true) do |form| %>
+      <% if @taskform.errors.any? %>
+        <div id="error_explanation">
+          <h2>
+            <% er = @taskforms.errors.count %>
+            <% if er>0 %>
+              <span>Форма заполнена неправильно</span>
+            <% end %>
+          </h2>
+        </div>
+      <% end %>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Вопросов в тесте:</h4></td>
+        <td>
+          <h4>
+            <% if @taskform.countquestions %>
+              <input id="taskform_countquestions" class="w100" max="100" min="1" name="taskform[countquestions]" step="1" type="number" value=<%= @taskform.countquestions %> />
+            <% else %>
+              <input id="taskform_countquestions" class="w100" max="100" min="1" name="taskform[countquestions]" step="1" type="number" value="10" />
+            <% end %>
+          </h4>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <p>Указано количество вопросов в тестовом задании. Если вы добавили меньше вопросов, чем
+          указано, то ваше задание будет неактивно.</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Правильных ответов:</h4></td>
+        <td>
+          <h4>
+            <% if @taskform.sucquest %>
+              <input id="taskform_sucquest" class="w100" max="100" min="1" name="taskform[sucquest]" step="1" type="number" value=<%= @taskform.sucquest %> />
+            <% else %>
+              <input id="taskform_sucquest" class="w100" max="100" min="1" name="taskform[sucquest]" step="1" type="number" value="5" />
+            <% end %>
+          </h4>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <p>Если по итогам прохождения теста, количество правильных ответов равно или больше, чем указано,
+          то задание считается пройденым.</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Успешное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @taskform.successmessage %>
+              <textarea name="taskform[successmessage]" id="taskform_successmessage" class="w100"><%= @taskform.successmessage %></textarea>
+            <% else %>
+              <textarea name="taskform[successmessage]" id="taskform_successmessage" class="w100">Вы успешно прошли тест</textarea>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Неудовлетвори&shy;тель&shy;ное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @taskform.failuremessage %>
+              <textarea name="taskform[failuremessage]" id="failuremessage_successmessage" class="w100"><%= @taskform.failuremessage %></textarea>
+            <% else %>
+              <textarea name="taskformc[failuremessage]" id="failuremessage_successmessage" class="w100">Вы не прошли тест</textarea>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Начало показов:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @taskform.intdate1 %>
+              <%= form.datetime_local_field :intdate1, class: "w100" %>
+            <% else %>
+              <input type="datetime-local" name="topic[intdate1]" id="topic_intdate1" value=<%= newcurentdate %>>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Окончание показов:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <%= form.datetime_local_field :intdate2, class: "w100" %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Время:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <%= form.time_field :timetask, class: "w100" %>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Показы:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><%= form.select(:activ, [['Вкл.', "Вкл."], ['Выкл.', "Выкл."]]) %></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Случай&shy;ный поря&shy;док:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><%= form.select(:rand, [['Выкл.', "Выкл."], ['Вкл.', "Вкл."]]) %></h5></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Пароль:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <% if @taskform.password %>
+              <input name="taskform[password]" id="taskform_password" class = "w100" value=<%= @taskform.password %>>
+            <% else %>
+              <%= form.password_field :password, class: "w100" %>
+            <% end %>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<p>
+  <%= form.submit "Сохранить", class: "topic_button btn btn-primary" %>
+</p>
+<% end %>
+  <%= link_to 'Назад', taskform_path(id: @taskform) %>
+<% end %>
+
+<script type="text/javascript">
+  $( document ).on('turbolinks:load', function() {
+    $("#topic_countquestions").on("change", function(){
+      let element = $("#topic_countquestions").val();
+      element = element * 1;
+      let hid = $("#topic_sucquest").val();
+      hid = hid * 1;
+      if (element < hid) {
+      $("#topic_sucquest").val(element);
+      }
+    });
+    $("#topic_sucquest").on("change", function(){
+      let el = $("#topic_sucquest").val();
+      el = el * 1;
+      let el2 = $("#topic_countquestions").val();
+      el2 = el2 * 1;
+      if (el > el2) {
+      $("#topic_countquestions").val(el);
+      }
+    });
+    $("#topic_intdate1").on("change", function(){
+      let dataelement = $("#topic_intdate1").val();
+      intdate1 = new Date(dataelement);
+      let dataelement2 = $("#topic_intdate2").val();
+      if (dataelement2) {
+        intdate2 = new Date(dataelement2);
+        if (intdate1 > intdate2) {
+          $("#topic_intdate2").val(dataelement);
+        }
+      }
+    });
+    $("#topic_intdate2").on("change", function(){
+      let datael = $("#topic_intdate2").val();
+      int1 = new Date(datael);
+      let datael2 = $("#topic_intdate1").val();
+      if (datael) {
+        int2 = new Date(datael2);
+        if (int1 < int2) {
+          $("#topic_intdate1").val(datael);
+        }
+      }
+    });
+  });
+</script>

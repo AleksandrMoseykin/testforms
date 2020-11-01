@@ -2,6 +2,7 @@ class PasswordsController < ApplicationController
   def index
     @topic = Topic.find(params[:topic_id])
     @password = @topic.passwords.all
+    render 'answers/new'
   end
     def show
       @topic = Topic.find(params[:topic_id])

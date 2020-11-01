@@ -1,0 +1,453 @@
+<!-- Узнаем id пользователя и  id задания-->
+<% if (username_signed_in?) %>
+  <% idreg1 = current_username.id %>
+<% end %>
+<% topicid = @topic.id %>
+
+<!-- Выводим таймер -->
+<%= render "answers/timer" %>
+
+<!-- Узнаем количество вопросов в задании -->
+<% cnt = @topic.questions.count %>
+
+<!-- Если в тесте вопросы закончились -->
+<% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall == cnt %>
+
+<!-- Выводим блок первых 3-х мест -->
+  <%= render "answers/mesto" %>
+
+<!-- Выводим таблицу результатов для пользователя -->
+  <%= render "answers/tabltotal" %>
+<% end %>
+
+<!-- Если рандонные показы выключены выводим этот блок -->
+<% if @topic.rand == "Выкл." %>
+
+  <!-- Создаем переменную с количеством вопросов -->
+  <% questionsall = Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+
+  <!-- Создаем переменную с количеством отложенных вопросов -->
+  <% countreserve = @topic.answers.where(userid: idreg1, answeruser: nil).count %>
+
+<!-- Узнаем общее количество вопросов (вместе с отложенными вопросами) -->
+    <% if countreserve != nil %>
+      <% numberrand = 0 + questionsall + countreserve %>
+    <% else %>
+      <% numberrand = 0 + questionsall %>
+    <% end %>
+
+  <!-- Если количество вопросов в задании равно общему количесству вопросов и есть пропущенные вопросы -->
+  <% if cnt == numberrand and Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil) != nil %>
+
+    <!-- Создаем переменную с номерами пропущенных ответов -->
+    <% numberrand = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).numberanswer %>
+
+    <% if numberrand !="" %>
+
+      <!-- узнаем id пропущенного ответа -->
+      <% numberid = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).id %>
+
+      <!-- Удаляем ответ -->
+      <% Answer.destroy_by(id: numberid) %>
+
+    <% end %>
+  <% end %>
+
+  <!-- Создаем рандонное чило -->
+  <% numberanswer = rand(0..6) %>
+
+  <!-- Если количество ответов на вопросы меньше чем вопросов то последовательно выводим вопросы -->
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall < cnt %>
+
+    <% @topic.questions.each_with_index do |question, index| %>
+
+    <!-- Узнаем все переменные (вопросы и варианты ответов) -->
+    <% idquestion = Array[] %>
+    <% idquestion[index]=question.id %>
+    <% titlequestion = Array[] %>
+    <% titlequestion[index]=question.titlequestion %>
+    <% imgquestion = Array[] %>
+    <% imgquestion[index]=question.imgquestion %>
+    <% answertrue = Array[] %>
+    <% answertrue[index]=question.answertrue %>
+    <% answer2 = Array[] %>
+    <% answer2[index]=question.answer2 %>
+    <% answer3 = Array[] %>
+    <% answer3[index]=question.answer3 %>
+    <% answer4 = Array[] %>
+    <% answer4[index]=question.answer4 %>
+    <% topic_id = Array[] %>
+    <% topic_id[index]=question.topic_id %>
+
+    <div hidden class="hid"><%=idquestion[numberrand] %></div>
+
+    <!-- Выводим изображение -->
+    <% if imgquestion[numberrand] %>
+    <%= image_tag "#{imgquestion[numberrand]}", {height: 350} %>
+    <% end %>
+
+
+
+    <!-- Выводим вопрос -->
+    <% if titlequestion[numberrand] %>
+      <div><h5><%= titlequestion[numberrand] %></h5></div>
+    <% end %>
+
+    <!-- Выводим рандонно ответы -->
+    <% if numberanswer == 0 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+    <% if numberanswer == 1 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+    <% if numberanswer == 2 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+    <% if numberanswer == 3 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+    <% if numberanswer == 4 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+    <% if numberanswer == 5 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+    <% if numberanswer == 6 and answertrue[numberrand] %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3[numberrand] %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2[numberrand] %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4[numberrand] %></span></div></div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <!-- Скрытая форма для передачи ответа и вопроса -->
+  <%= render "answers/forma" %>
+
+  <!-- Если в задании осталось больше одного вопроса, то выводим кнопку пропустить -->
+  <% cnt = @topic.questions.count %>
+  <% questionsall = Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+  <% numbercnt = cnt - questionsall %>
+  <% if numbercnt > 1 %>
+    <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+      <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= numberrand %>>
+      <% if (username_signed_in?) %><% idreg = current_username.id %>
+        <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+        <input type="hidden" name="answer[usercode]" id="answer_usercode" value=<%= current_username.encrypted_password %>>
+      <% end %>
+    <%= form.submit "Пропустить", name: "add", class: "nextbutton topic_button btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>
+<% end %>
+
+<!-- Если рандонный вывод включен и количество вопросов не равно количеству ответов -->
+<% if @topic.rand == "Вкл." and cnt != Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+
+  <!-- Создаем переменную количество всех вопросов -->
+  <% questionsall = Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+
+  <!-- Создаем переменную количество пропущенных вопросов -->
+  <% countreserve = @topic.answers.where(userid: idreg1, answeruser: nil).count %>
+  <% cntquest = cnt - questionsall %>
+
+  <!-- Если пропущенных вопросов нет -->
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).numberrand == nil %>
+
+    <% idar = Array[] %>
+    <% @topic.questions.each_with_index do |quest, index| %>
+      <% idar.push(quest.id)%>
+    <% end %>
+    <% idar %>
+    <% updatenumberrand = Consent.find_by(userid: idreg1, topic_id: topicid) %>
+    <% updatenumberrand.update(numberrand: idar) %>
+  <% end %>
+
+  <!-- Если есть пропущенные вопросы -->
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).numberrand != nil %>
+
+    <% arraycountdb = Consent.find_by(userid: idreg1, topic_id: topicid).numberrand %>
+    <% arraycount = arraycountdb.count - 1 %>
+    <% if arraycount > - 1 %>
+      <% randint = rand(0..arraycount) %>
+      <% idarray = arraycountdb[randint] %>
+    <% end %>
+  <% end %>
+
+  <!-- Сравниваем количество пропущенных вопросов -->
+  <% if cntquest == countreserve %>
+    <% numberrand = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).numberanswer %>
+    <% if numberrand !="" %>
+      <% numberid = Answer.find_by(userid: idreg1, topic_id: topicid, answeruser: nil).id %>
+      <% Answer.destroy_by(id: numberid) %>
+    <% end %>
+<% numberanswer = rand(0..6) %>
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall < cnt %>
+    <% titlequestion = Question.find_by(id: numberrand).titlequestion %>
+    <% imgquestion = Question.find_by(id: numberrand).imgquestion %>
+    <% answertrue = Question.find_by(id: numberrand).answertrue %>
+    <% answer2 = Question.find_by(id: numberrand).answer2 %>
+    <% answer3 = Question.find_by(id: numberrand).answer3 %>
+    <% answer4 = Question.find_by(id: numberrand).answer4 %>
+    <% topic_id = Question.find_by(id: numberrand).topic_id %>
+    <div hidden class="hid"><%= numberrand %></div>
+
+    <% # if imgquestion %>
+
+    <% # end %>
+
+    <% if titlequestion %>
+      <div><h5><%= titlequestion %></h5></div>
+    <% end %>
+    <% if numberanswer == 0 and answertrue %>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      </div>
+      <div class="row">
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+        <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      </div>
+    <% end %>
+  <% if numberanswer == 1 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 2 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 3 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 4 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+   <% end %>
+  <% if numberanswer == 5 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 6 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+  <% end %>
+<%= render "answers/forma" %>
+<% cnt = @topic.questions.count %>
+<% questionsall = Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+<% numbercnt = cnt - questionsall %>
+<% if numbercnt > 1 %>
+  <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+    <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= numberrand %>>
+    <% if (username_signed_in?) %><% idreg = current_username.id %>
+      <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+      <input type="hidden" name="answer[usercode]" id="answer_usercode" value=<%= current_username.encrypted_password %>>
+    <% end %>
+  <%= form.submit "Пропустить", name: "add", class: "nextbutton topic_button btn btn-primary" %>
+  <% end %>
+<% end %>
+
+<% end %>
+<% end %>
+<% if cntquest != countreserve %>
+  <% if Question.find_by(id: idarray) %>
+    <% titlequestion = Question.find_by(id: idarray).titlequestion %>
+    <% imgquestion = Question.find_by(id: idarray).imgquestion %>
+    <% answertrue = Question.find_by(id: idarray).answertrue %>
+    <% answer2 = Question.find_by(id: idarray).answer2 %>
+    <% answer3 = Question.find_by(id: idarray).answer3 %>
+    <% answer4 = Question.find_by(id: idarray).answer4 %>
+    <% topic_id = Question.find_by(id: idarray).topic_id %>
+  <% end %>
+  <% numberanswer = rand(0..6) %>
+  <% if Consent.find_by(userid: idreg1, topic_id: topicid).questionsall != cnt %>
+    <div hidden class="hid"><%= idarray %></div>
+    <% # if imgquestion %>
+
+    <% #end %>
+    <div><h5><%= titlequestion %></h5></div>
+  <% if numberanswer == 0 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 1 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 2 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 3 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 4 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 5 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+    </div>
+  <% end %>
+  <% if numberanswer == 6 and answertrue %>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answertrue %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer3 %></span></div></div>
+    </div>
+    <div class="row">
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer2 %></span></div></div>
+      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer4 %></span></div></div>
+    </div>
+  <% end %>
+  <%= render "answers/forma" %>
+
+  <% arraydel = Consent.find_by(userid: idreg1, topic_id: topicid) %>
+  <% arraydelete = arraydel.numberrand %>
+  <!-- Если в массиве есть id пропущенных вопросов -->
+  <% if arraydelete != [] %>
+  <!-- Удаляем id вопроса, который на экране -->
+    <% arraydelete.delete_at(randint) %>
+  <% end %>
+  <% arraydelete %>
+  <!-- Если массив равен 0 или больше -->
+  <% if arraydelete.count > -1 %>
+  <!-- обновляем массив -->
+    <% updatearraydelete = Consent.find_by(userid: idreg1, topic_id: topicid) %>
+    <% updatearraydelete.update(numberrand: arraydelete) %>
+  <% end %>
+
+  <% cnt = @topic.questions.count %>
+  <% questionsall = Consent.find_by(userid: idreg1, topic_id: topicid).questionsall %>
+  <% numbercnt = cnt - questionsall %>
+  <% if numbercnt > 1 %>
+    <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
+      <input type="hidden" name="answer[numberanswer]" id="answer_numberanswer" value=<%= numberrand %>>
+      <% if (username_signed_in?) %><% idreg = current_username.id %>
+        <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+        <input type="hidden" name="answer[usercode]" id="answer_usercode" value=<%= current_username.encrypted_password %>>
+      <% end %>
+    <%= form.submit "Пропустить", name: "add", class: "nextbutton topic_button btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>
+<% end %>
+<% end %>

@@ -1,0 +1,59 @@
+<% if username_signed_in? %>
+  <% useridname = current_username.id %>
+  <h1>Ссылки</h1>
+  <h4>За последнюю неделю</h4>
+  <table class ="task-tabl">
+    <tr class="gl-zag-tabl">
+      <th>Ссылка</th>
+      <th>От кого</th>
+      <th>Дата</th>
+    </tr>
+    <% time_last = Time.now-604800 %>
+      <% if Linktask.find_by(userid: useridname) %>
+        <% Linktask.where(userid: useridname, created_at: time_last..Time.now).order(created_at: :desc).each do |link| %>
+          <tr class = "borderquestabl backgroundtabl">
+            <% id = link.topicid %>
+            <% idcreator = link.idcreator %>
+            <% if link.viewlinks == "y" %>
+              <% if Topic.find_by(id: id) %>
+                <td><a href="/topics/<%= id %>/consents/new"><%= Topic.find_by(id: id).titletopic %></a>
+                  <% if Topic.find_by(id: id).password != "" %>
+                    <div>Пароль: <%= Topic.find_by(id: id).password %></div>
+                  <% end %>
+                </td>
+                <% if Creator.find_by(idreg: idcreator) %>
+                  <td><%= Creator.find_by(idreg: idcreator).namecreator %> <%= Creator.find_by(idreg: idcreator).surnamecreator %></td>
+                  <% else %>
+                  <td> - </td>
+              <% end %>
+              <td><%= link.created_at.strftime("%d.%m.%y %H:%M") %></td>
+              <% end %>
+
+            <% else %>
+              <% if Topic.find_by(id: id) %>
+              <td><strong><a href="/topics/<%= id %>/consents/new"><%= Topic.find_by(id: id).titletopic %></a></strong>
+                <% if Topic.find_by(id: id).password != "" %>
+                  <div><strong>Пароль: <%= Topic.find_by(id: id).password %><strong></div>
+                <% end %>
+              </td>
+              <% if Creator.find_by(idreg: idcreator) %>
+                <td><strong><%= Creator.find_by(idreg: idcreator).namecreator %> <%= Creator.find_by(idreg: idcreator).surnamecreator %></strong></td>
+                <% else %>
+                <td><strong> - </strong></td>
+              <% end %>
+              <td><strong><%= link.created_at.strftime("%d.%m.%y %H:%M") %></strong></td>
+            <% end %>
+              </tr>
+            <% end %>
+        <% end %>
+      <% end %>
+  </table>
+  <% Linktask.where(userid: useridname).order(created_at: :desc).each do |linktask| %>
+    <% linktask.update(viewlinks: "y") %>
+  <% end %>
+  <% Linktask.all.each do |linktaskdel| %>
+    <% if linktaskdel.created_at < time_last %>
+      <% linktaskdel.destroy %>
+    <% end %>
+  <% end %>
+<% end %>

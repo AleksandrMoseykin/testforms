@@ -1,0 +1,135 @@
+<h1>
+  Тестовое задание "<%= @taskform.titletask %>"
+</h1>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Вопросов в тесте:</h4></td>
+        <td><h4><a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.countquestions %></a></h4></td>
+      </tr>
+      <tr>
+        <td colspan="2"><p>Указано количество вопросов в тестовом задании. Если вы добавили меньше вопросов, чем
+          указано, то ваше задание будет неактивно.</p></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Правильных ответов:</h4></td>
+        <td><h4><a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.sucquest %></a></h4></td>
+      </tr>
+      <tr>
+        <td colspan="2"><p>Если по итогам прохождения теста, количество правильных ответов равно или больше, чем указано,
+          то задание считается пройденым.</p></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Успешное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td><p><a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.successmessage %></a></p></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Неудовлетвори&shy;тель&shy;ное сообщение:</h4></td>
+      </tr>
+      <tr>
+        <td><p><a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.failuremessage %></a></p></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Начало показов:</h4></td>
+      </tr>
+      <tr>
+        <td><p><a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.intdate1.strftime("%d.%m.%Y %H:%M") %></a></p></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Окончание показов:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <p>
+            <% if @taskform.intdate2 %>
+              <a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.intdate2.strftime("%d.%m.%Y %H:%M") %></a>
+            <% else %>
+              <a href="/taskforms/<%= @taskform.id %>/edit">Не задано</a>
+            <% end %>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Время:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <% @taskform.timetask %>
+            <% date = @taskform.timetask %>
+            <a href="/taskforms/<%= @taskform.id %>/edit"><%= date.strftime("%H:%M")%></a>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Показы:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.activ %></a></h5></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Случай&shy;ный поря&shy;док:</h4></td>
+      </tr>
+      <tr>
+        <td><h5><a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.rand %></a></h5></td>
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="borderdiv">
+      <tr>
+        <td><h4>Пароль:</h4></td>
+      </tr>
+      <tr>
+        <td>
+          <h5>
+            <a href="/taskforms/<%= @taskform.id %>/edit"><%= @taskform.password %></a>
+          </h5>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<%= link_to 'Редактировать', edit_taskform_path(@taskform) %> |
+<%= link_to 'Назад', taskforms_path %>

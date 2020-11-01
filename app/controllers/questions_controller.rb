@@ -21,7 +21,12 @@ class QuestionsController < ApplicationController
     def create
         @topic = Topic.find(params[:topic_id])
         @question = @topic.questions.create(question_params)
-        redirect_to '/topics/'
+
+        if @question.save
+          redirect_to '/topics/'
+        else
+          render 'new'
+        end
       end
 
     def update

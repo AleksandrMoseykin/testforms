@@ -26,7 +26,7 @@
             <% if Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
               <P class ="greenicon"><strong><i class="fa fa-check-circle" aria-hidden="true"></i> Пользователь добавлен в контакты</strong><p>
             <% else %>
-              <p><%= form.submit "Добавить в контакты", name: "add" %></p>
+              <p><%= form.submit "Добавить в контакты", name: "add", class: "btn btn-primary" %></p>
             <% end %>
           <% end %>
         </td>
@@ -124,6 +124,9 @@
         <% end %>
     <% end %>
   </table>
+  <% unless Statisticvisitor.find_by(idregvis: usernameid, idreg: userid) %>
+    <% Statisticvisitor.create(idregvis: usernameid, idreg: userid) %>
+  <% end %>
 <% end %>
 <br>
 <%= link_to 'Назад', topic_questions_path %>

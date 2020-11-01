@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   def index
     @topic = Topic.find(params[:topic_id])
     @answer = @topic.answers.all
+    render 'new'
   end
     def show
       @topic = Topic.find(params[:topic_id])
@@ -40,6 +41,6 @@ class AnswersController < ApplicationController
 
     private
       def answer_params
-        params.require(:answer).permit(:answeruser, :time, :questionid, :userid, :numberanswer)
+        params.require(:answer).permit(:answeruser, :time, :questionid, :userid, :numberanswer, :usercode)
       end
 end

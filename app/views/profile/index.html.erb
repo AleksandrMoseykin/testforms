@@ -6,12 +6,18 @@
         <% if Creator.find_by(idreg: userid).photocreator.url(:thumb) !="" %>
           <%= image_tag Creator.find_by(idreg: userid).photocreator.url(:thumb), class: "photoprofile" %>
         <% end %>
+        <hr>
         <h4><%= Creator.find_by(idreg: userid).surnamecreator %> <%= Creator.find_by(idreg: userid).namecreator %> (<%= Creator.find_by(idreg: userid).telephonecreator %>)</h4>
+        <hr>
         <p><strong>Email: </strong><% if (user_signed_in?) %><%= current_user.email %><% end %></p>
+        <hr>
         <p><strong>Id пользователя: </strong><% if (user_signed_in?) %><%= current_user.id %><% end %></p>
+        <hr>
         <p><strong>Зарегистрирован: </strong><% if (user_signed_in?) %><% regdata = current_user.created_at %><%= regdata.time.strftime("%d-%m-%Y") %><% end %></p>
+        <hr>
         <% if Creator.find_by(idreg: userid).companycreator !="" %>
           <p><strong>Название организации: </strong><%= Creator.find_by(idreg: userid).companycreator %></p>
+          <hr>
         <% end %>
         <% if Creator.find_by(idreg: userid).promocodecreator !="" %>
           <p><strong>Промокод:</strong><%= Creator.find_by(idreg: userid).promocodecreator %></p>
@@ -24,11 +30,15 @@
     <div class="container">
       <h1>Профиль пользователя</h1>
       <h3>Ваш профиль заполнен не полностью</h3>
-      <a><%= image_tag "avatarka-no.png", alt: "Фото аватарки отсутствует" %></a>
+      <a><%= image_tag "avatarka-no.png", alt: "Фото аватарки отсутствует", class: "noavatarka" %></a>
       <p>Фото аватарки отсутствует</p>
-      <p><strong>Email:</strong><% if (user_signed_in?) %><%= current_user.email %><% end %></p>
-      <p><strong>Id пользователя:</strong><% if (user_signed_in?) %><%= current_user.id %><% end %></p>
-      <p><strong>Зарегистрирован:</strong><% if (user_signed_in?) %><% regdata = current_user.created_at %><%= regdata.time.strftime("%d-%m-%Y") %><% end %></p>
+      <hr>
+      <p><strong>Email:</strong> <% if (user_signed_in?) %><%= current_user.email %><% end %></p>
+      <hr>
+      <p><strong>Id пользователя: </strong><% if (user_signed_in?) %><%= current_user.id %><% end %></p>
+      <hr>
+      <p><strong>Зарегистрирован: </strong><% if (user_signed_in?) %><% regdata = current_user.created_at %><%= regdata.time.strftime("%d-%m-%Y") %><% end %></p>
+      <hr>
       <p><a href="/creators/new">Добавить данные</a></p>
     </div>
     <% end %>

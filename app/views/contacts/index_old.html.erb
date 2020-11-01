@@ -1,0 +1,55 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+<% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+<% i = 0 %>
+<div class="div-line"><h1>Контакты</h1> <i class="fa fa-plus-circle fa-2x pluscontact" aria-hidden="true"></i></div>
+<div class = "hidid" id = "contactforms">
+<%= form_with(model: @contact) do |form| %>
+  <%= form.label :"ID пользователя" %><br>
+  <p><%= form.text_field :idvisitor %></p>
+  <%= form.hidden_field :idcreator, value: idreg1 %>
+  <%= form.hidden_field :codecreator, value: current_user.encrypted_password %>
+  <p><%= form.submit "Добавить", class: "btn btn-primary" %></p>
+<% end %>
+  <% if Contact.find_by(idcreator: idreg1) %>
+<br>
+</div>
+<table class="task-tabl">
+  <tr class="gl-zag-tabl">
+    <th>#</th>
+    <th>Имя</th>
+    <th>Фамилия</th>
+    <th>Пол</th>
+    <th>Телефон</th>
+    <th>Email</th>
+    <th>Город</th>
+    <th>Удалить</th>
+  </tr>
+    <% @contacts.where(idcreator: idreg1).each do |contact| %>
+        <tr class="zag-tabl">
+          <td><% id = contact.idvisitor %><%= i += 1 %></td>
+          <% if Visitor.find_by(idregvis: id) %>
+              <% if Visitor.find_by(idregvis: id).name != nil %>
+              <td><%= Visitor.find_by(idregvis: id).name %></td>
+              <td><%= Visitor.find_by(idregvis: id).surname %></td>
+              <td><%= Visitor.find_by(idregvis: id).sex %></td>
+              <td><%= Visitor.find_by(idregvis: id).telephone %></td>
+              <td><% idvisitor = Visitor.find_by(idregvis: id).idregvis %><%= Username.find_by(id: idvisitor).email %></td>
+              <td class="hidid"><%= Username.find_by(id: idvisitor).id %></td>
+              <td><%= Visitor.find_by(idregvis: id).city %></td>
+              <td><h4><a data-confirm="Удалить?" rel="nofollow" data-method="delete" href="/contacts/<%= Contact.find_by(idvisitor: idvisitor).id %>/"><i class="fa fa-trash-o" aria-hidden="true"></i></a></h4></td>
+            </tr>
+            <% end %>
+          <% end %>
+    <% end %>
+    </table>
+    <% else if %>
+      <p>В этой категории нет контактов.</p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+    $(".fa").on("click", function(){
+      $("#contactforms").toggleClass("hidid");
+    });
+</script>

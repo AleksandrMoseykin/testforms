@@ -8,7 +8,7 @@ class TopicsController < ApplicationController
   end
 
   def new
-    @topic = Topic.new
+      @topic = Topic.new
   end
 
   def edit
@@ -19,7 +19,7 @@ class TopicsController < ApplicationController
     @topic = Topic.new(topic_params)
 
     if @topic.save
-      redirect_to @topic
+      redirect_to '/topics/'
     else
       render 'new'
     end
@@ -43,6 +43,6 @@ end
 
   private
   def topic_params
-      params.require(:topic).permit(:titletopic, :idreg, :countquestions, :sucquest, :timetask, :password, :ip, :email, :successmessage, :typetopic, :activ, :failuremessage, :intdate1, :intdate2, :rand)
+      params.require(:topic).permit(:titletopic, :idreg, :codecreator, :countquestions, :sucquest, :timetask, :password, :ip, :email, :successmessage, :typetopic, :activ, :failuremessage, :intdate1, :intdate2, :rand)
   end
     end

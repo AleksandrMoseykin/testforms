@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_23_161143) do
+ActiveRecord::Schema.define(version: 2020_10_09_165421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,12 @@ ActiveRecord::Schema.define(version: 2020_06_23_161143) do
   create_table "answers", force: :cascade do |t|
     t.integer "questionid"
     t.integer "userid"
+    t.integer "scoreanswer"
+    t.text "answeruser"
+    t.bigint "topic_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "topic_id", null: false
-    t.integer "scoreanswer"
-    t.string "answeruser"
-    t.integer "numberanswer"
+    t.string "usercode"
     t.index ["topic_id"], name: "index_answers_on_topic_id"
   end
 
@@ -42,11 +42,9 @@ ActiveRecord::Schema.define(version: 2020_06_23_161143) do
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.string "surname"
-    t.string "name"
-    t.integer "age"
-    t.text "telephone"
-    t.text "email"
+    t.integer "idvisitor"
+    t.integer "idcreator"
+    t.text "codecreator"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -62,6 +60,27 @@ ActiveRecord::Schema.define(version: 2020_06_23_161143) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "companycreator"
     t.integer "idreg"
+    t.string "codecreator"
+  end
+
+  create_table "issues", force: :cascade do |t|
+    t.string "title"
+    t.text "img"
+    t.integer "idreg"
+    t.bigint "taskform_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["taskform_id"], name: "index_issues_on_taskform_id"
+  end
+
+  create_table "linktasks", force: :cascade do |t|
+    t.integer "idcreator"
+    t.text "codecreator"
+    t.integer "userid"
+    t.string "viewlinks"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "topicid"
   end
 
   create_table "passwords", force: :cascade do |t|
@@ -108,6 +127,40 @@ ActiveRecord::Schema.define(version: 2020_06_23_161143) do
     t.integer "survey", array: true
   end
 
+  create_table "statistictasks", force: :cascade do |t|
+    t.text "test"
+    t.text "survey"
+    t.integer "idreg"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "statisticvisitors", force: :cascade do |t|
+    t.integer "idregvis"
+    t.integer "idreg"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "taskforms", force: :cascade do |t|
+    t.string "titletask"
+    t.integer "countquestions"
+    t.text "password"
+    t.integer "idreg"
+    t.text "successmessage"
+    t.text "failuremessage"
+    t.text "activ"
+    t.text "sucquest"
+    t.text "email"
+    t.text "rand"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.time "timetask"
+    t.datetime "intdate1"
+    t.datetime "intdate2"
+    t.text "codecreator"
+  end
+
   create_table "topics", force: :cascade do |t|
     t.string "titletopic"
     t.integer "countquestions"
@@ -126,6 +179,7 @@ ActiveRecord::Schema.define(version: 2020_06_23_161143) do
     t.datetime "intdate1"
     t.datetime "intdate2"
     t.string "rand"
+    t.string "codecreator"
   end
 
   create_table "usernames", force: :cascade do |t|
@@ -176,6 +230,7 @@ ActiveRecord::Schema.define(version: 2020_06_23_161143) do
     t.bigint "topic_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "addcontact"
     t.index ["topic_id"], name: "index_usertabls_on_topic_id"
   end
 
@@ -192,10 +247,12 @@ ActiveRecord::Schema.define(version: 2020_06_23_161143) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "idregvis"
     t.string "sex"
+    t.string "codevisitor"
   end
 
   add_foreign_key "answers", "topics"
   add_foreign_key "consents", "topics"
+  add_foreign_key "issues", "taskforms"
   add_foreign_key "passwords", "topics"
   add_foreign_key "questions", "topics"
   add_foreign_key "settings", "topics"

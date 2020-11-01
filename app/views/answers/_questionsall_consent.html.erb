@@ -2,5 +2,7 @@
   <% idreg1 = current_username.id %>
 <% end %>
 <% topicid = @topic.id %>
-<% questionsall = Answer.where(userid: idreg1, topic_id: topicid, numberanswer: nil).count %>
-<% Consent.where(userid: idreg1, topic_id: topicid).update(questionsall: questionsall) %>
+<% questionsall = Answer.where(userid: idreg1, topic_id: topicid).count %>
+<% questions_reserv = Answer.where(userid: idreg1, topic_id: topicid, answeruser: nil).count %>
+<% questions_final = questionsall - questions_reserv %>
+<% Consent.where(userid: idreg1, topic_id: topicid).update(questionsall: questions_final) %>

@@ -1,0 +1,170 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <h1>Добавить задание</h1>
+  <% curentdate = Time.new %>
+  <% newcurentdate = curentdate.strftime("%Y-%m-%dT%H:%M") %>
+  <%= form_with scope: :taskform, url: taskforms_path, local: true do |form| %>
+    <% if @taskform.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <% er=@taskform.errors.count %>
+          <% if er>0 %>
+            <span class="formerrors">Форма заполнена неправильно</span>
+          <% end %>
+        </h2>
+      </div>
+    <% end %>
+    <div class="row form-group">
+      <div class="col-sm-12">
+        <%= form.label :"Название*" %><br>
+        <% if @taskform.errors[:titletask].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Название тестового задания должно быть уникальным</li>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 300 символов</li>
+          </ul>
+        <% end %>
+        <%= form.text_field :titletask, class: "w100", placeholder: "Ввидите уникальное название тестового задания" %>
+        <small id="emailHelp" class="form-text text-muted">Обязательное поле для заполнения</small>
+      </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-4">
+        <%= form.label :"Количество вопросов*" %><br>
+        <input id="topic_countquestions" max="100" min="1" name="taskform[countquestions]" step="1" type="number" value="10" class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите количество вопросов в тесте</small>
+      </div>
+      <div class="col-sm-4">
+        <%= form.label :"Правильных ответов*" %><br>
+        <input id="topic_sucquest" max="100" min="1" name="taskform[sucquest]" step="1" type="number" value="5" class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите количество правильных ответов для прохождения теста</small>
+      </div>
+      <div class="col-sm-4">
+        <%= form.label :"Время*" %><br>
+        <input type="time" name="taskform[timetask]" id="taskform_timetask" value="00:10" class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите время для прохождения тестового задания</small>
+      </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-6">
+        <%= form.label :"Начало показов*" %><br>
+        <input type="datetime-local" name="taskform[intdate1]" id="taskform_intdate1" value=<%= newcurentdate %> class = "w100">
+        <small id="emailHelp" class="form-text text-muted">Укажите дату запуска тестового задания</small>
+      </div>
+      <div class="col-sm-6">
+        <%= form.label :"Окончание показов" %><br>
+        <%= form.datetime_local_field :intdate2, class: "w100" %>
+        <small id="emailHelp" class="form-text text-muted">Дата окончания показов тестового задания</small>
+      </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-6">
+        <%= form.label :"Успешное сообщение" %><br>
+        <% if @taskform.errors[:successmessage].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 300 символов</li>
+          </ul>
+        <% end %>
+        <%= form.text_area :successmessage, value: "Вы успешно прошли тест", class: "w100" %>
+        <small id="emailHelp" class="form-text text-muted">Введите сообщение, которое будет показываться при успешном прохождении теста</small>
+      </div>
+      <div class="col-sm-6">
+        <%= form.label :"Сообщение о неудаче" %><br>
+        <% if @taskform.errors[:failuremessage].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 300 символов</li>
+          </ul>
+        <% end %>
+        <%= form.text_area :failuremessage, value: "Вы не прошли тест", class: "w100" %>
+        <small id="emailHelp" class="form-text text-muted">Введите сообщение, которое будет показываться при неудачном прохождении теста</small>
+      </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+      <div class="col-sm-4">
+        <%= form.label :"Пароль" %><br>
+        <% if @taskform.errors[:password].count > 0 %>
+          <p class="formerrors">Ошибка заполнения</p>
+          <ul>
+            <li>Минимальная длина поля 3 символа</li>
+            <li>Максимальная длина поля 20 символов</li>
+          </ul>
+        <% end %>
+        <%= form.password_field :password, class: "w100", placeholder: "Введите пароль (минимум: 3 символа)" %>
+        <small id="emailHelp" class="form-text text-muted">Поле можно оставить пустым</small>
+      </div>
+      <% if (user_signed_in?) %><% idreg = current_user.id %>
+        <%= form.hidden_field :idreg, value: idreg %>
+        <%= form.hidden_field :codecreator, value: current_user.encrypted_password %>
+      <% end %>
+      <div class="col-sm-4">
+        <%= form.label :"Показы*" %><br>
+        <%= form.select(:activ, [['Вкл.', "Вкл."], ['Выкл.', "Выкл."]]) %>
+        <small id="emailHelp" class="form-text text-muted">Настройте активность показов тестового задания</small>
+      </div>
+      <div class="col-sm-4">
+        <%= form.label :"Случайный порядок*" %><br>
+        <%= form.select(:rand, [['Выкл.', "Выкл."], ['Вкл.', "Вкл."]]) %>
+        <small id="emailHelp" class="form-text text-muted">Настройте порядок показов тестового задания</small>
+      </div>
+    </div>
+    <hr>
+      <p>
+        <%= form.submit "Сохранить", class: "topic_button btn btn-primary" %>
+      </p>
+  <% end %>
+  <%= link_to 'Задания', taskforms_path %>
+<% end %>
+
+
+<script type="text/javascript">
+  $( document ).on('turbolinks:load', function() {
+    $("#topic_countquestions").on("change", function(){
+      let element = $("#topic_countquestions").val();
+      element = element * 1;
+      let hid = $("#topic_sucquest").val();
+      hid = hid * 1;
+      if (element < hid) {
+      $("#topic_sucquest").val(element);
+      }
+    });
+    $("#topic_sucquest").on("change", function(){
+      let el = $("#topic_sucquest").val();
+      el = el * 1;
+      let el2 = $("#topic_countquestions").val();
+      el2 = el2 * 1;
+      if (el > el2) {
+      $("#topic_countquestions").val(el);
+      }
+    });
+    $("#topic_intdate1").on("change", function(){
+      let dataelement = $("#topic_intdate1").val();
+      intdate1 = new Date(dataelement);
+      let dataelement2 = $("#topic_intdate2").val();
+      if (dataelement2) {
+        intdate2 = new Date(dataelement2);
+        if (intdate1 > intdate2) {
+          $("#topic_intdate2").val(dataelement);
+        }
+      }
+    });
+    $("#topic_intdate2").on("change", function(){
+      let datael = $("#topic_intdate2").val();
+      int1 = new Date(datael);
+      let datael2 = $("#topic_intdate1").val();
+      if (datael) {
+        int2 = new Date(datael2);
+        if (int1 < int2) {
+          $("#topic_intdate1").val(datael);
+        }
+      }
+    });
+  });
+</script>

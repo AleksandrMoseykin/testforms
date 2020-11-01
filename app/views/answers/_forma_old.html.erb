@@ -1,10 +1,11 @@
 <%= form_with(model: [@topic, @topic.answers.build], local: true) do |form| %>
-<p class="answerus">
+<span class="answerus">
   <%= form.text_field :answeruser, class: "hid" %>
-</p>
+</span>
 <%= form.hidden_field :questionid %>
 <% if (username_signed_in?) %><% idreg = current_username.id %>
   <input type="hidden" name="answer[userid]" id="answer_userid" value=<%= idreg %>>
+  <input type="hidden" name="answer[usercode]" id="answer_usercode" value=<%= current_username.encrypted_password %>>
 <% end %>
 <p>
   <%= form.submit "Ответить", name: "add", class: "but-hid", id: "addbut"%>

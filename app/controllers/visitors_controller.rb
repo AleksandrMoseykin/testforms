@@ -1,6 +1,7 @@
 class VisitorsController < ApplicationController
   def index
     @visitors  = Visitor.all
+    redirect_to '/visitors/new'
   end
 
   def show
@@ -45,6 +46,6 @@ end
   private
   def visitor_params
       params.require(:visitor).permit(:name, :surname, :telephone, :birthdate,
-        :photo, :promocode, :country, :city, :idregvis, :sex)
+        :photo, :promocode, :country, :city, :idregvis, :sex, :codevisitor)
   end
 end

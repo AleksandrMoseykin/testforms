@@ -1,0 +1,45 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <div class="div-line"><h1>Задания</h1> <a href="<%= new_taskform_path %>"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></a> </div>
+  <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+  <% if Taskform.find_by(idreg: idreg1) %>
+    <table class ="task-tabl">
+      <tr class="gl-zag-tabl">
+        <th>Название</th>
+        <th>Вопросов</th>
+        <th>Настройки</th>
+        <th>Удалить</th>
+      </tr>
+      <% @taskforms.each do |taskform| %>
+        <% if taskform.idreg == idreg1 %>
+          <tr class="zag-tabl">
+            <td><h4 class="div-line-small"><a href="/taskforms/<%= taskform.id %>/issues"><%= taskform.titletask %></a><a href="/taskforms/<%= taskform.id %>/issues/new"><i class="fa fa-plus-circle fa-1x" aria-hidden="true"></i></a></h4></td>
+            <td><h4><%= taskform.issues.count %></h4></td>
+            <td><h4><a href="/taskforms/<%= taskform.id %>"><i class="fa fa-cogs fa-1x" aria-hidden="true"></i></a></h4></td>
+            <td><h4><a data-confirm="Удалить?" rel="nofollow" data-method="delete" href="/taskforms/<%= taskform.id %>/"><i class="fa fa-trash-o" aria-hidden="true"></i></a></h4></td>
+          </tr>
+          <% unless Statistictask.find_by(idreg: idreg1) %>
+            <% statistictest = [] %>
+            <% statistictest[0] = taskform.id %>
+            <% Statistictask.create(test: statistictest, idreg: idreg1) %>
+          <% else %>
+            <% statistictest = Statistictask.find_by(idreg: idreg1).test %>
+            <% statistictest.push(taskform.id) %>
+            <% statistictest2 = statistictest.uniq %>
+            <% stat = Statistictask.find_by(idreg: idreg1) %>
+            <% stat.update(test: statistictest2) %>
+          <% end %>
+          <% n = 0 %>
+          <% taskform.issues.each do |t| %>
+            <tr class="questabl">
+              <th><h5><%= t.title %></h5></th>
+              <th><h5>№ <%= n=n+1 %></h5></th>
+              <th><h5><a href="/taskforms/<%= t.taskform_id %>/issues/<%= t.id %>/edit"><i class="fa fa-cog fa-1x" aria-hidden="true"></i></a></h5></th>
+              <th><h5><a data-confirm="Удалить?" rel="nofollow" data-method="delete" href="/taskforms/<%= t.taskform_id %>/issues/<%= t.id %>"><i class="fa fa-trash" aria-hidden="true"></i></a></h5></th>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+
+    </table>
+  <% end %>
+<% end %>

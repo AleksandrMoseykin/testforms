@@ -2,7 +2,7 @@ class ConsentsController < ApplicationController
   def index
     @topic = Topic.find(params[:topic_id])
     @consent = @topic.consents.all
-    render '/answers/new'
+    render 'answers/new'
   end
     def show
       @topic = Topic.find(params[:topic_id])

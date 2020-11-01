@@ -1,0 +1,2 @@
+class Statistictask < ApplicationRecord
+end

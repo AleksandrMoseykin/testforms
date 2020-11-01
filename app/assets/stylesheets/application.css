@@ -15,8 +15,6 @@
  */
 
 
-
-
  body {
    background-color: #2f343a;
    /* Цвет фона веб-страницы */
@@ -53,8 +51,8 @@
 .reg:hover {color: #ff0000; text-decoration: none;}
 .disnone {display: none;}
 .dsnone {display: none;}
-.buttonname:hover {color: #ff0000; text-decoration: none;}
-.buttomout:hover {color: #ff0000; text-decoration: none;}
+.buttonname:hover {color: #ff0000; text-decoration: none; cursor: pointer;}
+.buttomout:hover {color: #ff0000; text-decoration: none; cursor: pointer;}
 .redicon {color: #fd4622;}
 .greenicon {color: #1ea076;}
 .borderquestabl {border-bottom: 1px; border-bottom-style: solid; border-bottom-color: #9ea1a5;}
@@ -65,18 +63,55 @@
 .w260 {width: 160px;}
 .right-element {text-align: right;}
 .photousertabls {padding-top: 2px; padding-bottom: 10px; padding-right: 20px;}
-.answ {margin-bottom: 12px; }
+.answ {margin-bottom: 12px;}
 .spanansw {background-color: #ced2d8; width: 100%; padding: 2px 10px; border-radius: 5px; border-width: 1px; border-color: #ced2d8; border-style: solid;}
 .spanansw:hover {border-width: 1px; border-color: #1ea076; border-style: solid;}
 .hid {display: none;}
 .but-hid {display: none;}
-.link-for-copy {background-color: #e9fbc7; padding-left: 3px; padding-right: 3px;}
+.link-for-copy {background-color: #e9fbc7; padding: 4px;}
+.link-for-copy-red {background-color: #fdc8c8; padding: 4px;}
 .hidid {display: none;}
 .addid {margin-top: 8px;}
 .addidhid {display: none;}
 .topinfoblock {text-align: right;}
-#addbut {width: 40%; margin-left: 30%}
+.formerrors {color: red}
+.timeout {margin-bottom: 20px;}
+.imgquestion {margin-bottom: 20px;}
+.pluscontact {color: #007bff}
+.pluscontact:hover {color: #0069d9}
+.linkscount {background-color: #1ea076; padding-left: 4px; padding-right: 4px; padding-bottom: 1px; border-radius: 8px; margin-left: 4px; font-size: 10px;}
+#addbut {width: 32%; margin-left: 34%; margin-top: 10px}
 #click-to-copy {margin-left: 3px;}
+#topic_rand, #topic_activ, #visitor_sex, #linktask_topicid, #linktask_userid {width: 100%; height: 30px}
+.inputphotocreator {margin-top: 10px;}
+.noavatarka, .formswrapper {margin-top: 20px; margin-bottom: 20px;}
+.personaldata {margin-top: 20px;}
+.notation {color: #535d63; margin-top: 40px;}
+.notationpravila {color: #535d63; margin-top: 20px; margin-bottom: 10px;}
+.topic_button {
+  margin-top: 12px;
+  width: 30%;
+  margin-left: 35%;
+  margin-right: 35%;
+  border-radius: 5px;
+}
+
+.topic_button:hover {
+  margin-top: 12px;
+  width: 30%;
+  margin-left: 35%;
+  margin-right: 35%;
+  border-radius: 5px;
+
+}
+
+label, .statisticscolor {
+  color: #535d63; font-weight: bold;
+}
+
+form {
+  margin-top: 16px;
+}
 
  #right-colon {
    padding-top: 10px;
@@ -97,6 +132,10 @@
  }
 
  .field_with_errors input {
+border-color: #ff0000
+ }
+
+ .field_with_errors textarea {
 border-color: #ff0000
  }
 

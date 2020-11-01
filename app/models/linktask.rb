@@ -1,0 +1,2 @@
+class Linktask < ApplicationRecord
+end

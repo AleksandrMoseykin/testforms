@@ -1,15 +1,23 @@
 Rails.application.routes.draw do
+  get 'personaldata/index'
   get 'test_task/index'
   get 'profilevisitor/index'
   devise_for :usernames
   get 'profile', to: 'profile#index'
   get 'profilevisitor', to: 'profilevisitor#index'
   get 'test_task', to: 'test_task#index'
+  get 'personaldata', to: 'personaldata#index'
+  get 'links', to: 'links#index'
+  resources :taskforms do
+    resources :issues
+  end
   devise_for :users
   resources :topics
   resources :visitors
   resources :statisticscreators
+  resources :statisticvisitors
   resources :contacts
+  resources :linktasks
   resources :topics do
     resources :questions
     resources :answers
@@ -17,7 +25,7 @@ Rails.application.routes.draw do
     resources :passwords
     resources :usertabls
     resources :settings
-end
+  end
   resources :creators
   get 'welcome/index'
 

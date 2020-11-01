@@ -1,0 +1,49 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <% idreg = current_user.id %>
+  <h1>Поделиться ссылкой</h1>
+  <% topicall = [] %>
+  <% contactall = [] %>
+  <% if Topic.find_by(idreg: idreg) && Contact.find_by(idcreator: idreg) %>
+    <% Topic.where(idreg: idreg).each do |topic| %>
+    <% array = [] %>
+      <% titletopic = topic.titletopic %> <% topicid = topic.id %>
+      <% array.push(titletopic, topicid) %>
+      <% array %>
+      <% topicall << array %>
+    <% end %>
+    <% Contact.where(idcreator: idreg).each do |contact| %>
+    <% array = [] %>
+      <% name = Visitor.find_by(idregvis: contact.idvisitor).name %>
+      <% surname = Visitor.find_by(idregvis: contact.idvisitor).surname %>
+      <% idvisitor = Visitor.find_by(idregvis: contact.idvisitor).idregvis %>
+      <% person = name + " " + surname %>
+      <% array.push(person, idvisitor) %>
+      <% contactall << array %>
+    <% end %>
+    <%= form_with scope: :linktask, url: linktasks_path, local: true do |form| %>
+    <div class="row">
+    <div class="col-sm-6">
+      <%= form.label :"Название тестового задания" %><br>
+      <%= form.select(:topicid, topicall) %> <br>
+    </div>
+    <div class="col-sm-6">
+      <%= form.label :"Пользователь" %><br>
+      <%= form.select(:userid, contactall) %>
+    </div>
+    <%= form.hidden_field :idcreator, value: idreg %>
+    <%= form.hidden_field :codecreator, value: current_user.encrypted_password %>
+    </div>
+    <br>
+    <p>
+      <%= form.submit "Отправить", class: "topic_button btn btn-primary" %>
+    </p>
+    <% end %>
+<% else %>
+  <% unless Topic.find_by(idreg: idreg) %>
+    <P>У вас нет тестовых заданий. <a href="/topics/new/">Добавить задание</a> </p>
+  <% end %>
+  <% unless Contact.find_by(idcreator: idreg) %>
+    <P>У вас нет контактов. <a href="/contacts/">Добавить контакт</a> </p>
+  <% end %>
+<% end %>
+<% end %>

@@ -1,0 +1,41 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <% if @taskform.idreg == current_user.id %>
+    <h2>Добавить вопрос в задание "<%= @taskform.titletask %>"</h2>
+    <p><strong>Добавлено вопросов:</strong> <%= Issue.where(taskform_id: @taskform).count %>  из <%= @taskform.countquestions %> </p>
+    <%= form_with(model: [ @taskform, @taskform.issues.build ], local: true) do |form| %>
+    <% if @issue.errors.any? %>
+      <div id="error_explanation">
+        <h2>
+          <% er = @issue.errors.count %>
+          <% if er > 0 %>
+            <span class="formerrors">Форма заполнена неправильно</span>
+          <% end %>
+        </h2>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <%= form.label :"Изображение" %><br><%= form.file_field :img %><br>
+        <% if @issue.errors[:imgquestion].count > 0 %>
+          <div class="field_with_errors"></div>
+        <% end %>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <%= form.label :"Вопрос" %><br>
+        <% if @issue.errors[:title].count > 0 %>
+          <div class="field_with_errors">
+        <% end %>
+        <%= form.text_field :title, class: "w100" %>
+        <% if @issue.errors[:title].count > 0 %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+      <p><%= form.submit "Добавить", name: "add", class: "topic_button btn btn-primary" %></p>
+    <% end %>
+    <%= link_to 'Назад', taskforms_path %>
+  <% end %>
+<% end %>
