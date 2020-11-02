@@ -34,7 +34,9 @@
       <table class="borderdiv">
         <tr>
           <td>
-            <h4 class = "statisticscolor">Создано за все время</h4><p>Тестовые задания: <%= stattest2 %></p>
+            <% cache Topic do %>
+              <h4 class = "statisticscolor">Создано за все время</h4><p>Тестовые задания: <%= stattest2 %></p>
+            <% end %>
           </td>
         </tr>
       </table>
