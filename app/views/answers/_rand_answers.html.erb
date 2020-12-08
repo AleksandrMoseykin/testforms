@@ -3,7 +3,6 @@
   <% idreg1 = current_username.id %>
 <% end %>
 <% topicid = @topic.id %>
-<% $username_id = current_username.id %>
 <!-- Выводим таймер -->
 <%= render "answers/timer" %>
 
@@ -80,82 +79,31 @@
     <div><h5><%= Question.find_by(id: id_array_questions[number_questions]).titlequestion %></h5></div>
   <% end %>
 
-  <!-- Создаем рандонное чило -->
-  <% numberanswer = rand(0..6) %>
-
-  <span hidden class="hid"><%=id_array_questions[number_questions] %></span>
-
-  <!-- Выводим рандонно ответы-->
+  <span hidden class="hid"><%= id_array_questions[number_questions] %></span>
   <% answer = Question.find_by(id: id_array_questions[number_questions]) %>
-  <% if numberanswer == 0 and Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer.answertrue %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer.answer2 %></span></div></div>
-    </div>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer.answer3 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer.answer4 %></span></div></div>
-    </div>
-  <% end %>
-  <% if numberanswer == 1 and Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer.answer2 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer.answer3 %></span></div></div>
-    </div>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer.answer4 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer.answertrue %></span></div></div>
-    </div>
-  <% end %>
-  <% if numberanswer == 2 and Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer.answer3 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer.answer4 %></span></div></div>
-    </div>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer.answertrue %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer.answer2 %></span></div></div>
-    </div>
-  <% end %>
-  <% if numberanswer == 3 and Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer.answer4 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer.answertrue %></span></div></div>
-    </div>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer.answer2 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer.answer3 %></span></div></div>
-    </div>
-  <% end %>
-  <% if numberanswer == 4 and Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer.answer4 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer.answer2 %></span></div></div>
-    </div>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer.answer3 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer.answertrue %></span></div></div>
-    </div>
-  <% end %>
-  <% if numberanswer == 5 and Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer.answer3 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer.answer2 %></span></div></div>
-    </div>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer.answertrue %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer.answer4 %></span></div></div>
-    </div>
-  <% end %>
-  <% if numberanswer == 6 and Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>A: </strong></span><span class ="answerspan"><%= answer.answer4 %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>B: </strong></span><span class ="answerspan"><%= answer.answer2 %></span></div></div>
-    </div>
-    <div class="row">
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>C: </strong></span><span class ="answerspan"><%= answer.answertrue %></span></div></div>
-      <div class="answ col-6"><div class="spanansw"><span class ="variant"><strong>D: </strong></span><span class ="answerspan"><%= answer.answer3 %></span></div></div>
-    </div>
+  <% if Question.find_by(id: id_array_questions[number_questions]).titlequestion %>
+    <% aray_abcd = ["A: ", "B: ", "C: ", "D: "] %>
+    <% xcount = 0 %>
+    <% array_answer = [answer.answertrue, answer.answer2, answer.answer3, answer.answer4] %>
+
+    <% aray_abcd.each do |answer_number| %>
+    <% count = array_answer.size - 1 %>
+    <% number = rand(0..count) %>
+      <% if xcount.zero? or xcount.even? %>
+        <div class="row">
+      <% end %>
+      <div class="answ col-6">
+        <div class="spanansw">
+          <span class ="variant"><strong><%= aray_abcd[xcount] %></strong></span>
+          <span class ="answerspan"><%= array_answer[number] %></span>
+        </div>
+      </div>
+      <% array_answer -= [array_answer[number]] %>
+      <% if xcount.odd? %>
+        </div>
+      <% end %>
+      <% xcount += 1 %>
+    <% end %>
   <% end %>
 
   <!-- Скрытая форма для передачи ответа и вопроса -->

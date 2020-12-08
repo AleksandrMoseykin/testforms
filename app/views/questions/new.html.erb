@@ -1,13 +1,18 @@
 <% if (user_signed_in?) and !(username_signed_in?) %>
+
+<% count = 0 %>
+<% answers = ["Правильный ответ", "Вариант ответа 1", "Вариант ответа 2", "Вариант ответа 3"] %>
+<% title = ["answertrue", "answer2", "answer3", "answer4"] %>
+
   <% if @topic.idreg == current_user.id %>
     <h2>Добавить вопрос в задание "<%= @topic.titletopic %>"</h2>
-    <p><strong>Добавлено вопросов:</strong> <%= Question.where(topic_id: @topic).count %>  из <%= @topic.countquestions %> </p>
+    <p><strong>Добавлено вопросов:</strong> <%= Question.where(topic_id: @topic).count %> из <%= @topic.countquestions %> </p>
     <%= form_with(model: [ @topic, @topic.questions.build ], local: true) do |form| %>
     <% if @question.errors.any? %>
       <div id="error_explanation">
         <h2>
-          <% er= @question.errors.count %>
-          <% if er>0 %>
+          <% er = @question.errors.count %>
+          <% if er > 0 %>
             <span class="formerrors">Форма заполнена неправильно</span>
           <% end %>
         </h2>
@@ -15,72 +20,44 @@
     <% end %>
     <div class="row">
       <div class="form-group col-sm-12">
-        <%= form.label :"Изображение" %><br><%= form.file_field :imgquestion %><br>
-        <% if @question.errors[:imgquestion].count>0 %>
-          <div class="field_with_errors"></div>
-        <% end %>
+        <%= form.label :"Изображение" %><br>
+        <%= form.file_field :imgquestion %><br>
       </div>
     </div>
     <hr>
     <div class="row">
       <div class="form-group col-sm-12">
         <%= form.label :"Вопрос" %><br>
-        <% if @question.errors[:titlequestion].count>0 %>
+        <% if @question.errors[:titlequestion].count.zero? %>
+          <%= form.text_field :titlequestion, class: "w100" %>
+        <% else %>
           <div class="field_with_errors">
-        <% end %>
-        <%= form.text_field :titlequestion, class: "w100" %>
-        <% if @question.errors[:titlequestion].count>0 %>
+            <%= form.text_field :titlequestion, class: "w100" %>
           </div>
         <% end %>
       </div>
     </div>
     <hr>
-    <div class="row">
+    <% answers.each do |answer| %>
+      <% if count.zero? or count.even? %>
+        <div class="row">
+      <% end %>
       <div class="form-group col-sm-6">
-        <%= form.label :"Правильный ответ" %><br>
-        <% if @question.errors[:answertrue].count>0 %>
+        <%= form.label answer %><br>
+        <% if @question.errors[title[count]].count.zero? %>
+          <%= form.text_field title[count], class: "w100" %>
+        <% else %>
           <div class="field_with_errors">
-        <% end %>
-        <%= form.text_field :answertrue, class: "w100" %>
-        <% if @question.errors[:answertrue].count>0 %>
+            <%= form.text_field title[count], class: "w100" %>
           </div>
         <% end %>
       </div>
-      <div class="form-group col-sm-6">
-        <%= form.label :"Вариант ответа 1" %><br>
-        <% if @question.errors[:answer2].count>0 %>
-          <div class="field_with_errors">
-        <% end %>
-        <%= form.text_field :answer2, class: "w100" %>
-        <% if @question.errors[:answer2].count>0 %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="form-group col-sm-6">
-        <%= form.label :"Вариант ответа 2" %><br>
-        <% if @question.errors[:answer3].count>0 %>
-          <div class="field_with_errors">
-        <% end %>
-        <%= form.text_field :answer3, class: "w100" %>
-        <% if @question.errors[:answer3].count>0 %>
-          </div>
-        <% end %>
-      </div>
-      <div class="form-group col-sm-6">
-        <%= form.label :"Вариант ответа 3" %><br>
-        <% if @question.errors[:answer4].count>0 %>
-          <div class="field_with_errors">
-        <% end %>
-        <%= form.text_field :answer4, class: "w100" %>
-        <% if @question.errors[:answer4].count>0 %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-    <hr>
+      <% if count.odd? %>
+        </div>
+        <hr>
+      <% end %>
+      <% count +=1 %>
+    <% end %>
       <p><%= form.submit "Добавить", name: "add", class: "topic_button btn btn-primary" %></p>
     <% end %>
     <%= link_to 'Назад', topics_path %>

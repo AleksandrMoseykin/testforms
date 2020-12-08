@@ -1,3 +1,4 @@
+<% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
 <% if (user_signed_in?) and !(username_signed_in?) %>
   <h1>Добавить тестовое задание</h1>
   <% curentdate = Time.new %>
@@ -122,7 +123,6 @@
   <% end %>
   <%= link_to 'Тестовые задания', topics_path %>
 <% end %>
-
 
 <script type="text/javascript">
   $( document ).on('turbolinks:load', function() {

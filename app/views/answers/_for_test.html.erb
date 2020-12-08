@@ -13,12 +13,10 @@
     <% datecreadtopic = @topic.created_at %>
     <% usercreatid = @topic.idreg %>
     <% creatordb = Creator.find_by(idreg: usercreatid) %>
-    <h6>id: <%= @topic.id %> | Создатель: <%= creatordb.namecreator %> <%= creatordb.surnamecreator %> | <%= datecreadtopic.strftime("%d.%m.%Y") %></h6>
+    <h6>id: <%= @topic.id %><% if creatordb %> | Создатель: <%= creatordb.namecreator %> <%= creatordb.surnamecreator %><% end %> | <%= datecreadtopic.strftime("%d.%m.%Y") %></h6>
     <br>
 
     <% cnt = @topic.questions.count %>
-
-    <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
 
       <!-- Если время окончания показов еще не задано, то задаем время окончания показов в базе данных  -->
       <% if Consent.find_by(userid: idreg1, topic_id: topicid1) != nil %>
@@ -61,17 +59,10 @@
           <%= render "answers/rand_answers" %>
         <% end %>
 
-        <% if (username_signed_in?) %><% idreg1 = current_username.id %><% end %>
-
-        <!-- ??? -->
-        <% # if Consent.find_by(userid: idreg1, topic_id: topicid) != nil %>
-          <% # stoptimeconsent = Consent.find_by(userid: idreg1, topic_id: topicid).stoptime %>
-        <% # end %>
-
         <!-- Узнаем дату последнего ответа -->
-        <% if Answer.find_by(userid: idreg1, topic_id: topicid) %>
-          <% createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
-        <% end %>
+        <% #if Answer.find_by(userid: idreg1, topic_id: topicid) %>
+          <% #createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
+        <% #end %>
       <% else %>
           <!-- Выводим если время вышло -->
             <%= render "answers/time_out" %>

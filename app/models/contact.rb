@@ -1,22 +1,31 @@
 class Contact < ApplicationRecord
-  validates :idvisitor, presence: true, numericality: true, uniqueness: {scope: :idcreator}
-  validates :idcreator, presence: true, numericality: true
-  validates :codecreator, presence: true
-
-  before_validation :user_validation
-  before_validation :user_id_validation
+  validates :idvisitor, presence: true, numericality: true,
+            uniqueness: {scope: :idcreator}
+  validates :idcreator, presence: true, numericality: true, if: :user_validation?
+  validates :codecreator, presence: true, if: :id_validation?
 
   private
-    def user_validation
-        if self.codecreator != User.find_by(id: self.idcreator).encrypted_password
-          valid = User.find_by(encrypted_password: self.codecreator).id
-          valid.save!
-        end
+  def user_validation?
+    if User.find_by(id: self.idcreator)
+      if User.find_by(id: self.idcreator).encrypted_password != self.codecreator
+        errors.add(:idcreator, "Ошибка")
+      end
+    else
+      errors.add(:idcreator, "Ошибка")
     end
-    def user_id_validation
-        if User.find_by(id: self.idvisitor).encrypted_password == nil
-          valid = User.find_by(encrypted_password: self.codecreator).id
-          valid.save!
-        end
+
+    if User.find_by(encrypted_password: self.codecreator)
+      if User.find_by(encrypted_password: self.codecreator).id != self.idcreator
+        errors.add(:idcreator, "Ошибка")
+      end
+    else
+      errors.add(:idcreator, "Ошибка")
     end
+  end
+
+  def id_validation?
+    unless Username.find_by(id: self.idvisitor)
+      errors.add(:idvisitor, "Ошибка")
+    end
+  end
 end

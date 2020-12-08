@@ -1,42 +1,53 @@
 <% if (user_signed_in?) and !(username_signed_in?) %>
   <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
   <h1>Статистика</h1>
-  <% if Statisticscreator.find_by(idreg: idreg1) %>
-    <% if Statisticscreator.find_by(idreg: idreg1).test %>
-      <% stattest = Statisticscreator.find_by(idreg: idreg1).test %>
-      <% stattest2 = stattest.size %>
+  <% userencrypted = User.find_by(id: idreg1).encrypted_password %>
+
+  <% unless $all_task_creat.get userencrypted + "all_test_tesk" %>
+    <% if Statisticscreator.find_by(idreg: idreg1) %>
+      <% if Statisticscreator.find_by(idreg: idreg1).test %>
+        <% stattest = Statisticscreator.find_by(idreg: idreg1).test %>
+        <% stattest2 = stattest.size %>
+      <% else %>
+        <% stattest2 = 0 %>
+      <% end %>
     <% else %>
       <% stattest2 = 0 %>
     <% end %>
+    <% all_test_tesk = userencrypted + "all_test_tesk" %>
+    <% $all_task_creat.set all_test_tesk, Statisticscreator.find_by(idreg: idreg1).test.size %>
+    <% $all_task_creat.expire all_test_tesk, 28800 %>
   <% else %>
-    <% stattest2 = 0 %>
+    <% stattest2 = $all_task_creat.get userencrypted + "all_test_tesk" %>
   <% end %>
-  <% if Topic.find_by(idreg: idreg1) %>
-    <% if Topic.find_by(idreg: idreg1).activ == "Вкл." %>
-      <% statactiv = Topic.where(idreg: idreg1, activ: "Вкл.").count %>
-    <% else %>
-      <% statactiv = 0 %>
+
+  <% unless $all_task_creat.get userencrypted + "all_test_tesk_activ" %>
+    <% if Topic.find_by(idreg: idreg1) %>
+        <% statactiv = Topic.where(idreg: idreg1, activ: "Вкл.").count %>
     <% end %>
-  <% else %>
-    <% statactiv = 0 %>
+      <% all_test_tesk_activ = userencrypted + "all_test_tesk_activ" %>
+      <% $all_task_creat.set all_test_tesk_activ, Topic.where(idreg: idreg1, activ: "Вкл.").count %>
+      <% $all_task_creat.expire all_test_tesk_activ, 28800 %>
+    <% else %>
+      <% statactiv = $all_task_creat.get userencrypted + "all_test_tesk_activ" %>
   <% end %>
-  <% if Topic.find_by(idreg: idreg1) %>
-    <% if Topic.find_by(idreg: idreg1).activ == "Выкл." %>
-      <% statstop = Topic.where(idreg: idreg1, activ: "Выкл.").count %>
-    <% else %>
-      <% statstop = 0 %>
+
+  <% unless $all_task_creat.get userencrypted + "all_test_tesk_stop" %>
+    <% if Topic.find_by(idreg: idreg1) %>
+        <% statstop = Topic.where(idreg: idreg1, activ: "Выкл.").count %>
     <% end %>
-  <% else %>
-    <% statstop = 0 %>
+      <% all_test_tesk_stop = userencrypted + "all_test_tesk_stop" %>
+      <% $all_task_creat.set all_test_tesk_stop, Topic.where(idreg: idreg1, activ: "Выкл.").count %>
+      <% $all_task_creat.expire all_test_tesk_stop, 28800 %>
+    <% else %>
+      <% statstop = $all_task_creat.get userencrypted + "all_test_tesk_stop" %>
   <% end %>
   <div class="row">
     <div class="col-6">
       <table class="borderdiv">
         <tr>
           <td>
-            <% cache Topic do %>
               <h4 class = "statisticscolor">Создано за все время</h4><p>Тестовые задания: <%= stattest2 %></p>
-            <% end %>
           </td>
         </tr>
       </table>

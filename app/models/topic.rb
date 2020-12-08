@@ -17,21 +17,29 @@ class Topic < ApplicationRecord
   validates :timetask, presence: true
   validates :intdate1, presence: true
   validates :password, length: { in: 3..20 }, allow_blank: true
-  validates :idreg, numericality: true, presence: true
+  validates :idreg, numericality: true, presence: true, if: :user_validation?
   validates :successmessage, length: { in: 3..300 }, allow_blank: true
   validates :failuremessage, length: { in: 3..300 }, allow_blank: true
   validates :activ, length: { in: 3..5 }, presence: true
   validates :rand, length: { in: 3..5 }, presence: true
   validates :codecreator, presence: true
 
-  before_validation :user_validtion
-
   private
-    def user_validtion
-        if self.codecreator != User.find_by(id: self.idreg).encrypted_password
-          valid = User.find_by(encrypted_password: self.codecreator).id
-          valid.save!
+    def user_validation?
+      if User.find_by(id: self.idreg)
+        if User.find_by(id: self.idreg).encrypted_password != self.codecreator
+          errors.add(:idreg, "Ошибка")
         end
-    end
+      else
+        errors.add(:idreg, "Ошибка")
+      end
 
+      if User.find_by(encrypted_password: self.codecreator)
+        if User.find_by(encrypted_password: self.codecreator).id != self.idreg
+          errors.add(:idreg, "Ошибка")
+        end
+      else
+        errors.add(:idreg, "Ошибка")
+      end
+    end
 end

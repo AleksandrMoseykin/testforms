@@ -1,19 +1,20 @@
 class LinktasksController < ApplicationController
+
+  before_action :linktask_find, only: [:show, :edit, :update, :destroy]
+
   def index
     @linktasks  = Linktask.all
   end
 
   def show
-    @linktask = Linktask.find(params[:id])
   end
 
   def new
-      @linktasks  = Linktask.all
-      @linktask = Linktask.new
+    @linktasks  = Linktask.all
+    @linktask = Linktask.new
   end
 
   def edit
-    @linktask = Linktask.find(params[:id])
   end
 
   def create
@@ -27,7 +28,6 @@ class LinktasksController < ApplicationController
   end
 
   def update
-    @linktask = Linktask.find(params[:id])
     if @linktask.update(link_params)
       redirect_to @linktask
     else
@@ -36,14 +36,17 @@ class LinktasksController < ApplicationController
   end
 
   def destroy
-    @linktask = Linktask.find(params[:id])
     @linktask.destroy
-
     redirect_to '/topics/'
   end
 
     private
+
+    def linktask_find
+      @linktask = Linktask.find(params[:id])
+    end
+
     def link_params
         params.require(:linktask).permit(:link, :idcreator, :codecreator, :topicid, :userid, :viewlinks)
     end
-      end
+  end

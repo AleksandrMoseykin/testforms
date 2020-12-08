@@ -6,12 +6,12 @@
   <!-- Узнаем id темы тестового задания -->
   <% topicid1 = @topic.id %>
 
-    <!-- Узнаем дату окончания показа тестового задания -->
-    <% if @topic.intdate2 %>
-      <% findate = @topic.intdate2 %>
-    <% else %>
-      <% findate = Time.new + 90000 %>
-    <% end %>
+  <!-- Узнаем дату окончания показа тестового задания -->
+  <% if @topic.intdate2 %>
+    <% findate = @topic.intdate2 %>
+  <% else %>
+    <% findate = Time.new + 90000 %>
+  <% end %>
 
   <!-- Если текущая дата больше даты старта показов и меньше даты окончания, то показываем этот блок   -->
   <% if @topic.intdate1 < Time.new and findate > Time.new or Consent.find_by(userid: idreg1, topic_id: topicid1) != nil %>

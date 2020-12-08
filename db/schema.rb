@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_09_165421) do
+ActiveRecord::Schema.define(version: 2020_12_03_080434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accepts", force: :cascade do |t|
+    t.integer "userid"
+    t.datetime "stoptime"
+    t.integer "counttrue"
+    t.integer "totaltime"
+    t.integer "issuesall"
+    t.bigint "taskform_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "numberrand", array: true
+    t.index ["taskform_id"], name: "index_accepts_on_taskform_id"
+  end
 
   create_table "answers", force: :cascade do |t|
     t.integer "questionid"
@@ -27,6 +40,17 @@ ActiveRecord::Schema.define(version: 2020_10_09_165421) do
     t.index ["topic_id"], name: "index_answers_on_topic_id"
   end
 
+  create_table "codes", force: :cascade do |t|
+    t.text "pasanswer"
+    t.integer "pascount"
+    t.text "pasvalue"
+    t.integer "userid"
+    t.bigint "taskform_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["taskform_id"], name: "index_codes_on_taskform_id"
+  end
+
   create_table "consents", force: :cascade do |t|
     t.integer "userid"
     t.integer "creatorid"
@@ -38,6 +62,7 @@ ActiveRecord::Schema.define(version: 2020_10_09_165421) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "numberrand", array: true
+    t.string "code"
     t.index ["topic_id"], name: "index_consents_on_topic_id"
   end
 
@@ -128,11 +153,11 @@ ActiveRecord::Schema.define(version: 2020_10_09_165421) do
   end
 
   create_table "statistictasks", force: :cascade do |t|
-    t.text "test"
     t.text "survey"
     t.integer "idreg"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "test", array: true
   end
 
   create_table "statisticvisitors", force: :cascade do |t|
@@ -250,11 +275,26 @@ ActiveRecord::Schema.define(version: 2020_10_09_165421) do
     t.string "codevisitor"
   end
 
+  create_table "youanswers", force: :cascade do |t|
+    t.text "answeruser"
+    t.integer "scoreanswer"
+    t.integer "issueid"
+    t.integer "userid"
+    t.text "usercode"
+    t.bigint "taskform_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["taskform_id"], name: "index_youanswers_on_taskform_id"
+  end
+
+  add_foreign_key "accepts", "taskforms"
   add_foreign_key "answers", "topics"
+  add_foreign_key "codes", "taskforms"
   add_foreign_key "consents", "topics"
   add_foreign_key "issues", "taskforms"
   add_foreign_key "passwords", "topics"
   add_foreign_key "questions", "topics"
   add_foreign_key "settings", "topics"
   add_foreign_key "usertabls", "topics"
+  add_foreign_key "youanswers", "taskforms"
 end

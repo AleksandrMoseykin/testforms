@@ -1,0 +1,10 @@
+<% if (username_signed_in?) %>
+  <% idreg1 = current_username.id %>
+<% end %>
+<% taskformid = @taskform.id %>
+<% counttrue = Youanswer.where(userid:idreg1, taskform_id: taskformid) %>
+<% result = 0 %>
+<% counttrue.each do |res|%>
+  <% result = result + res.scoreanswer %>
+<% end %>
+<% Accept.where(userid: idreg1, taskform_id: taskformid).update(counttrue: result) %>

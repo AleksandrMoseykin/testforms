@@ -8,20 +8,16 @@
 
 <% stoptime = Consent.find_by(userid: idreg1, topic_id: tid).stoptime %>
 
-<% #if Consent.find_by(userid: idreg1, topic_id: tid).questionsall != @topic.countquestions and stoptime < Time.now %>
-
 <% @topic.answers.where(userid: idreg1).each do |answer| %>
 
   <% if answer.created_at > stoptime %>
-      <% answer.destroy %>
+    <% answer.destroy %>
   <% end %>
 <% end %>
 <% counttrue = Consent.find_by(userid: idreg1, topic_id: tid).counttrue %>
 <% counttruedb = Answer.where(userid:idreg1, topic_id: tid , scoreanswer: '1').count %>
 <% Consent.where(userid: idreg1, topic_id: tid ).update(counttrue: counttruedb) %>
-<% if counttrue == nil%>
-  <% counttrue = 0 %>
-<% end %>
+<% counttrue ||= 0 %>
 <% timeout = stoptime + 150 %>
 <% if timeout > Time.new and Consent.find_by(userid: idreg1, topic_id: tid).questionsall != @topic.countquestions%>
   <p class="timeout"><strong>Время вышло!</strong></p>
@@ -49,9 +45,7 @@
       <h4><%= @topic.countquestions%></h4>
     </div>
   </div>
-<% if counttrue == nil %>
-  <% counttrue = 0 %>
-<% end %>
+<% counttrue ||= 0 %>
   <div class="row">
     <div class="col-6 tbl-answer">
       <h4>Правильных ответов:</h4>
@@ -136,10 +130,13 @@
     </div>
   <div class="col-6 tbl-answer">
     <h4>
-      <% if counttruemax > 0 %>
-        <% if counttruemax == 1 or counttruemax == 21 or counttruemax == 31 or counttruemax == 41 or counttruemax == 51 or counttruemax == 61 or counttruemax == 71 or counttruemax == 81 or counttruemax == 91 %>
+      <% unless counttruemax.zero? %>
+        <% counttruemaxnew = counttruemax.to_i % 100  %>
+        <% if counttruemax < 19 and counttruemaxnew > 10 %>
+          <%= counttruemax %> правильных ответов (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
+        <% elsif 1 == counttruemaxnew %>
           <%= counttruemax %> правильный ответ (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
-        <% elsif counttruemax == 2 or counttruemax == 3 or counttruemax == 4 or%>
+        <% elsif counttruemaxnew < 5 and counttruemaxnew > 1 %>
           <%= counttruemax %> правильных ответа (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
         <% else %>
           <%= counttruemax %> правильных ответов (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
@@ -154,7 +151,7 @@
         <% position += 1 %>
       <% end %>
       <% if counttrue == topcon.counttrue and totaltime.totaltime > topcon.totaltime %>
-          <% position += 1 %>
+        <% position += 1 %>
       <% end %>
     <% end %>
     <div class="row">
@@ -181,5 +178,4 @@
 </div>
 <br>
 
-<% # end %>
 <%= link_to "Подробнее",  "/test_task/" %>

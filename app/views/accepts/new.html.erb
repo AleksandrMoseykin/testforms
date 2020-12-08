@@ -1,0 +1,28 @@
+<% if (username_signed_in?) %><% idreg1 = current_username.id %>
+  <% unless Accept.find_by(taskform_id: @taskform.id, userid: idreg1) %>
+    <h1>Правила</h1>
+    <%= form_with(model: [@taskform, @taskform.accepts.build],local: true) do |form| %>
+      <% if (username_signed_in?) %><% idreg = current_username.id %>
+        <%= form.hidden_field :userid, value: idreg %>
+      <% end %>
+      <p>
+        <ul>
+          <ol class = "notationpravila">
+            <li>Пройти тестовое задание могут только зарегистрированные пользователи.</li>
+            <li>Каждое задание имеет определенное количество вопросов и ограничено по времени.</li>
+            <li>Если вы уже проходили тестовое задание, то повторное прохождение будет уже не доступно.</li>
+            <li>В каждом вопросе тестового задания можно выбрать только один вариант правильного ответа.</li>
+            <li>Если какой-то вопрос у вас вызвал затруднение, то его можно пропустить и ответить позднее.</li>
+            <li>На результаты теста влияет не только количество правильных ответов, но и время, затраченное на прохождение задания.</li>
+          </ol>
+        </ul>
+      </p>
+      <p><%= form.submit "Начать", name: "add", class: "topic_button btn btn-primary" %></p>
+    <% end %>
+  <% else %>
+  <h1>Ошибка</h1>
+  <h4><i class="fa fa-lock" aria-hidden="true"></i> Доступ закрыт. Задание # <%= @taskform.id %></h4>
+  <p><i class="fa fa-exclamation-triangle redicon" aria-hidden="true"></i> Вы уже проходили это тестовое задание.<br>
+  <a href="/taskforms/<%= @taskform.id %>/issue">Посмотреть результаты<a> </p>
+  <% end %>
+<% end %>

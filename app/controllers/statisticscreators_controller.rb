@@ -1,24 +1,27 @@
 class StatisticscreatorsController < ApplicationController
+  require "redis"
+
+  before_action :statisticscreator_find, only: [:show, :edit, :update, :destroy]
+
   def index
     @statisticscreators  = Statisticscreator.all
+    $all_task_creat = Redis.new
   end
 
   def show
-      @statisticscreator = Statisticscreator.find(params[:id])
-    end
+  end
 
   def new
     @statisticscreator = Statisticscreator.new
   end
 
   def edit
-    @statisticscreator = Statisticscreator.find(params[:id])
   end
 
   def create
-      @statisticscreator = Statisticscreator.new(statisticscreator_params)
+    @statisticscreator = Statisticscreator.new(statisticscreator_params)
 
-      if @topic.save
+    if @topic.save
       redirect_to @statisticscreator
     else
       render 'new'
@@ -26,24 +29,25 @@ class StatisticscreatorsController < ApplicationController
   end
 
   def update
-  @statisticscreator = Statisticscreator.find(params[:id])
-
-  if @statisticscreator.update(statisticscreator_params)
-    redirect_to @statisticscreator
-  else
-    render 'edit'
+    if @statisticscreator.update(statisticscreator_params)
+      redirect_to @statisticscreator
+    else
+      render 'edit'
+    end
   end
-end
 
-def destroy
-  @statisticscreator = Statisticscreator.find(params[:id])
-  @statisticscreator.destroy
-
-  redirect_to '/topics/'
-end
+  def destroy
+    @statisticscreator.destroy
+    redirect_to '/topics/'
+  end
 
   private
+
+  def topic_find
+    @statisticscreator = Statisticscreator.find(params[:id])
+  end
+
   def statisticscreator_params
-      params.require(:statisticscreator).permit(:test, :survey, :idreg)
+    params.require(:statisticscreator).permit(:test, :survey, :idreg)
   end
 end

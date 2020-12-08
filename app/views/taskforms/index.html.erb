@@ -32,14 +32,13 @@
           <% taskform.issues.each do |t| %>
             <tr class="questabl">
               <th><h5><%= t.title %></h5></th>
-              <th><h5>№ <%= n=n+1 %></h5></th>
+              <th><h5>№ <%= n += 1 %></h5></th>
               <th><h5><a href="/taskforms/<%= t.taskform_id %>/issues/<%= t.id %>/edit"><i class="fa fa-cog fa-1x" aria-hidden="true"></i></a></h5></th>
               <th><h5><a data-confirm="Удалить?" rel="nofollow" data-method="delete" href="/taskforms/<%= t.taskform_id %>/issues/<%= t.id %>"><i class="fa fa-trash" aria-hidden="true"></i></a></h5></th>
             </tr>
           <% end %>
         <% end %>
       <% end %>
-
     </table>
   <% end %>
 <% end %>

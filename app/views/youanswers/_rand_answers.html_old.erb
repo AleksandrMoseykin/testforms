@@ -1,0 +1,101 @@
+<!-- Узнаем id пользователя и  id задания-->
+<% if (username_signed_in?) %>
+  <% idreg1 = current_username.id %>
+<% end %>
+<% taskformid = @taskform.id %>
+<!-- Выводим таймер -->
+<%= render "youanswers/timer" %>
+
+<!-- Узнаем количество вопросов в задании -->
+<% count_questions_topic = @taskform.issues.count %>
+
+<!-- Создаем переменную с количеством вопросов -->
+<% questionsall = Youanswer.where(userid: idreg1, taskform_id: taskformid).count %>
+
+<!-- Если количество вопросов равно количеству ответов -->
+<% if count_questions_topic == questionsall %>
+
+<% reserv = Youanswer.find_by(userid: idreg1, taskform_id: taskformid, answeruser: nil) %>
+<% if reserv %>
+  <% Youanswer.destroy_by(userid: idreg1, taskform_id: taskformid, answeruser: nil) %>
+<% else %>
+  <!-- Выводим блок первых 3-х мест -->
+    <%= render "answers/mesto!!!" %>
+  <!-- Выводим таблицу результатов для пользователя -->
+    <%= render "answers/tabltotal!!!" %>
+<% end %>
+<% end %>
+<!-- Если в тесте вопросов больше чем ответов -->
+<% answer_user = Youanswer.where(userid: idreg1, taskform_id: taskformid).count - Youanswer.where(userid: idreg1, taskform_id: taskformid, answeruser: nil).count %>
+
+<% if count_questions_topic > answer_user %>
+
+  <!-- Создаем переменную с количеством отложенных вопросов -->
+  <% countreserve = @taskform.youanswers.where(userid: idreg1, answeruser: nil).count %>
+
+  <!-- Создаем массив id вопросов -->
+  <% id_array_questions = [] %>
+  <% @taskform.issues.each do |question| %>
+    <% id_array_questions.push(question.id) %>
+  <% end %>
+
+  <!-- Создаем массив id вопросов, на которые пользователь ответил или пропустил -->
+  <% if Youanswer.find_by(userid: idreg1, taskform_id: taskformid) %>
+    <% id_array_questions_answer = [] %>
+    <% Youanswer.where(userid: idreg1, taskform_id: taskformid).each do |answer| %>
+      <% id_array_questions_answer.push(answer.questionid) %>
+    <% end %>
+  <% end %>
+
+  <!-- Создаем массив id вопросов, которые пользователь пропустил -->
+  <% if Youanswer.find_by(userid: idreg1, taskform_id: taskformid, answeruser: nil) %>
+    <% id_array_questions_answer_reserv = [] %>
+    <% Youanswer.where(userid: idreg1, taskform_id: taskformid, answeruser: nil).each do |answer_reserv| %>
+      <% id_array_questions_answer_reserv.push(answer_reserv.questionid) %>
+    <% end %>
+  <% end %>
+
+  <!-- Удаляем из массива вопросы, на которые пользователь отвечал или пропустил -->
+  <% if id_array_questions_answer and id_array_questions.size > id_array_questions_answer.size %>
+    <% id_array_questions = id_array_questions - id_array_questions_answer %>
+  <% end %>
+
+  <!-- Порядок вывода вопросов -->
+  <% if @taskform.rand == "Вкл." %>
+    <% array_size = id_array_questions.size - 1 %>
+    <% number_questions = rand(0..array_size) %>
+  <% else %>
+    <% number_questions = 0 %>
+  <% end %>
+
+  <!-- Выводим изображение !!!!!!!!!!!!!!!!!!!!!!-->
+
+
+  <!-- Выводим вопросы -->
+  <% if Issue.find_by(id: id_array_questions[number_questions]).title %>
+    <div><h5><%= Issue.find_by(id: id_array_questions[number_questions]).title %></h5></div>
+  <% end %>
+
+  <!-- Скрытая форма для передачи ответа и вопроса -->
+  <%= form_with(model: [@taskform, @taskform.youanswers.build], local: true) do |form| %>
+    <span class="answerus">
+      <%= form.text_area :answeruser %>
+    </span>
+    <%= form.hidden_field :issueid, class: "answer_questionid", value: id_array_questions[number_questions] %>
+    <%= form.hidden_field :userid, class: "answer_userid", value: idreg1 %>
+    <%= form.hidden_field :usercode, class: "answer_usercode", value: current_username.encrypted_password %>
+    <%= form.submit "Ответить", name: "add", class: "but-hid", id: "addbut"%>
+  <% end %>
+
+  <!-- Если в задании осталось больше одного вопроса, то выводим кнопку пропустить -->
+  <% count = Youanswer.where(userid: idreg1, taskform_id: taskformid).count - Answer.where(userid: idreg1, taskform_id: taskformid, answeruser: nil).count %>
+  <% count_questions = count_questions_topic - count %>
+  <% if count_questions > 1 %>
+    <%= form_with(model: [@taskform, @taskform.youanswers.build], local: true) do |form| %>
+      <%= form.hidden_field :issueid, class: "answer_questionid", value: id_array_questions[number_questions] %>
+      <%= form.hidden_field :userid, class: "answer_userid", value: idreg1 %>
+      <%= form.hidden_field :usercode, class: "answer_usercode", value: current_username.encrypted_password %>
+      <%= form.submit "Пропустить", name: "add", class: "nextbutton topic_button btn btn-primary" %>
+    <% end %>
+  <% end %>
+<% end %>

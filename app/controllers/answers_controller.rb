@@ -1,46 +1,52 @@
 class AnswersController < ApplicationController
+
+  before_action :topic_find
+  before_action :answers_find, only: [:show, :edit, :update, :destroy]
+
   def index
-    @topic = Topic.find(params[:topic_id])
     @answer = @topic.answers.all
     render 'new'
   end
-    def show
-      @topic = Topic.find(params[:topic_id])
-      @answer = @topic.answers.find(params[:id])
-    end
-    def new
-      @topic = Topic.find(params[:topic_id])
-      @answer = @topic.answers.new
-    end
-    def edit
-      @topic = Topic.find(params[:topic_id])
-      @answer = @topic.answers.find(params[:id])
-    end
-    def create
-        @topic = Topic.find(params[:topic_id])
-        @answer = @topic.answers.create(answer_params)
-        render 'new'
-      end
-    def update
-      @topic = Topic.find(params[:topic_id])
-      @answer = @topic.answers.find(params[:id])
 
+  def show
+  end
+
+  def new
+    @answer = @topic.answers.new
+  end
+
+  def edit
+  end
+
+  def create
+    @answer = @topic.answers.create(answer_params)
+    render 'new'
+  end
+
+  def update
     if @answer.update(answer_params)
       redirect_to '/topics/'
     else
       render 'edit'
     end
-    end
+  end
 
-    def destroy
-      @topic = Topic.find(params[:topic_id])
-      @answer = @topic.answers.find(params[:id])
-      @answer.destroy
-      redirect_to '/topics/'
-    end
+  def destroy
+    @answer.destroy
+    redirect_to '/topics/'
+  end
 
-    private
-      def answer_params
-        params.require(:answer).permit(:answeruser, :time, :questionid, :userid, :numberanswer, :usercode)
-      end
+  private
+
+  def topic_find
+    @topic = Topic.find(params[:topic_id])
+  end
+
+  def answers_find
+    @answer = @topic.answers.find(params[:id])
+  end
+
+  def answer_params
+    params.require(:answer).permit(:answeruser, :time, :questionid, :userid, :numberanswer, :usercode)
+  end
 end

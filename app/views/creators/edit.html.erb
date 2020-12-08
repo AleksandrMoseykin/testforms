@@ -6,7 +6,7 @@
       <h2>
         <% er=@creator.errors.count %>
         <% if er>0 %>
-        <span>Форма заполнена неправильно</span>
+        <span class="formerrors">Форма заполнена неправильно</span>
         <% end %>
       </h2>
       <% if @creator.errors[:photocreator] %>

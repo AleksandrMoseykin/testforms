@@ -8,8 +8,12 @@ Rails.application.routes.draw do
   get 'test_task', to: 'test_task#index'
   get 'personaldata', to: 'personaldata#index'
   get 'links', to: 'links#index'
+
+
   resources :taskforms do
     resources :issues
+    resources :youanswers
+    resources :accepts
   end
   devise_for :users
   resources :topics

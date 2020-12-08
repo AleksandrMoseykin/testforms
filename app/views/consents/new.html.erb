@@ -1,10 +1,11 @@
-
 <% if (username_signed_in?) %><% idreg1 = current_username.id %>
+  <% codeuser = current_username.encrypted_password %>
   <% unless Consent.find_by(topic_id: @topic.id, userid: idreg1) %>
     <h1>Правила</h1>
     <%= form_with(model: [@topic, @topic.consents.build],local: true) do |form| %>
       <% if (username_signed_in?) %><% idreg = current_username.id %>
-        <input type="hidden" name="consent[userid]" id="consent_userid" value=<%= idreg %>>
+        <%= form.hidden_field :userid, value: idreg %>
+        <%= form.hidden_field :code, value: codeuser %>
       <% end %>
       <p>
         <ul>

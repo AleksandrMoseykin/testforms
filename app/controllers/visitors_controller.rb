@@ -1,20 +1,21 @@
 class VisitorsController < ApplicationController
+
+  before_action :visitor_find, only: [:show, :edit, :update, :destroy]
+
   def index
     @visitors  = Visitor.all
     redirect_to '/visitors/new'
   end
 
   def show
-      @visitor = Visitor.find(params[:id])
-    end
+  end
 
   def new
       @visitor = Visitor.new
   end
 
   def edit
-  @visitor = Visitor.find(params[:id])
-end
+  end
 
   def create
       @visitor = Visitor.new(visitor_params)
@@ -27,25 +28,26 @@ end
   end
 
   def update
-  @visitor = Visitor.find(params[:id])
-
-  if @visitor.update(visitor_params)
-    redirect_to '/profilevisitor/'
-  else
-    render 'edit'
+    if @visitor.update(visitor_params)
+      redirect_to '/profilevisitor/'
+    else
+      render 'edit'
+    end
   end
-end
 
 def destroy
-  @visitor = Visitor.find(params[:id])
   @visitor.destroy
-
   redirect_to '/topics/'
 end
 
   private
+
+  def visitor_find
+    @visitor = Visitor.find(params[:id])
+  end
+
   def visitor_params
-      params.require(:visitor).permit(:name, :surname, :telephone, :birthdate,
+    params.require(:visitor).permit(:name, :surname, :telephone, :birthdate,
         :photo, :promocode, :country, :city, :idregvis, :sex, :codevisitor)
   end
 end

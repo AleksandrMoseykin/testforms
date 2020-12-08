@@ -1,0 +1,97 @@
+<!-- Проверяем авторизацию пользователя -->
+<% if (username_signed_in?) %><% idreg1 = current_username.id %>
+
+<!-- Основной блок -->
+
+<!-- Узнаем id темы задания -->
+<% taskformid = @taskform.id %>
+
+<!-- Узнаем дату окончания показа задания -->
+<% if @taskform.intdate2 %>
+  <% findate = @taskform.intdate2 %>
+<% else %>
+  <% findate = Time.new + 90000 %>
+<% end %>
+
+<!-- Если текущая дата больше даты старта показов и меньше даты окончания, то показываем этот блок   -->
+<% if @taskform.intdate1 < Time.new and findate > Time.new or Consent.find_by(userid: idreg1, taskform_id: taskformid) != nil %>
+
+<!-- Проверяем активность тестового задания   -->
+<% if @taskform.activ == "Выкл." and Consent.find_by(userid: idreg1, taskform_id: taskformid) == nil %>
+  <p>Тестовое задание "<%= @topic.titletopic %>" не запущено или остановлено.</p>
+<% else %>
+<!-- Если количество вопросов созданых меньше, чем указано в настройках, то показываем сообщение "Создано недостаточное количество вопросов"  -->
+<% if @taskform.countquestions > @taskform.issues.count %>
+  <% addcount = @taskform.countquestions - @taskform.issues.count %>
+  <% if addcount == 1 or addcount == 21 or addcount == 31 or addcount == 41 or addcount == 51 or addcount == 61 or addcount == 71 or addcount == 81 or addcount == 91%>
+    <% qs = "вопрос" %>
+  <% elsif addcount > 1 and addcount < 5 or addcount > 21 and addcount < 25 or addcount > 31 and addcount < 35 or addcount > 41 and addcount < 45 or addcount > 51 and addcount < 55 %>
+    <% qs = "вопросa" %>
+  <% elsif addcount > 4 and addcount < 21 or addcount > 24 and addcount < 31 or addcount > 34 and addcount < 41 or addcount > 44 and addcount < 51 or addcount > 54 and addcount < 61%>
+    <% qs = "вопросов" %>
+  <% elsif addcount > 61 and addcount < 65 or addcount > 71 and addcount < 75 or addcount > 81 and addcount < 85 or addcount > 91 and addcount < 95 %>
+    <% qs = "вопросa" %>
+  <% elsif addcount > 64 and addcount < 71 or addcount > 74 and addcount < 81 or addcount > 94 and addcount < 101%>
+    <% qs = "вопросов" %>
+  <% else %>
+    <% qs = "вопросов(а)" %>
+  <% end %>
+  <p>Создано недостаточное количество вопросов в задании "<%= @taskform.titletask %>". Для запуска задания нужно добавить еще <%= addcount %> <%= qs %>.</p>
+<% else %>
+
+<!-- Если пароль отсутствует   -->
+<% if @taskform.password ==""%>
+  <%= render "youanswers/for_test" %>
+<% end %>
+
+<!-- Если пароль существует -->
+<% if @taskform.password !="" %>
+
+<!-- выводим форму ввода пароля -->
+  <% if @taskform.passwords.find_by(userid: idreg1) == nil %>
+    <%= render "answers/password_form!!!" %>
+  <% end %>
+
+
+  <!-- Сравниваем пароли -->
+  <% if @taskform.passwords.find_by(userid: idreg1) != nil %>
+    <% if @taskform.password == @taskform.passwords.where(userid: idreg1, taskform_id: taskformid).last.pasanswer %>
+      <%= render "answers/for_test!!!" %>
+      <% else %>
+
+        <!-- Проверяем количество раз введения пароля -->
+        <% if @taskform.password != @taskform.passwords.where(userid: idreg1).last.pasanswer %>
+          <% if @taskform.passwords.where(userid: idreg1).count > 2 %>
+            <% timecreated = @taskform.passwords.where(userid: idreg1).last.created_at %>
+            <% timefinal = timecreated + 1800 %>
+            <% time2 = Time.now %>
+            <% if timefinal.to_f > time2.to_f %>
+              <p>Вы 3 раза (или более раз) не правильно ввели пароль.</p>
+              <p>Повторная попытка будет доступна в <%= timefinal.hour %>-<%= timefinal.min %> (Мск)</p>
+            <% else %>
+
+              <!-- Выводим форму пароля -->
+              <%= render "answers/password_form!!!" %>
+            <% end %>
+          <% else %>
+
+            <!-- Выводим форму пароля при ошибке -->
+            <p>Ошибка: пароль введен не верный! </p>
+            <%= render "answers/password_form!!!" %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<% end %>
+<% end %>
+<% else %>
+
+<!-- Проверка доступности задания по времени -->
+<% if @taskform.intdate1 > Time.new %>
+  <p>Тестовое задание будет доступно <%= @taskform.intdate1.strftime("%d.%m.%Y %H:%M") %> (Мск)</p>
+<% else %>
+  <p>Тестовое задание было остановлено <%= @taskform.intdate2.strftime("%d.%m.%Y %H:%M") %> (Мск)</p>
+<% end %>
+<% end %>

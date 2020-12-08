@@ -3,12 +3,12 @@
     <% curentdate = Time.new %>
     <% newcurentdate = curentdate.strftime("%Y-%m-%dT%H:%M") %>
     <h1>Редактировать "<%= @taskform.titletask %>"</h1>
-    <%= form_with(model: @taskforms, local: true) do |form| %>
+    <%= form_with(model: @taskform, local: true) do |form| %>
       <% if @taskform.errors.any? %>
         <div id="error_explanation">
           <h2>
             <% er = @taskforms.errors.count %>
-            <% if er>0 %>
+            <% if er > 0 %>
               <span>Форма заполнена неправильно</span>
             <% end %>
           </h2>
@@ -90,7 +90,7 @@
             <% if @taskform.failuremessage %>
               <textarea name="taskform[failuremessage]" id="failuremessage_successmessage" class="w100"><%= @taskform.failuremessage %></textarea>
             <% else %>
-              <textarea name="taskformc[failuremessage]" id="failuremessage_successmessage" class="w100">Вы не прошли тест</textarea>
+              <textarea name="taskform[failuremessage]" id="failuremessage_successmessage" class="w100">Вы не прошли тест</textarea>
             <% end %>
           </p>
         </td>
@@ -110,7 +110,7 @@
             <% if @taskform.intdate1 %>
               <%= form.datetime_local_field :intdate1, class: "w100" %>
             <% else %>
-              <input type="datetime-local" name="topic[intdate1]" id="topic_intdate1" value=<%= newcurentdate %>>
+              <input type="datetime-local" name="taskform[intdate1]" id="taskform_intdate1" value=<%= newcurentdate %>>
             <% end %>
           </p>
         </td>
@@ -195,43 +195,43 @@
 
 <script type="text/javascript">
   $( document ).on('turbolinks:load', function() {
-    $("#topic_countquestions").on("change", function(){
-      let element = $("#topic_countquestions").val();
+    $("#taskform_countquestions").on("change", function(){
+      let element = $("#taskform_countquestions").val();
       element = element * 1;
-      let hid = $("#topic_sucquest").val();
+      let hid = $("#taskform_sucquest").val();
       hid = hid * 1;
       if (element < hid) {
-      $("#topic_sucquest").val(element);
+      $("#taskform_sucquest").val(element);
       }
     });
-    $("#topic_sucquest").on("change", function(){
-      let el = $("#topic_sucquest").val();
+    $("#taskform_sucquest").on("change", function(){
+      let el = $("#taskform_sucquest").val();
       el = el * 1;
-      let el2 = $("#topic_countquestions").val();
+      let el2 = $("#taskform_countquestions").val();
       el2 = el2 * 1;
       if (el > el2) {
-      $("#topic_countquestions").val(el);
+      $("#taskform_countquestions").val(el);
       }
     });
-    $("#topic_intdate1").on("change", function(){
-      let dataelement = $("#topic_intdate1").val();
+    $("#taskform_intdate1").on("change", function(){
+      let dataelement = $("#taskform_intdate1").val();
       intdate1 = new Date(dataelement);
-      let dataelement2 = $("#topic_intdate2").val();
+      let dataelement2 = $("#taskform_intdate2").val();
       if (dataelement2) {
         intdate2 = new Date(dataelement2);
         if (intdate1 > intdate2) {
-          $("#topic_intdate2").val(dataelement);
+          $("#taskform_intdate2").val(dataelement);
         }
       }
     });
-    $("#topic_intdate2").on("change", function(){
-      let datael = $("#topic_intdate2").val();
+    $("#taskform_intdate2").on("change", function(){
+      let datael = $("#taskform_intdate2").val();
       int1 = new Date(datael);
-      let datael2 = $("#topic_intdate1").val();
+      let datael2 = $("#taskform_intdate1").val();
       if (datael) {
         int2 = new Date(datael2);
         if (int1 < int2) {
-          $("#topic_intdate1").val(datael);
+          $("#taskform_intdate1").val(datael);
         }
       }
     });

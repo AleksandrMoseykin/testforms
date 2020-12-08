@@ -1,15 +1,16 @@
 class ContactsController < ApplicationController
+
+  before_action :contact_find, only: [:show, :edit, :update, :destroy]
+
   def index
     @contacts  = Contact.all
     @contact = Contact.new
   end
 
   def show
-    @contact = Contact.find(params[:id])
   end
 
   def edit
-    @contact = Contact.find(params[:id])
   end
 
   def create
@@ -17,30 +18,30 @@ class ContactsController < ApplicationController
 
     if @contact.save
     redirect_to '/contacts/'
-  else
-    redirect_to '/contacts/'
-  end
+    else
+      redirect_to '/contacts/'
+    end
   end
 
   def update
-    @contact = Contact.find(params[:id])
-
-  if @contact.update(contact_params)
-    redirect_to @contact
-  else
-    render 'edit'
+    if @contact.update(contact_params)
+      redirect_to @contact
+    else
+      render 'edit'
+    end
   end
-end
 
 def destroy
-  @contact = Contact.find(params[:id])
   @contact.destroy
-
   redirect_to '/contacts/'
 end
 
   private
+  def contact_find
+    @contact = Contact.find(params[:id])
+  end
+
   def contact_params
-      params.require(:contact).permit(:idvisitor, :idcreator, :codecreator)
+    params.require(:contact).permit(:idvisitor, :idcreator, :codecreator)
   end
 end

@@ -1,0 +1,91 @@
+<% if (user_signed_in?) and !(username_signed_in?) %>
+  <% if @taskform.idreg == current_user.id %>
+    <div class="div-line"><h1>Задание "<%= @taskform.titletask %>"</h1></div>
+    <div>
+      <% qucount = @issue.where(taskform_id: @taskform.id).count %>
+      <% tocount = @taskform.countquestions %>
+      <strong>Ссылка для прохождения задания:</strong><br>
+      <% if tocount > qucount %>
+        <span class="link-for-copy-red">http://localhost:3000/taskforms/<%= @taskform.id %>/accepts/new</span>
+        <button disabled id="click-to-copy" class = "btn btn-primary">Скопировать</button>
+        <p>В тестовом задании недостаточное количество вопросов.</p>
+      <% else %>
+        <span class="link-for-copy">http://localhost:3000/taskforms/<%= @taskform.id %>/accepts/new</span>
+        <button id="click-to-copy" class = "btn btn-primary">Скопировать</button>
+      <% end %>
+    </div>
+    <br>
+    <% topicid = @taskform.id %>
+
+    <% if Accept.where(taskform_id: topicid).count > 0 %>
+      <div class="row">
+        <div class="col-sm-11"><h3>Статистика ответов на вопросы </h3></div>
+
+      </div>
+    <% end %>
+    <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
+      <% if Taskform.find_by(idreg: idreg1) %>
+        <% if Accept.find_by(taskform_id: topicid) %>
+          <table class ="task-tabl">
+          <tr class="gl-zag-tabl">
+            <th>Пользователи</th>
+            <th>№</th>
+            <th>Правильных ответов</th>
+            <th>Время</th>
+            <th>Выполнение</th>
+          </tr>
+          <% xcount = 0 %>
+          <% Accept.where(taskform_id: topicid).each do |consent| %>
+            <% userid = consent.userid %>
+            <% unless Usertabl.find_by(userid: userid, topic_id: topicid) %>
+              <% Usertabl.create(userid: userid, topic_id: topicid) %>
+            <% end %>
+            <% if Setting.find_by(topic_id: topicid) %>
+              <% settingagebefore = Setting.find_by(topic_id: topicid).agebefore %>
+            <% settingageafter = Setting.find_by(topic_id: topicid).ageafter %>
+            <% else %>
+              <% settingagebefore = 0 %>
+              <% settingageafter = 100 %>
+            <% end %>
+
+            <% if Visitor.find_by(idregvis: userid) %>
+              <% birthdate22 = Visitor.find_by(idregvis: userid).birthdate %>
+              <% birthdate23 = birthdate22.time.strftime("%d-%m-%Y") %>
+              <% if birthdate23 %>
+                <% timed1 = Time.now.strftime("%d-%m-%Y") %>
+                <% age1 = Time.diff(Time.now, birthdate23) %>
+                <% age2 = age1[:year] %>
+              <% end %>
+              <% else %>
+              <% age2 = Setting.find_by(topic_id: topicid).ageafter %>
+            <% end %>
+            <% if Visitor.find_by(idregvis: userid) %>
+              <% visitorsex = Visitor.find_by(idregvis: userid).sex %>
+              <% visitorcountry = Visitor.find_by(idregvis: userid).country %>
+            <% end %>
+          <% end %>
+        </table>
+      <% end %>
+      <% if xcount and xcount < 1 %>
+        <br>
+        <p><strong>Ничего не найдено.</strong> Проверьте настройки фильтра.</p>
+      <% end %>
+      <br>
+      <%= link_to "Назад", taskforms_path %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+   $('#click-to-copy').click(function() {
+    var copyText = $('.link-for-copy').text();
+    var copytext2 = document.createElement('input');
+    copytext2.value = copyText;
+    document.body.appendChild(copytext2);
+    copytext2.select();
+    document.execCommand("copy");
+    document.body.removeChild(copytext2);
+   });
+  });
+</script>

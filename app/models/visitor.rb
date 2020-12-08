@@ -12,13 +12,7 @@ class Visitor < ApplicationRecord
   validates :promocode, length: { in: 3..300 }, allow_blank: true
   validates :codevisitor, presence: true
 
-  before_validation :user_validtion
 
   private
-    def user_validtion
-        if self.codecreator != User.find_by(id: self.idreg).encrypted_password
-          valid = User.find_by(encrypted_password: self.codecreator).id
-          valid.save!
-        end
-    end
+
 end

@@ -31,9 +31,7 @@
   </div>
 
   <!-- Если правильных ответов нет, то переменной присваеваем значение 0 -->
-  <% if counttrue == nil%>
-    <% counttrue = 0 %>
-  <% end %>
+  <% counttrue ||= 0 %>
   <div class="row">
     <div class="col-6 tbl-answer">
       <h4>Правильных ответов:</h4>
@@ -101,13 +99,16 @@
     </div>
     <div class="col-6 tbl-answer">
       <h4>
-        <% if counttruemax > 0 %>
-          <% if counttruemax == 1 or counttruemax == 21 or counttruemax == 31 or counttruemax == 41 or counttruemax == 51 or counttruemax == 61 or counttruemax == 71 or counttruemax == 81 or counttruemax == 91 %>
-            <%= counttruemax %> правильный ответ <br> (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
-          <% elsif counttruemax == 2 or counttruemax == 3 or counttruemax == 4 or%>
-            <%= counttruemax %> правильных ответа <br> (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
+        <% unless counttruemax.zero? %>
+          <% counttruemaxnew = counttruemax.to_i % 100  %>
+          <% if counttruemax < 19 and counttruemaxnew > 10 %>
+            <%= counttruemax %> правильных ответов (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
+          <% elsif 1 == counttruemaxnew %>
+            <%= counttruemax %> правильный ответ (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
+          <% elsif counttruemaxnew < 5 and counttruemaxnew > 1 %>
+            <%= counttruemax %> правильных ответа (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
           <% else %>
-            <%= counttruemax %> правильных ответов <br> (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
+            <%= counttruemax %> правильных ответов (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
           <% end %>
         <% end %>
       </h4>

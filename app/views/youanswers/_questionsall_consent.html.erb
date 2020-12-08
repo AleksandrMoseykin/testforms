@@ -1,0 +1,8 @@
+<% if (username_signed_in?) %>
+  <% idreg1 = current_username.id %>
+<% end %>
+<% taskformid = @taskform.id %>
+<% questionsall = Youanswer.where(userid: idreg1, taskform_id: taskformid).count %>
+<% questions_reserv = Youanswer.where(userid: idreg1, taskform_id: taskformid, answeruser: nil).count %>
+<% questions_final = questionsall - questions_reserv %>
+<% Accept.where(userid: idreg1, taskform_id: taskformid).update(issuesall: questions_final) %>

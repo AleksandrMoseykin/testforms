@@ -42,9 +42,9 @@ class IssuesController < ApplicationController
 
     def destroy
       @taskform = Taskform.find(params[:taskform_id])
-      @issue = @topic.taskforms.find(params[:id])
+      @issue = @taskform.issues.find(params[:id])
       @issue.destroy
-      redirect_to '/taskform/'
+      redirect_to '/taskforms/'
     end
 
     private
