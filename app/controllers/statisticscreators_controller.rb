@@ -1,5 +1,4 @@
 class StatisticscreatorsController < ApplicationController
-  require "redis"
 
   before_action :statisticscreator_find, only: [:show, :edit, :update, :destroy]
 

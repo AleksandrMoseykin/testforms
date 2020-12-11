@@ -1,6 +1,8 @@
 class LinktasksController < ApplicationController
 
   before_action :linktask_find, only: [:show, :edit, :update, :destroy]
+  before_action :linktask_user
+  after_action :linktask_update_user, only: [:create]
 
   def index
     @linktasks  = Linktask.all
@@ -44,6 +46,21 @@ class LinktasksController < ApplicationController
 
     def linktask_find
       @linktask = Linktask.find(params[:id])
+    end
+
+    def linktask_user
+      $linktask_user = Redis.new
+    end
+
+    def linktask_update_user
+      last_linktask = Linktask.where(idcreator: current_user.id).last
+      userid = last_linktask.userid
+      pass = Username.find_by(id: userid).encrypted_password
+      user = pass + "link"
+      value_link = $linktask_user.get(user)
+      value_link = value_link.to_i + 1
+      $linktask_user.set(user, value_link)
+      $linktask_user.expire(user, 172800)
     end
 
     def link_params

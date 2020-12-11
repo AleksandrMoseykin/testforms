@@ -1,4 +1,18 @@
 <% if (username_signed_in?) %>
+  <% userencrypted = current_username.encrypted_password %>
+  <% link_user = userencrypted + "link" %>
+  <% link = nil %>
+  <% $linktask_user = Redis.new %>
+
+  <% unless $linktask_user.get link_user %>
+    <% linktask = Linktask.where(userid: current_username.id, viewlinks: nil).count %>
+    <% $linktask_user.set link_user, linktask %>
+    <% $linktask_user.expire link_user, 172800 %>
+    <% link = $linktask_user.get link_user %>
+  <% else %>
+    <% link = $linktask_user.get link_user %>
+  <% end %>
+
   <div class="col-3" id="right-colon">
     <p>Баланс:</p>
     <hr class="razdelitel">
@@ -11,10 +25,13 @@
     <p><a class="menu-r-link"href="/test_task/">Тестовые задания</a></p>
     <hr class="razdelitel">
     <p class="addlink">
-      <a class="menu-r-link"href="/links/">Ссылки</a>
-      <% messagelink = Linktask.find_by(userid: current_username.id, viewlinks: nil) %>
-      <% if messagelink %>
-      <sup><span class="linkscount"><%= Linktask.where(userid: current_username.id, viewlinks: nil).count %></span></sup>
+      <a class="menu-r-link" data-turbolinks="false" href="/links/">Ссылки</a>
+      <% if link != "0" %>
+        <sup>
+          <span class="linkscount">
+            <%= link %>
+          </span>
+        </sup>
       <% end %>
     </p>
     <hr class="razdelitel">

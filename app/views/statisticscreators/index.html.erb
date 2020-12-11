@@ -16,7 +16,7 @@
     <% end %>
     <% all_test_tesk = userencrypted + "all_test_tesk" %>
     <% $all_task_creat.set all_test_tesk, Statisticscreator.find_by(idreg: idreg1).test.size %>
-    <% $all_task_creat.expire all_test_tesk, 28800 %>
+    <% $all_task_creat.expire all_test_tesk, 86400 %>
   <% else %>
     <% stattest2 = $all_task_creat.get userencrypted + "all_test_tesk" %>
   <% end %>
@@ -27,7 +27,7 @@
     <% end %>
       <% all_test_tesk_activ = userencrypted + "all_test_tesk_activ" %>
       <% $all_task_creat.set all_test_tesk_activ, Topic.where(idreg: idreg1, activ: "Вкл.").count %>
-      <% $all_task_creat.expire all_test_tesk_activ, 28800 %>
+      <% $all_task_creat.expire all_test_tesk_activ, 86400 %>
     <% else %>
       <% statactiv = $all_task_creat.get userencrypted + "all_test_tesk_activ" %>
   <% end %>
@@ -38,7 +38,7 @@
     <% end %>
       <% all_test_tesk_stop = userencrypted + "all_test_tesk_stop" %>
       <% $all_task_creat.set all_test_tesk_stop, Topic.where(idreg: idreg1, activ: "Выкл.").count %>
-      <% $all_task_creat.expire all_test_tesk_stop, 28800 %>
+      <% $all_task_creat.expire all_test_tesk_stop, 86400 %>
     <% else %>
       <% statstop = $all_task_creat.get userencrypted + "all_test_tesk_stop" %>
   <% end %>

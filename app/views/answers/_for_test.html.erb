@@ -60,9 +60,9 @@
         <% end %>
 
         <!-- Узнаем дату последнего ответа -->
-        <% #if Answer.find_by(userid: idreg1, topic_id: topicid) %>
-          <% #createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
-        <% #end %>
+        <% if Answer.find_by(userid: idreg1, topic_id: topicid) %>
+          <% createdanswer = Answer.where(userid: idreg1, topic_id: topicid).last.created_at %>
+        <% end %>
       <% else %>
           <!-- Выводим если время вышло -->
             <%= render "answers/time_out" %>

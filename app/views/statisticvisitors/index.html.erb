@@ -1,10 +1,16 @@
 <% if (username_signed_in?) %>
   <% idregvis = current_username.id %>
-  <% userencrypted = Username.find_by(id: idregvis).encrypted_password %>
-  <% contact = Contact.where(idvisitor: idregvis) %>
-  <% view_profile = Statisticvisitor.where(idregvis: idregvis) %>
+  <% userencrypted = current_username.encrypted_password %>
+
+  <% contact_statistic, view_statistic, view_statistic_week, view_visitor_week = nil %>
+  <% statistic_week, view_profile = nil %>
+  <% time_current = Time.new %>
+  <% time_day = Time.new - 86400 %>
+  <% time_week = Time.new - 604800 %>
+  <% time_week2 = Time.new - 1209600 %>
 
   <% unless $all_statistic_visitors.get userencrypted + "contact" %>
+    <% contact = Contact.where(idvisitor: idregvis) %>
     <% contact_count = userencrypted + "contact" %>
     <% $all_statistic_visitors.set contact_count, contact.count %>
     <% $all_statistic_visitors.expire contact_count, 28800 %>
@@ -13,28 +19,18 @@
   <% end %>
 
   <% unless $all_statistic_visitors.get userencrypted + "view" %>
+    <% view_profile = Statisticvisitor.where(idregvis: idregvis, created_at: time_week..time_current) %>
     <% view_visitor = userencrypted + "view" %>
     <% $all_statistic_visitors.set view_visitor, view_profile.count %>
     <% $all_statistic_visitors.expire view_visitor, 28800 %>
+    <% statistic_day = Statisticvisitor.where(idregvis: idregvis, created_at: time_day..time_current) %>
+    <% view_visitor_day = userencrypted + "view_day" %>
+    <% $all_statistic_visitors.set view_visitor_day, statistic_day.count %>
+    <% $all_statistic_visitors.expire view_visitor_day, 28800 %>
+    <% Statisticvisitor.destroy_by(created_at: time_week2..time_week) %>
   <% else %>
     <% view_statistic = $all_statistic_visitors.get userencrypted + "view" %>
-  <% end %>
-
-  <% unless $all_statistic_visitors.get userencrypted + "view_week" %>
-    <% if Statisticvisitor.find_by(idregvis: idregvis) %>
-      <% created_statisticvisitor = Statisticvisitor.find_by(idregvis: idregvis).created_at %>
-      <% time_current = Time.new %>
-      <% time_week = Time.new - 86400 %>
-      <% statistic_week = Statisticvisitor.where(idregvis: idregvis, created_at: time_week..time_current).count %>
-      <% if Statisticvisitor.first.created_at < time_week %>
-        <% Statisticvisitor.first.destroy %>
-      <% end %>
-    <% end %>
-    <% view_visitor_week = userencrypted + "view_week" %>
-    <% $all_statistic_visitors.set view_visitor_week, statistic_week %>
-    <% $all_statistic_visitors.expire view_visitor_week, 28800 %>
-  <% else %>
-    <% view_statistic_week = $all_statistic_visitors.get userencrypted + "view_week" %>
+    <% view_statistic_day = $all_statistic_visitors.get userencrypted + "view_day" %>
   <% end %>
 
   <h1>Статистика</h1>
@@ -56,7 +52,7 @@
             <h4 class = "statisticscolor">Просмотры</h4>
             <p>
               Просмотры профиля за неделю: <%= view_statistic ||= view_profile.count %><br>
-              Просмотры за последний день: <%= view_statistic_week ||= statistic_week %>
+              Просмотры за последний день: <%= view_statistic_day ||= statistic_day.count %>
             </p>
           </td>
         </tr>

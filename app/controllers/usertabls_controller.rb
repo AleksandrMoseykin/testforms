@@ -2,12 +2,14 @@ class UsertablsController < ApplicationController
 
   before_action :topic_find
   before_action :usertabl_find, only: [:show, :edit, :update, :destroy]
+  after_action :add_id, only: [:edit]
 
   def index
     @usertabl = @topic.usertabls.all
   end
 
   def show
+    redirect_to '/topics/'
   end
 
   def new
@@ -43,6 +45,14 @@ class UsertablsController < ApplicationController
 
   def usertabl_find
     @usertabl = @topic.usertabls.find(params[:id])
+  end
+
+  def add_id
+    if @usertabl.addcontact
+      user = @usertabl
+      user.update(addcontact: "")
+      Contact.create(idvisitor: user.userid, idcreator: current_user.id, codecreator: current_user.encrypted_password)
+    end
   end
 
   def usertabl_params

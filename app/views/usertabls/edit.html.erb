@@ -2,17 +2,11 @@
 <% usertabltopicid = @usertabl.topic_id %>
 <% idreg = Topic.find_by(id: usertabltopicid).idreg %>
 <% if (user_signed_in?) %><% userid = current_user.id %><% end %>
-<% if idreg==userid %>
+<% if idreg == userid %>
   <% if Username.find_by(id: usertabls) %>
     <% usernameid = Username.find_by(id: usertabls).id %>
   <% end %>
-  <% #@usertabl.update(addcontact: nil) %>
-  <% if @usertabl.addcontact %>
-    <% unless Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
-      <% Contact.create(idvisitor: usernameid, idcreator: userid) %>
-    <% end %>
-    <% Usertabl.destroy_by(userid: usertabls) %>
-  <% end %>
+
   <% if Visitor.find_by(idregvis: usertabls) %>
     <h1><%= Visitor.find_by(idregvis: usertabls).surname %> <%= Visitor.find_by(idregvis: usertabls).name %> - ответы на задание "<%= Topic.find_by(id: usertabltopicid).titletopic %>"</h1>
     <table cellspacing="5" cellpadding="10" class="backgroundtabl">
@@ -22,13 +16,14 @@
             <%= image_tag Visitor.find_by(idregvis: usertabls).photo.url(:thumb), class: "photousertabls" %>
           <% end %>
           <%= form_with(model: @usertabl, url: topic_usertabl_path, local: true) do |form| %>
-            <input type="hidden" name="usertabl[addcontact]" id="usertabl_addcontact" value=<%= Username.find_by(id: usernameid).confirmation_token %>>
+
             <% if Contact.find_by(idcreator: userid, idvisitor: usernameid) %>
               <P class ="greenicon"><strong><i class="fa fa-check-circle" aria-hidden="true"></i> Пользователь добавлен в контакты</strong><p>
             <% else %>
+              <%= form.hidden_field :addcontact, value: usertabls %>
               <p><%= form.submit "Добавить в контакты", name: "add", class: "btn btn-primary" %></p>
             <% end %>
-          <% end %>
+        <% end %>
         </td>
         <td>
           <h6>
