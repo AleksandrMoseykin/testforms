@@ -56,6 +56,14 @@
     <!-- Сравниваем пароли -->
     <% if @topic.passwords.find_by(userid: idreg1) != nil %>
       <% if @topic.password == @topic.passwords.where(userid: idreg1, topic_id: topicid1).last.pasanswer %>
+        <% topic_contact = topicid1.to_s + "t" + idreg1.to_s %>
+        <% unless $compare_password.get topic_contact %>
+
+          <% $compare_password.set topic_contact, "ok" %>
+          <% $compare_password.expire topic_contact, 28800 %>
+          <% time_pass = @topic.passwords.where(userid: idreg1, topic_id: topicid1).last.created_at %>
+          <% Consent.where(userid: idreg1, topic_id: topicid1).update(created_at: time_pass) %>
+        <% end %>
         <%= render "answers/for_test" %>
         <% else %>
 

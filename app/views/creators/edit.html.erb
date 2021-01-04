@@ -18,26 +18,28 @@
     <p class="inputphotocreator"><%= form.file_field :photocreator %></p>
     <hr>
     <div class="row">
-      <div class="col-sm-6">
-        <%= form.label :"Имя" %><br><%= form.text_field :namecreator, class: "w100" %>
+      <div class="form-group col-lg-6 col-sm-12">
+        <%= form.label :name, "Имя" %><br><%= form.text_field :namecreator, class: "w100" %>
       </div>
-      <div class="col-sm-6">
-        <%= form.label :"Фамилия" %><br><%= form.text_field :surnamecreator, class: "w100" %>
+      <div class="form-group col-lg-6 col-sm-12">
+        <%= form.label :surname, "Фамилия" %><br><%= form.text_field :surnamecreator, class: "w100" %>
       </div>
     </div>
     <hr>
     <div class="row">
-      <div class="col-sm-4">
-        <%= form.label :"Телефон" %><br><%= form.text_field :telephonecreator, class: "w100" %>
+      <div class="form-group col-lg-4 col-sm-12">
+        <%= form.label :telephone, "Телефон" %><br><%= form.text_field :telephonecreator, class: "w100" %>
       </div>
-      <div class="col-sm-4">
-        <%= form.label :"Компания" %><br><%= form.text_field :companycreator, class: "w100" %>
+      <div class="form-group col-lg-4 col-sm-12">
+        <%= form.label :company, "Компания" %><br><%= form.text_field :companycreator, class: "w100" %>
       </div>
-      <div class="col-sm-4">
-        <%= form.label :"Промокод" %><br><%= form.text_field :promocodecreator, class: "w100" %>
+      <div class="form-group col-lg-4 col-sm-12">
+        <%= form.label :promocode, "Промокод" %><br><%= form.text_field :promocodecreator, class: "w100" %>
       </div>
     </div>
     <hr>
+    <%= form.hidden_field :idreg, id: "creator_idreg", value: current_user.id %>
+    <%= form.hidden_field :codecreator, value: current_user.encrypted_password %>
     <p><%= form.submit "Сохранить", class: "topic_button btn btn-primary" %></p>
 <% end %>
 <p><a href="/profile">Назад</a></p>

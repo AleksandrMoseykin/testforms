@@ -1,4 +1,6 @@
 class StatisticvisitorsController < ApplicationController
+  before_action :authenticate_username!
+
   def index
     @statisticvisitors  = Statisticvisitor.all
     $all_statistic_visitors = Redis.new

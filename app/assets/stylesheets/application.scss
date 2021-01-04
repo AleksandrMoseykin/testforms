@@ -1,6 +1,5 @@
- body {
+ body, footer {
    background-color: #2f343a;
-   /* Цвет фона веб-страницы */
    margin: 0;
    padding: 0;
  }
@@ -9,12 +8,6 @@
    margin: 0;
    padding: 0;
    background-color: #1a1f23;
- }
-
- footer {
-   margin: 0;
-   padding: 0;
-   background-color: #2f343a;
  }
 
  #logo {
@@ -30,11 +23,25 @@
    text-align: right;
  }
 
- $tabl-border-color: #9ea1a5;
-
- .task-tabl {
-   width: 100%;
+ .question_img {
+   padding-bottom: 10px
  }
+
+  .pagination {
+  margin-top: 10px;
+  text-align: center;
+  }
+
+ .page, .next, .last, .first, .prev {
+   padding: 5px;
+   margin: 2px;
+   border-style: solid;
+   border-width: 1px;
+   border-color: #767879;
+   background-color: #e5e9ef;
+ }
+
+ $tabl-border-color: #9ea1a5;
 
  .gl-zag-tabl {
    background-color: #2f343a;
@@ -102,21 +109,7 @@
   text-decoration: none;
 }
 
-.disnone {
-  display: none;
-}
-
-.dsnone {
-  display: none;
-}
-
-.buttonname:hover {
-  color: #ff0000;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.buttomout:hover {
+.buttonname:hover, .buttomout:hover {
   color: #ff0000;
   text-decoration: none;
   cursor: pointer;
@@ -149,8 +142,12 @@
   padding-left: 12px;
 }
 
-.w100 {
+.w100, .task-tabl, .tbl-gl {
   width: 100%;
+}
+
+.link_strong {
+  font-weight: bold;
 }
 
 .textarea {
@@ -197,15 +194,7 @@
   border-style: solid;
 }
 
-.hid {
-  display: none;
-}
-
-.but-hid {
-  display: none;
-}
-
-.nextbutton-hid {
+.hid, .but-hid, .nextbutton-hid, .hidid, .addidhid, .disnone, .dsnone {
   display: none;
 }
 
@@ -219,16 +208,8 @@
   padding: 4px;
 }
 
-.hidid {
-  display: none;
-}
-
 .addid {
   margin-top: 8px;
-}
-
-.addidhid {
-  display: none;
 }
 
 .topinfoblock {
@@ -239,11 +220,7 @@
   color: red
 }
 
-.timeout {
-  margin-bottom: 20px;
-}
-
-.imgquestion {
+.timeout, .imgquestion {
   margin-bottom: 20px;
 }
 
@@ -305,23 +282,11 @@
   margin-bottom: 10px;
 }
 
-.answerspan {
+.answerspan, .variant {
   cursor: default;
 }
 
-.variant {
-  cursor: default;
-}
-
-.topic_button {
-  margin-top: 12px;
-  width: 30%;
-  margin-left: 35%;
-  margin-right: 35%;
-  border-radius: 5px;
-}
-
-.topic_button:hover {
+.topic_button, .topic_button:hover {
   margin-top: 12px;
   width: 30%;
   margin-left: 35%;
@@ -375,7 +340,10 @@ border-color: #ff0000
  .otstup {
    padding-right: 16px;
  }
-.aut {color: #fff;}
+
+.aut {
+  color: #fff;
+}
 
 #main {min-height: 630px;}
 
@@ -404,10 +372,6 @@ border-color: #ff0000
  .menu-r-link:hover {
    color: #ff0000;
    text-decoration: none;
- }
-
- .tbl-gl {
-   width: 100%;
  }
 
  table.tbl-gl td {

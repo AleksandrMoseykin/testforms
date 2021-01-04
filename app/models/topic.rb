@@ -1,4 +1,5 @@
 class Topic < ApplicationRecord
+  paginates_per  5
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :consents, dependent: :destroy

@@ -3,22 +3,22 @@
 
   <!-- Узнаем время окончания показов и выводим таймер и количество ответов на вопросы   -->
   <% if Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
-  <% datestop = Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
-  <% currentdate = Time.new %>
-  <% finishtime = (datestop - currentdate) %>
-  <% countanswer_true = Answer.where(topic_id: topicid1, userid: idreg1).count %>
-  <% countanswer_reserv = Answer.where(topic_id: topicid1, userid: idreg1, answeruser: nil).count %>
-  <% countanswer = countanswer_true - countanswer_reserv %>
-  <% countquestion = Topic.find_by(id: topicid1).countquestions %>
+    <% datestop = Consent.find_by(userid: idreg1, topic_id: topicid1).stoptime %>
+    <% currentdate = Time.new %>
+    <% finishtime = (datestop - currentdate) %>
+    <% countanswer_true = Answer.where(topic_id: topicid1, userid: idreg1).count %>
+    <% countanswer_reserv = Answer.where(topic_id: topicid1, userid: idreg1, answeruser: nil).count %>
+    <% countanswer = countanswer_true - countanswer_reserv %>
+    <% countquestion = Topic.find_by(id: topicid1).countquestions %>
 
-  <% if countanswer < countquestion %>
-    <div class = "topinfoblock">
-      <strong>
-        <span id="my_timers"><%= Time.at(finishtime).utc.strftime("%H:%M:%S") %></span> |
-        <%= javascript_pack_tag 'timer', 'data-turbolinks-track': 'reload' %>
-        <span><%= countanswer %></span>:<span><%= countquestion %></span>
-      </strong>
-    </div>
-  <% end %>
+    <% if countanswer < countquestion %>
+      <div class = "topinfoblock">
+        <strong>
+          <span id="my_timers"><%= Time.at(finishtime).utc.strftime("%H:%M:%S") %></span> |
+          <%= javascript_pack_tag 'timer', 'data-turbolinks-track': 'reload' %>
+          <span><%= countanswer %></span>:<span><%= countquestion %></span>
+        </strong>
+      </div>
+    <% end %>
   <% end %>
 <% end %>

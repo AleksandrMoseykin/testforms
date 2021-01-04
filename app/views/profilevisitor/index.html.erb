@@ -1,55 +1,74 @@
 <% if (username_signed_in?) %><% userid = current_username.id %>
-  <% if Visitor.exists? %>
-    <% if Visitor.find_by(idregvis: userid) %>
-      <div class="container">
-        <h1>Профиль пользователя</h1>
-        <% if Visitor.find_by(idregvis: userid).photo.url(:thumb) %>
-          <%= image_tag Visitor.find_by(idregvis: userid).photo.url(:thumb), class: "photoprofile" %>
-        <% end %>
-        <hr>
-        <h4><%= Visitor.find_by(idregvis: userid).surname %> <%= Visitor.find_by(idregvis: userid).name %> (<%= Visitor.find_by(idregvis: userid).telephone %>)</h4>
-        <hr>
-        <p><strong>Пол: </strong><%= Visitor.find_by(idregvis: userid).sex %></p>
-        <hr>
-        <p><strong>Email: </strong><%= current_username.email %></p>
-        <hr>
-        <p><strong>Id пользователя: </strong><%= current_username.id %></p>
-        <hr>
-        <p><strong>Зарегистрирован: </strong><% regdata = current_username.created_at %><%= regdata.time.strftime("%d-%m-%Y") %></p>
-        <hr>
-        <% if Visitor.find_by(idregvis: userid).birthdate %>
-          <% birthdate = Visitor.find_by(idregvis: userid).birthdate %>
-          <% birthdate.time.strftime("%d-%m-%Y") %>
-          <p><strong>Возраст: </strong><% timed=Time.now.strftime("%d-%m-%Y") %><% age = Time.diff(Time.now, birthdate) %><%= age[:year] %> лет</p>
-          <hr>
-        <% end %>
-        <% if Visitor.find_by(idregvis: userid).country %>
-          <p><strong>Страна: </strong><%= Visitor.find_by(idregvis: userid).country %></p>
-          <hr>
-        <% end %>
-        <% if Visitor.find_by(idregvis: userid).city %>
-          <p><strong>Город: </strong><%= Visitor.find_by(idregvis: userid).city %></p>
-          <hr>
-        <% end %>
-        <% editid = Visitor.find_by(idregvis: userid).id %>
-        <p><%= link_to 'Редактировать', edit_visitor_path(id: editid) %></p>
-      </div>
-    <% else %>
-      <div class="container">
-        <h1>Профиль пользователя</h1>
-        <h3>Ваш профиль заполнен не полностью</h3>
-        <a><%= image_tag "avatarka-no.png", alt: "Фото аватарки отсутствует", class: "noavatarka" %></a>
-        <p>Фото аватарки отсутствует</p>
-        <hr>
-        <p><strong>Email: </strong><%= current_username.email %></p>
-        <hr>
-        <p><strong>Id пользователя: </strong><%= current_username.id %></p>
-        <hr>
-        <p><strong>Зарегистрирован: </strong>
-        <% regdata = current_username.created_at %><%= regdata.time.strftime("%d-%m-%Y") %>
-        <hr>
-        <p><a href="/visitors/new">Добавить данные</a></p>
-      </div>
+<div class="container">
+  <h1>Профиль пользователя</h1>
+  <% if @visitor %>
+    <% if @visitor.photo.url(:thumb) %>
+      <%= image_tag @visitor.photo.url(:thumb), class: "photoprofile" %>
     <% end %>
+    <hr>
+    <% visitor_surname =  "visitor_surname" + current_username.id.to_s %>
+    <% visitor_name =  "visitor_name" + current_username.id.to_s %>
+    <% visitor_telephone =  "visitor_telephone" + current_username.id.to_s %>
+    <% visitor_sex =  "visitor_sex" + current_username.id.to_s %>
+    <% visitor_age =  "visitor_age" + current_username.id.to_s %>
+    <% visitor_country =  "visitor_country" + current_username.id.to_s %>
+    <% visitor_city =  "visitor_city" + current_username.id.to_s %>
+
+    <% unless $visitor_name.get visitor_surname %>
+      <% $visitor_name.set visitor_surname, @visitor.surname %>
+      <% $visitor_name.expire visitor_surname, 86400 %>
+      <% $visitor_name.set visitor_name, @visitor.name %>
+      <% $visitor_name.expire visitor_name, 86400 %>
+      <% $visitor_name.set visitor_telephone, @visitor.telephone %>
+      <% $visitor_name.expire visitor_telephone, 86400 %>
+      <h4><%= @visitor.surname %> <%= @visitor.name %> (<%= @visitor.telephone %>)</h4>
+    <% else %>
+      <h4><%= $visitor_name.get visitor_surname %> <%= $visitor_name.get visitor_name %> (<%= $visitor_name.get visitor_telephone %>)</h4>
+    <% end %>
+    <hr>
+    <% unless $visitor_name.get visitor_sex %>
+      <% $visitor_name.set visitor_sex, @visitor.sex %>
+      <% $visitor_name.expire visitor_sex, 86400 %>
+      <p><strong>Пол: </strong><%= @visitor.sex %></p>
+    <% else %>
+      <p><strong>Пол: </strong><%= $visitor_name.get visitor_sex %></p>
+    <% end %>
+    <hr>
+    <%= render "user_name" %>
+    <% birthdate = @visitor.birthdate %>
+    <% birthdate.time.strftime("%d-%m-%Y") %>
+    <% unless $visitor_name.get visitor_age %>
+      <p><strong>Возраст: </strong><% age = Time.diff(Time.now, birthdate) %><%= age[:year] %> лет</p>
+      <% $visitor_name.set visitor_age, age[:year] %>
+      <% $visitor_name.expire visitor_age, 86400 %>
+    <% else %>
+      <p><strong>Возраст: </strong><%= $visitor_name.get visitor_age %> лет</p>
+    <% end %>
+    <hr>
+    <% unless $visitor_name.get visitor_country %>
+      <% $visitor_name.set visitor_country, @visitor.country %>
+      <% $visitor_name.expire visitor_country, 86400 %>
+      <p><strong>Страна: </strong><%= @visitor.country %></p>
+    <% else %>
+      <p><strong>Страна: </strong><%= $visitor_name.get visitor_country %></p>
+    <% end %>
+    <hr>
+    <% unless $visitor_name.get visitor_city %>
+      <% $visitor_name.set visitor_city, @visitor.city %>
+      <% $visitor_name.expire visitor_city, 86400 %>
+      <p><strong>Город: </strong><%= @visitor.city %></p>
+    <% else %>
+      <p><strong>Город: </strong><%= $visitor_name.get visitor_city %></p>
+    <% end %>
+    <hr>
+    <p><%= link_to 'Редактировать', edit_visitor_path(id: @visitor.id) %></p>
+  <% else %>
+    <h3>Ваш профиль заполнен не полностью</h3>
+    <a><%= image_tag "avatarka-no.png", alt: "Фото аватарки отсутствует", class: "noavatarka" %></a>
+    <p>Фото аватарки отсутствует</p>
+    <hr>
+    <%= render "user_name" %>
+    <p><a href="/visitors/new">Добавить данные</a></p>
   <% end %>
+  </div>
 <% end %>

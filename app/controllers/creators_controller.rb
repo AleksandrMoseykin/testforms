@@ -1,6 +1,7 @@
 class CreatorsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :creator_find, only: [:show, :edit, :update, :destroy]
+  after_action :creator_delete, only: [:edit]
 
   def index
     @creators  = Creator.all
@@ -8,6 +9,7 @@ class CreatorsController < ApplicationController
   end
 
   def show
+    redirect_to '/profile/'
   end
 
   def new
@@ -44,6 +46,13 @@ end
 
   def creator_find
     @creator = Creator.find(params[:id])
+  end
+
+  def creator_delete
+    val = ["surnamecreator", "namecreator", "telephonecreator", "company", "promocode"]
+    val.each do |value|
+      $creator.del value + current_user.id.to_s
+    end
   end
 
   def creator_params

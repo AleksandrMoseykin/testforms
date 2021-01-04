@@ -8,8 +8,8 @@
       <% if @creator.errors.any? %>
         <div id="error_explanation">
           <h2>
-            <% er=@creator.errors.count %>
-            <% if er>0 %>
+            <% er = @creator.errors.count %>
+            <% if er > 0 %>
               <span class="formerrors">Форма заполнена неправильно</span>
             <% end %>
           </h2>
@@ -18,27 +18,27 @@
       <div class="formswrapper">
         <%= form_with scope: :creator, html: { multipart:  true }, url: creators_path, local: true do |form| %>
         <div class="row">
-          <div class="form-group col-sm-4">
-            <%= form.label :"Аватарка" %><br><%= form.file_field :photocreator %>
+          <div class="form-group col-lg-4 col-sm-12">
+            <%= form.label :photo, "Аватарка" %><br><%= form.file_field :photocreator %>
           </div>
-          <div class="form-group col-sm-4">
-            <%= form.label :"Имя*" %><br><%= form.text_field :namecreator, class: "w100" %>
+          <div class="form-group col-lg-4 col-sm-12">
+            <%= form.label :name, "Имя*" %><br><%= form.text_field :namecreator, class: "w100" %>
           </div>
-          <div class="form-group col-sm-4">
-            <%= form.label :"Фамилия*" %><br><%= form.text_field :surnamecreator, class: "w100" %>
+          <div class="form-group col-lg-4 col-sm-12">
+            <%= form.label :surname, "Фамилия*" %><br><%= form.text_field :surnamecreator, class: "w100" %>
           </div>
         </div>
         <hr>
         <div class="row">
-          <div class="form-group col-sm-4">
-            <%= form.label :"Телефон*" %><br><%= form.text_field :telephonecreator, class: "w100" %>
+          <div class="form-group col-lg-4 col-sm-12">
+            <%= form.label :telephone, "Телефон*" %><br><%= form.text_field :telephonecreator, class: "w100" %>
             <small class="form-text text-muted">Пример: +7 900-000-00-00</small>
           </div>
-          <div class="form-group col-sm-4">
-            <%= form.label :"Компания" %><br><%= form.text_field :companycreator, class: "w100" %>
+          <div class="form-group col-lg-4 col-sm-12">
+            <%= form.label :company, "Компания" %><br><%= form.text_field :companycreator, class: "w100" %>
           </div>
-          <div class="form-group col-sm-4">
-          <%= form.label :"Промокод" %><br><%= form.text_field :promocodecreator, class: "w100" %>
+          <div class="form-group col-lg-4 col-sm-12">
+          <%= form.label :promocode, "Промокод" %><br><%= form.text_field :promocodecreator, class: "w100" %>
           </div>
         </div>
         <hr>

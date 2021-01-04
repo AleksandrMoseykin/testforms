@@ -1,4 +1,5 @@
 class Consent < ApplicationRecord
+  paginates_per  20
   belongs_to :topic
   validates :userid, numericality: true, presence: true,
                           uniqueness: {scope: :topic_id}

@@ -1,18 +1,16 @@
 <% if (user_signed_in?) and !(username_signed_in?) %>
   <% idreg = current_user.id %>
   <h1>Поделиться ссылкой</h1>
-  <% topicall = [] %>
-  <% contactall = [] %>
+  <% topicall, contactall = [], [] %>
   <% if Topic.find_by(idreg: idreg) && Contact.find_by(idcreator: idreg) %>
-    <% Topic.where(idreg: idreg).each do |topic| %>
-    <% array = [] %>
+    <% Topic.where(idreg: idreg).order(id: :desc).each do |topic| %>
+      <% array = [] %>
       <% titletopic = topic.titletopic %> <% topicid = topic.id %>
       <% array.push(titletopic, topicid) %>
-      <% array %>
       <% topicall << array %>
     <% end %>
     <% Contact.where(idcreator: idreg).each do |contact| %>
-    <% array = [] %>
+      <% array = [] %>
       <% name = Visitor.find_by(idregvis: contact.idvisitor).name %>
       <% surname = Visitor.find_by(idregvis: contact.idvisitor).surname %>
       <% idvisitor = Visitor.find_by(idregvis: contact.idvisitor).idregvis %>
@@ -22,12 +20,12 @@
     <% end %>
     <%= form_with scope: :linktask, url: linktasks_path, local: true do |form| %>
     <div class="row">
-    <div class="col-sm-6">
-      <%= form.label :"Название тестового задания" %><br>
+    <div class="form-group col-lg-6 col-sm-12">
+      <%= form.label :test, "Название тестового задания" %><br>
       <%= form.select(:topicid, topicall) %> <br>
     </div>
-    <div class="col-sm-6">
-      <%= form.label :"Пользователь" %><br>
+    <div class="form-group col-lg-6 col-sm-12">
+      <%= form.label :user, "Пользователь" %><br>
       <%= form.select(:userid, contactall) %>
     </div>
     <%= form.hidden_field :idcreator, value: idreg %>

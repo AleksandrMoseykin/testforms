@@ -1,5 +1,5 @@
 class ConsentsController < ApplicationController
-
+  before_action :authenticate_username!
   before_action :topic_find
   before_action :consents_find, only: [:show, :edit, :update, :destroy]
 

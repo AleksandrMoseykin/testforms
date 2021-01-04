@@ -1,9 +1,9 @@
 class StatisticscreatorsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :statisticscreator_find, only: [:show, :edit, :update, :destroy]
 
   def index
-    @statisticscreators  = Statisticscreator.all
+    @statisticscreator = Statisticscreator.find_by(idreg: current_user.id)
     $all_task_creat = Redis.new
   end
 

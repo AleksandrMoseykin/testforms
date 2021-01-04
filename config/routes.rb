@@ -16,13 +16,14 @@ Rails.application.routes.draw do
     resources :accepts
   end
   devise_for :users
-  resources :topics
+  #resources :topics
   resources :visitors
   resources :statisticscreators
   resources :statisticvisitors
   resources :contacts
   resources :linktasks
   resources :topics do
+    get :view, on: :member
     resources :questions
     resources :answers
     resources :consents

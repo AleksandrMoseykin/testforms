@@ -1,5 +1,5 @@
 class LinktasksController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :linktask_find, only: [:show, :edit, :update, :destroy]
   before_action :linktask_user
   after_action :linktask_update_user, only: [:create]

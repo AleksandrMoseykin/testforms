@@ -122,6 +122,10 @@
   <% unless Statisticvisitor.find_by(idregvis: usernameid, idreg: userid) %>
     <% Statisticvisitor.create(idregvis: usernameid, idreg: userid) %>
   <% end %>
+  <% usercode = Username.find_by(id: usernameid).encrypted_password %>
+  <% view_profile = usercode + "view" %>
+  <% view_visitor_day = usercode + "view_day" %>
+  <% $all_statistic_visitors.del view_profile, view_visitor_day %>
 <% end %>
 <br>
 <%= link_to 'Назад', topic_questions_path %>

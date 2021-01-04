@@ -1,5 +1,5 @@
 class UsertablsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :topic_find
   before_action :usertabl_find, only: [:show, :edit, :update, :destroy]
   after_action :add_id, only: [:edit]

@@ -1,4 +1,6 @@
 class TaskformsController < ApplicationController
+  before_action :authenticate_user!
+  
   def index
     @taskforms  = Taskform.all
   end

@@ -1,12 +1,13 @@
 <h1>
-  Тестовое задание "<%= @topic.titletopic %>"
+  Тестовое задание "<a href="/topics/<%= @topic.id %>/edit"><%= @topic.titletopic %></a>"
 </h1>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-lg-6">
     <table class="borderdiv">
       <tr>
-        <td><h4>Вопросов в тесте:</h4></td>
-        <td><h4><a href="/topics/<%= @topic.id %>/edit"><%= @topic.countquestions %></a></h4></td>
+        <td colspan="2">
+          <h4>Вопросов в тесте: <a href="/topics/<%= @topic.id %>/edit"><%= @topic.countquestions %></a></h4>
+        </td>
       </tr>
       <tr>
         <td colspan="2"><p>Указано количество вопросов в тестовом задании. Если вы добавили меньше вопросов, чем
@@ -14,11 +15,11 @@
       </tr>
     </table>
   </div>
-  <div class="col-md-6">
+  <div class="col-lg-6">
     <table class="borderdiv">
       <tr>
-        <td><h4>Правильных ответов:</h4></td>
-        <td><h4><a href="/topics/<%= @topic.id %>/edit"><%= @topic.sucquest %></a></h4></td>
+        <td colspan="2">
+          <h4>Правильных ответов: <a href="/topics/<%= @topic.id %>/edit"><%= @topic.sucquest %></a></h4></td>
       </tr>
       <tr>
         <td colspan="2"><p>Если по итогам прохождения теста, количество правильных ответов равно или больше, чем указано,
@@ -28,7 +29,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-lg-6">
     <table class="borderdiv">
       <tr>
         <td><h4>Успешное сообщение:</h4></td>
@@ -38,7 +39,7 @@
       </tr>
     </table>
   </div>
-  <div class="col-md-6">
+  <div class="col-lg-6">
     <table class="borderdiv">
       <tr>
         <td><h4>Неудовлетвори&shy;тель&shy;ное сообщение:</h4></td>
@@ -50,7 +51,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-lg-6">
     <table class="borderdiv">
       <tr>
         <td><h4>Начало показов:</h4></td>
@@ -60,7 +61,7 @@
       </tr>
     </table>
   </div>
-  <div class="col-md-6">
+  <div class="col-lg-6">
     <table class="borderdiv">
       <tr>
         <td><h4>Окончание показов:</h4></td>
@@ -80,7 +81,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-lg-3">
     <table class="borderdiv">
       <tr>
         <td><h4>Время:</h4></td>
@@ -96,7 +97,7 @@
       </tr>
     </table>
   </div>
-  <div class="col-md-3">
+  <div class="col-lg-3">
     <table class="borderdiv">
       <tr>
         <td><h4>Показы:</h4></td>
@@ -106,7 +107,7 @@
       </tr>
     </table>
   </div>
-  <div class="col-md-3">
+  <div class="col-lg-3">
     <table class="borderdiv">
       <tr>
         <td><h4>Случай&shy;ный поря&shy;док:</h4></td>
@@ -116,7 +117,7 @@
       </tr>
     </table>
   </div>
-  <div class="col-md-3">
+  <div class="col-lg-3">
     <table class="borderdiv">
       <tr>
         <td><h4>Пароль:</h4></td>

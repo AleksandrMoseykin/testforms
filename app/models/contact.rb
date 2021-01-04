@@ -1,4 +1,5 @@
 class Contact < ApplicationRecord
+  paginates_per  20
   validates :idvisitor, presence: true, numericality: true,
             uniqueness: {scope: :idcreator}
   validates :idcreator, presence: true, numericality: true, if: :user_validation?

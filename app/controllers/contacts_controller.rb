@@ -1,11 +1,12 @@
 class ContactsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :contact_find, only: [:show, :edit, :update, :destroy]
   after_action :contact_add, only: [:create, :update]
   before_action :contact_add, only: [:destroy]
 
   def index
-    @contacts  = Contact.all
+    user = current_user.id
+    @contacts = Contact.where(idcreator: user).order(created_at: :desc).page(params[:page])
     @contact = Contact.new
   end
 

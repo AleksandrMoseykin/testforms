@@ -132,7 +132,7 @@
     <h4>
       <% unless counttruemax.zero? %>
         <% counttruemaxnew = counttruemax.to_i % 100  %>
-        <% if counttruemax < 19 and counttruemaxnew > 10 %>
+        <% if counttruemax < 20 and counttruemaxnew > 9 %>
           <%= counttruemax %> правильных ответов (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)
         <% elsif 1 == counttruemaxnew %>
           <%= counttruemax %> правильный ответ (<%= th %> ч. <%= tm %> мин. <%= ts %> сек.)

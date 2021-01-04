@@ -7,24 +7,24 @@
   <p class="inputphotocreator"><%= form.file_field :imgquestion %></p>
 
     <div class="row">
-      <div class="form-group col-sm-12">
-        <%= form.label :"Вопрос" %><br><%= form.text_field :titlequestion, class: "w100" %>
+      <div class="form-group col-md-12">
+        <%= form.label :question, "Вопрос" %><br><%= form.text_field :titlequestion, class: "w100" %>
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-sm-6">
-        <%= form.label :"Правильный ответ" %><br><%= form.text_field :answertrue, class: "w100" %>
+      <div class="form-group col-md-6">
+        <%= form.label :answer_true, "Правильный ответ" %><br><%= form.text_field :answertrue, class: "w100" %>
       </div>
-      <div class="form-group col-sm-6">
-        <%= form.label :"Вариант ответа 1" %><br><%= form.text_field :answer2, class: "w100" %>
+      <div class="form-group col-md-6">
+        <%= form.label :answer1, "Вариант ответа 1" %><br><%= form.text_field :answer2, class: "w100" %>
       </div>
     </div>
     <div class="row">
-      <div class="form-group col-sm-6">
-        <%= form.label :"Вариант ответа 2" %><br><%= form.text_field :answer3, class: "w100" %>
+      <div class="form-group col-md-6">
+        <%= form.label :answer2,"Вариант ответа 2" %><br><%= form.text_field :answer3, class: "w100" %>
       </div>
-      <div class="form-group col-sm-6">
-        <%= form.label :"Вариант ответа 3" %><br><%= form.text_field :answer4, class: "w100" %>
+      <div class="form-group col-md-6">
+        <%= form.label :answer3, "Вариант ответа 3" %><br><%= form.text_field :answer4, class: "w100" %>
       </div>
     </div>
     <p><%= form.submit "Сохранить", class: "topic_button btn btn-primary" %></p>

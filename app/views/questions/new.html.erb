@@ -19,15 +19,15 @@
       </div>
     <% end %>
     <div class="row">
-      <div class="form-group col-sm-12">
-        <%= form.label :"Изображение" %><br>
+      <div class="form-group col-md-12">
+        <%= form.label :image, "Изображение" %><br>
         <%= form.file_field :imgquestion %><br>
       </div>
     </div>
     <hr>
     <div class="row">
-      <div class="form-group col-sm-12">
-        <%= form.label :"Вопрос" %><br>
+      <div class="form-group col-md-12">
+        <%= form.label :question, "Вопрос" %><br>
         <% if @question.errors[:titlequestion].count.zero? %>
           <%= form.text_field :titlequestion, class: "w100" %>
         <% else %>
@@ -42,7 +42,7 @@
       <% if count.zero? or count.even? %>
         <div class="row">
       <% end %>
-      <div class="form-group col-sm-6">
+      <div class="form-group col-md-6">
         <%= form.label answer %><br>
         <% if @question.errors[title[count]].count.zero? %>
           <%= form.text_field title[count], class: "w100" %>

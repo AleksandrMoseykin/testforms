@@ -58,5 +58,6 @@ gem 'jquery-rails', '~> 4.3', '>= 4.3.5'
 gem 'file_validators', '~> 2.0', '>= 2.0.2'
 gem 'react-rails', '~> 2.6', '>= 2.6.1'
 gem 'factory_bot_rails'
+gem 'kaminari'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

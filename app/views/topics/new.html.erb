@@ -16,7 +16,7 @@
     <% end %>
     <div class="row form-group">
       <div class="col-sm-12">
-        <%= form.label :"Название*" %><br>
+        <%= form.label :title, "Название*" %><br>
         <% if @topic.errors[:titletopic].count > 0 %>
           <p class="formerrors">Ошибка заполнения</p>
           <ul>
@@ -32,17 +32,17 @@
     <hr>
     <div class="row form-group">
       <div class="col-sm-4">
-        <%= form.label :"Количество вопросов*" %><br>
+        <%= form.label :count, "Количество вопросов*" %><br>
         <input id="topic_countquestions" max="100" min="1" name="topic[countquestions]" step="1" type="number" value="10" class = "w100">
         <small id="emailHelp" class="form-text text-muted">Укажите количество вопросов в тесте</small>
       </div>
       <div class="col-sm-4">
-        <%= form.label :"Правильных ответов*" %><br>
+        <%= form.label :answer_true, "Правильных ответов*" %><br>
         <input id="topic_sucquest" max="100" min="1" name="topic[sucquest]" step="1" type="number" value="5" class = "w100">
         <small id="emailHelp" class="form-text text-muted">Укажите количество правильных ответов для прохождения теста</small>
       </div>
       <div class="col-sm-4">
-        <%= form.label :"Время*" %><br>
+        <%= form.label :time, "Время*" %><br>
         <input type="time" name="topic[timetask]" id="topic_timetask" value="00:10" class = "w100">
         <small id="emailHelp" class="form-text text-muted">Укажите время для прохождения тестового задания</small>
       </div>
@@ -50,12 +50,12 @@
     <hr>
     <div class="row form-group">
       <div class="col-sm-6">
-        <%= form.label :"Начало показов*" %><br>
+        <%= form.label :start_view, "Начало показов*" %><br>
         <input type="datetime-local" name="topic[intdate1]" id="topic_intdate1" value=<%= newcurentdate %> class = "w100">
         <small id="emailHelp" class="form-text text-muted">Укажите дату запуска тестового задания</small>
       </div>
       <div class="col-sm-6">
-        <%= form.label :"Окончание показов" %><br>
+        <%= form.label :finish_view, "Окончание показов" %><br>
         <%= form.datetime_local_field :intdate2, class: "w100" %>
         <small id="emailHelp" class="form-text text-muted">Дата окончания показов тестового задания</small>
       </div>
@@ -63,7 +63,7 @@
     <hr>
     <div class="row form-group">
       <div class="col-sm-6">
-        <%= form.label :"Успешное сообщение" %><br>
+        <%= form.label :success, "Успешное сообщение" %><br>
         <% if @topic.errors[:successmessage].count > 0 %>
           <p class="formerrors">Ошибка заполнения</p>
           <ul>
@@ -75,7 +75,7 @@
         <small id="emailHelp" class="form-text text-muted">Введите сообщение, которое будет показываться при успешном прохождении теста</small>
       </div>
       <div class="col-sm-6">
-        <%= form.label :"Сообщение о неудаче" %><br>
+        <%= form.label :error, "Сообщение о неудаче" %><br>
         <% if @topic.errors[:failuremessage].count > 0 %>
           <p class="formerrors">Ошибка заполнения</p>
           <ul>
@@ -90,7 +90,7 @@
     <hr>
     <div class="row form-group">
       <div class="col-sm-4">
-        <%= form.label :"Пароль" %><br>
+        <%= form.label :password, "Пароль" %><br>
         <% if @topic.errors[:password].count > 0 %>
           <p class="formerrors">Ошибка заполнения</p>
           <ul>
@@ -106,12 +106,12 @@
         <%= form.hidden_field :codecreator, value: current_user.encrypted_password %>
       <% end %>
       <div class="col-sm-4">
-        <%= form.label :"Показы*" %><br>
+        <%= form.label :view, "Показы*" %><br>
         <%= form.select(:activ, [['Вкл.', "Вкл."], ['Выкл.', "Выкл."]]) %>
         <small id="emailHelp" class="form-text text-muted">Настройте активность показов тестового задания</small>
       </div>
       <div class="col-sm-4">
-        <%= form.label :"Случайный порядок*" %><br>
+        <%= form.label :rand, "Случайный порядок*" %><br>
         <%= form.select(:rand, [['Выкл.', "Выкл."], ['Вкл.', "Вкл."]]) %>
         <small id="emailHelp" class="form-text text-muted">Настройте порядок показов тестового задания</small>
       </div>

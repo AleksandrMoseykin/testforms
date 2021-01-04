@@ -1,5 +1,5 @@
 class SettingsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :topic_find
   before_action :setting_find, only: [:show, :edit, :update, :destroy]
 

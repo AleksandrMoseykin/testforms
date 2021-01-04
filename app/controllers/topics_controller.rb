@@ -1,17 +1,23 @@
 class TopicsController < ApplicationController
-
-  before_action :topic_find, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  before_action :topic_find, only: [:show, :view, :edit, :update, :destroy]
   after_action :statistica_creator, only: [:create, :update, :destroy]
+  after_action :topic_id_link_delete, only: [:destroy]
 
   def index
-    @topics  = Topic.all
+    user = current_user.encrypted_password
+    @topics = Topic.where(codecreator: user).order(id: :desc).page(params[:page])
   end
 
   def show
   end
 
+  def view
+  end
+
   def new
     @topic = Topic.new
+    $compare_password = Redis.new
   end
 
   def edit
@@ -36,13 +42,22 @@ class TopicsController < ApplicationController
 
   def destroy
     @topic.destroy
-    redirect_to '/topics/'
+    redirect_back(fallback_location: root_path)
   end
 
   private
 
   def topic_find
     @topic = Topic.find(params[:id])
+  end
+
+  def topic_id_link_delete
+    @linktask = Linktask.all
+    @linktask.each do |link|
+      unless Topic.find_by(id: link.topicid)
+        link.destroy
+      end
+    end
   end
 
   def statistica_creator

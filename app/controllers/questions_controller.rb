@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-
+  before_action :authenticate_user!
   before_action :topic_find
   before_action :questions_find, only: [:show, :edit, :update, :destroy]
 
@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
     @question = @topic.questions.create(question_params)
 
     if @question.save
-      redirect_to '/topics/'
+      redirect_to "/topics/#{@topic.id}/view"
     else
       render 'new'
     end
@@ -37,7 +37,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question.destroy
-    redirect_to '/topics/'
+    redirect_to "/topics/#{@topic.id}/view"
   end
 
   private

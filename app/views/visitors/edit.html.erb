@@ -7,7 +7,7 @@
           <h2>
             <% er=@visitor.errors.count %>
             <% if er>0 %>
-              <span>Форма заполнена неправильно</span>
+              <span class="formerrors">Форма заполнена неправильно</span>
             <% end %>
           </h2>
             <% if @visitor.errors[:photo] %>
@@ -23,46 +23,48 @@
       </p>
       <hr>
       <div class="row">
-        <div class="form-group col-sm-6">
-          <%= form.label :"Имя" %><br>
+        <div class="form-group col-lg-6 col-sm-12">
+          <%= form.label :name, "Имя" %><br>
           <%= form.text_field :name, class: "w100" %>
         </div>
-        <div class="form-group col-sm-6">
-          <%= form.label :"Фамилия" %><br>
+        <div class="form-group col-lg-6 col-sm-12">
+          <%= form.label :surname, "Фамилия" %><br>
           <%= form.text_field :surname, class: "w100" %>
         </div>
       </div>
       <hr>
       <div class="row">
-        <div class="form-group col-sm-4">
-          <%= form.label :"Пол" %><br>
+        <div class="form-group col-lg-4 col-sm-12">
+          <%= form.label :sex, "Пол" %><br>
           <%= form.select(:sex, [['Муж.', "Муж."], ['Жен.', "Жен."]]) %>
         </div>
-        <div class="form-group col-sm-4">
-          <%= form.label :"Телефон" %><br>
+        <div class="form-group col-lg-4 col-sm-12">
+          <%= form.label :telephone, "Телефон" %><br>
           <%= form.text_field :telephone, class: "w100" %>
         </div>
-        <div class="form-group col-sm-4">
-          <%= form.label :"Страна" %><br>
+        <div class="form-group col-lg-4 col-sm-12">
+          <%= form.label :country, "Страна" %><br>
           <%= form.text_field :country, class: "w100" %>
         </div>
       </div>
       <hr>
       <div class="row">
-        <div class="form-group col-sm-4">
-          <%= form.label :"Город" %><br>
+        <div class="form-group col-lg-4 col-sm-12">
+          <%= form.label :city, "Город" %><br>
           <%= form.text_field :city, class: "w100" %>
         </div>
-        <div class="form-group col-sm-4">
-          <%= form.label :"Дата рождения" %><br>
+        <div class="form-group col-lg-4 col-sm-12">
+          <%= form.label :birthdate, "Дата рождения" %><br>
           <%= form.date_field :birthdate, class: "w100" %>
         </div>
-        <div class="form-group col-sm-4">
-          <%= form.label :"Промокод" %><br>
+        <div class="form-group col-lg-4 col-sm-12">
+          <%= form.label :promocode, "Промокод" %><br>
           <%= form.text_field :promocode, class: "w100" %>
         </div>
       </div>
       <hr>
+      <%= form.hidden_field :idregvis, value: current_username.id %>
+      <%= form.hidden_field :codevisitor, value: current_username.encrypted_password %>
       <p>
         <%= form.submit "Сохранить", class: "topic_button btn btn-primary" %>
       </p>

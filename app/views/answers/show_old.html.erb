@@ -1,0 +1,7 @@
+<h2>Ответы</h2>
+<% @topic.answers.each do |answer| %>
+  <p><%= answer.answeruser %></p>
+  <p><%= answer.scoreanswer %></p>
+  <p><%= answer.questionid %></p>
+  <p><%= answer.topic_id %></p>
+<% end %>

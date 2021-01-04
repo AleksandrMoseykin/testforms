@@ -10,7 +10,7 @@
           <th>Выполнение</th>
         </tr>
         <% numguest = 0 %>
-        <% Consent.where(userid: idreg1).each do |con| %>
+        <% Consent.where(userid: idreg1).page(params[:page]).each do |con| %>
           <% topicid = con.topic.id %>
           <tr class="zag-tabl">
             <td><h4><%= h(Topic.find_by(id: topicid).titletopic) %> <a href="/topics/<%= topicid %>/answers/new"><i class="fa fa-info-circle" aria-hidden="true"></a></h4></td>
@@ -45,5 +45,6 @@
         <% end %>
       <% end %>
     </table>
+    <%= paginate Consent.where(userid: idreg1).page(params[:page]) %>
   <% end %>
 <% end %>

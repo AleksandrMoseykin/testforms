@@ -1,0 +1,40 @@
+<h1><%= @topic.titletopic %>&nbsp;<a href="/topics/<%= @topic.id %>/questions/new"><i class="fa fa-plus-circle fa-1x" aria-hidden="true"></i></a></h1>
+<hr>
+<% count = 0 %>
+<% if @topic.questions.count == 0 %>
+<p>В задании нет вопросов.</p>
+<% end %>
+<% @topic.questions.order(id: :desc).each do |question| %>
+  <% abcd = ["A:", "B:", "C:", "D:"] %>
+  <div>
+    <% img = question.imgquestion %>
+    <% unless img.size.zero? %>
+      <%= image_tag("#{img}", class: "question_img") %>
+    <% end %>
+    <h3>
+      <%= count +=1 %>. <%= question.titlequestion %>
+      <a href="/topics/<%= question.topic_id %>/questions/<%= question.id %>/edit"><i class="fa fa-cog fa-1x" aria-hidden="true"></i></a>
+      <a data-confirm="Удалить?" rel="nofollow"data-method="delete" href="/topics/<%= question.topic_id %>/questions/<%= question.id %>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+    </h3>
+    <% count_question = 0 %>
+    <% answers = [question.answertrue, question.answer2, question.answer3, question.answer4] %>
+    <% abcd.each do |answer_number|%>
+      <% count_answers = answers.count - 1 %>
+      <% num = rand(0..count_answers) %>
+      <% if answers[num] == question.answertrue %>
+        <h4 class="text-success"><%= abcd[count_question] %> <%= "#{answers[num]}" %><h4>
+      <% else %>
+        <h4 class="text-secondary"><%= abcd[count_question] %> <%= "#{answers[num]}" %><h4>
+      <% end %>
+      <% abcd -= [abcd[count_question]] %>
+      <% answers -= [answers[num]] %>
+    <% end %>
+    <% count_question += 1 %>
+    <br>
+  </div>
+  <% if count != @topic.questions.count %>
+    <hr>
+  <% end %>
+  <br>
+<% end %>
+<%= link_to 'Назад', topics_path %>

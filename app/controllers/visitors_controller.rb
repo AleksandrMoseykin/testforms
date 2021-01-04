@@ -1,6 +1,7 @@
 class VisitorsController < ApplicationController
-
+  before_action :authenticate_username!
   before_action :visitor_find, only: [:show, :edit, :update, :destroy]
+  after_action :visitor_delete, only: [:edit]
 
   def index
     @visitors  = Visitor.all
@@ -8,6 +9,7 @@ class VisitorsController < ApplicationController
   end
 
   def show
+    redirect_to '/profilevisitor/'
   end
 
   def new
@@ -35,12 +37,21 @@ class VisitorsController < ApplicationController
     end
   end
 
-def destroy
-  @visitor.destroy
-  redirect_to '/topics/'
-end
+  def destroy
+    @visitor.destroy
+    redirect_to '/topics/'
+  end
 
   private
+
+  def visitor_delete
+    val1 = ["visitor_surname", "visitor_name", "visitor_telephone", "visitor_sex"]
+    val2 = ["visitor_age", "visitor_country", "visitor_city"]
+    val = val1 + val2
+    val.each do |value|
+      $visitor_name.del value + current_username.id.to_s
+    end
+  end
 
   def visitor_find
     @visitor = Visitor.find(params[:id])

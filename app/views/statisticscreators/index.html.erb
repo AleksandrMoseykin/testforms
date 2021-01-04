@@ -1,12 +1,13 @@
 <% if (user_signed_in?) and !(username_signed_in?) %>
   <% if (user_signed_in?) %><% idreg1 = current_user.id %><% end %>
   <h1>Статистика</h1>
-  <% userencrypted = User.find_by(id: idreg1).encrypted_password %>
+  <% userencrypted = current_user.encrypted_password %>
+  <% stattest2, statactiv, statstop = 0, 0, 0 %>
 
   <% unless $all_task_creat.get userencrypted + "all_test_tesk" %>
-    <% if Statisticscreator.find_by(idreg: idreg1) %>
-      <% if Statisticscreator.find_by(idreg: idreg1).test %>
-        <% stattest = Statisticscreator.find_by(idreg: idreg1).test %>
+    <% if @statisticscreator %>
+      <% if @statisticscreator.test %>
+        <% stattest = @statisticscreator.test %>
         <% stattest2 = stattest.size %>
       <% else %>
         <% stattest2 = 0 %>
@@ -15,7 +16,7 @@
       <% stattest2 = 0 %>
     <% end %>
     <% all_test_tesk = userencrypted + "all_test_tesk" %>
-    <% $all_task_creat.set all_test_tesk, Statisticscreator.find_by(idreg: idreg1).test.size %>
+    <% $all_task_creat.set all_test_tesk, @statisticscreator.test.size %>
     <% $all_task_creat.expire all_test_tesk, 86400 %>
   <% else %>
     <% stattest2 = $all_task_creat.get userencrypted + "all_test_tesk" %>
@@ -43,7 +44,7 @@
       <% statstop = $all_task_creat.get userencrypted + "all_test_tesk_stop" %>
   <% end %>
   <div class="row">
-    <div class="col-6">
+    <div class="col-lg-6">
       <table class="borderdiv">
         <tr>
           <td>
@@ -52,7 +53,7 @@
         </tr>
       </table>
     </div>
-    <div class="col-6">
+    <div class="col-lg-6">
       <table class="borderdiv">
         <tr>
           <td>
@@ -63,7 +64,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-6">
+    <div class="col-lg-6">
       <table class="borderdiv">
         <tr>
           <td>
@@ -72,7 +73,7 @@
         </tr>
       </table>
     </div>
-    <div class="col-6">
+    <div class="col-lg-6">
       <table class="borderdiv">
         <tr>
           <td>
