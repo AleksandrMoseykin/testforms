@@ -49,7 +49,7 @@ group :test do
 end
 gem 'devise'
 gem 'mini_magick'
-gem 'carrierwave', '~> 2.0'
+gem 'carrierwave', '~> 2.1'
 gem 'redis-rails'
 gem 'redis'
 gem 'redis-namespace'
